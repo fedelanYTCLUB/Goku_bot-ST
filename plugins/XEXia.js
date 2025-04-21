@@ -47,7 +47,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 async function getPrompt() {
   try {
-    const res = await fetch('https://raw.githubusercontent.com/Ado926/Mv/main/src/text-chatgpt.txt');
+    const res = await fetch('https://raw.githubusercontent.com/elrebelde21/LoliBot-MD/main/src/text-chatgpt.txt');
     return await res.text();
   } catch {
     return 'Eres un asistente inteligente';
