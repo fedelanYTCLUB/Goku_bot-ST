@@ -3,7 +3,6 @@ import fetch from 'node-fetch';
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
     await m.react('👑');
 
-   
     if (!['owner', 'creator', 'creador', 'dueño'].includes(command.toLowerCase())) {
         return conn.sendMessage(m.chat, { text: `El comando ${command} no existe.` });
     }
@@ -13,13 +12,13 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
     let edtr = `@${m.sender.split('@')[0]}`;
     let username = conn.getName(m.sender);
 
-    // VCARD
     let list = [{
-        displayName: "leonel-Ofc 👑",
-        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN: leonel-oficial👑\nitem1.TEL;waid=393715279301:393715279301\nitem1.X-ABLabel:Número\nitem2.EMAIL;type=INTERNET:ninopina10@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://www.instagram.com/crowbot_wa\nitem3.X-ABLabel:Internet\nitem4.ADR:;; Nicaragua;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
+        displayName: "Wirk - Creador de Mai ✨",
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN: Wirk - Bot Developer\nitem1.TEL;waid=50493732693:50493732693\nitem1.X-ABLabel:Número\nitem2.ADR:;;Honduras;;;;\nitem2.X-ABLabel:País\nEND:VCARD`,
     }];
 
     const imageUrl = 'https://files.catbox.moe/k0kpaj.jpg';
+    const texto = `╭───────❀\n│ *Contacto del creador*\n╰───────❀\n\n• *Nombre:* Wirk\n• *Desde:* Honduras\n• *Creador de:* Mai\n\n_“El código es temporal, pero la creatividad... esa es eterna.”_\n\nPuedes contactarlo si tienes ideas, bugs o quieres apoyar el proyecto.`;
 
     await conn.sendMessage(m.chat, {
         contacts: {
@@ -29,22 +28,21 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
         contextInfo: {
             externalAdReply: {
                 showAdAttribution: true,
-                title: 'һ᥆ᥣᥲ ᥴ᥆ᥒ𝗍ᥲᥴ𝗍᥆ ძᥱ mі ᥴrᥱᥲძ᥆r👑',
-                body: dev,
+                title: 'Mai - Bot Kawaii',
+                body: 'Creador: Wirk',
                 thumbnailUrl: imageUrl,
                 sourceUrl: 'https://github.com/WillZek',
                 mediaType: 1,
                 renderLargerThumbnail: true
             }
         }
-    }, {
-        quoted: m
-    });
+    }, { quoted: m });
 
-    await conn.sendMessage(m.chat, { text: txt });
+    await conn.sendMessage(m.chat, { text: texto }, { quoted: m });
 };
 
 handler.help = ['owner', 'creator'];
 handler.tags = ['main'];
 handler.command = ['owner', 'creator', 'creador', 'dueño'];
+
 export default handler;
