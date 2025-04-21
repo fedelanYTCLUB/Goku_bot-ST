@@ -42,7 +42,7 @@ let handler = async (m, { conn, text }) => {
 
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
-      caption: `*「✦」descargando ${video.title}*
+      caption: `*「✦」Descargando ${video.title}*
 
 > ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> ✐  *Autor:* » ${video.author.name}`,
 
@@ -51,7 +51,7 @@ let handler = async (m, { conn, text }) => {
 
     const audioMessage = {
       audio: { url: apiData.download.url },
-      mimetype: "audio/mpeg",
+      mimetype: "audio/mpeg", ptt: true
       fileName: `${video.title}.mp3`,
     };
 
