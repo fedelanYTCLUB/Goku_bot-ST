@@ -1,8 +1,6 @@
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 
-let limit = 100;
-
 let handler = async (m, { conn: star, args, usedPrefix, command }) => {
   if (!args || !args[0]) {
     return star.reply(
@@ -41,16 +39,6 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
     }
 
     let { dl: downloadUrl, size: sizeHumanReadable } = data;
-    let sizeMB = parseFloat(sizeHumanReadable) || 0;
-
-    if (sizeMB >= 700) {
-      return star.reply(m.chat, '✦ *El archivo es demasiado pesado (más de 700 MB). Se canceló la descarga.*', m).then(() => m.react('✖️'));
-    }
-
-    let durationParts = timestamp.split(':').map(Number);
-    let durationInMinutes = durationParts.length === 3
-      ? durationParts[0] * 60 + durationParts[1]
-      : durationParts[0];
 
     let txt = `*「✦」 » ${title}*\n`;
     txt += `> ✦ Canal » *${author.name}*\n`;
@@ -62,21 +50,17 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
 
     await star.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m);
 
-    if (sizeMB > limit || durationInMinutes > 30) {
-      await star.sendMessage(
-        m.chat,
-        { document: { url: downloadUrl }, mimetype: 'video/mp4', fileName: `${title}.mp4` },
-        { quoted: m }
-      );
-      await m.react('📄');
-    } else {
-      await star.sendMessage(
-        m.chat,
-        { video: { url: downloadUrl }, caption: title, mimetype: 'video/mp4', fileName: `${title}.mp4` },
-        { quoted: m }
-      );
-      await m.react('✅');
-    }
+    await star.sendMessage(
+      m.chat,
+      {
+        document: { url: downloadUrl },
+        mimetype: 'video/mp4',
+        fileName: `${title}.mp4`
+      },
+      { quoted: m }
+    );
+
+    await m.react('📄');
   } catch (error) {
     console.error(error);
     await m.react('✖️');
