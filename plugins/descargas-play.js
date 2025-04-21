@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import yts from 'yt-search';
-import { youtubedl, youtubedlv2 } from '@bochilteam/scraper';
+
 
 let limit = 100; 
 
