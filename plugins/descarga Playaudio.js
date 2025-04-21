@@ -1,9 +1,7 @@
 import fetch from "node-fetch";
 import yts from "yt-search";
 
-
 const encodedApi = "aHR0cHM6Ly9hcGkudnJlZGVuLndlYi5pZC9hcGkveXRtcDM=";
-
 
 const getApiUrl = () => Buffer.from(encodedApi, "base64").toString("utf-8");
 
@@ -22,11 +20,10 @@ const fetchWithRetries = async (url, maxRetries = 2) => {
   throw new Error("No se pudo obtener la música después de varios intentos.");
 };
 
-
 let handler = async (m, { conn, text }) => {
   if (!text || !text.trim()) {
     return conn.sendMessage(m.chat, {
-      text: "*❀ ingresa el nombre de la música a descargar.*`\n\n*Ejemplo:* `.play No llores más`",
+      text: "*❀ Ingresa el nombre de la música a descargar.*\n\n*Ejemplo:* `.play No llores más`",
     });
   }
 
@@ -42,17 +39,14 @@ let handler = async (m, { conn, text }) => {
 
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
-      caption: `*「✦」Descargando ${video.title}*
-
-> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> ✐  *Autor:* » ${video.author.name}`,
-
- 
-   });
+      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> ✐ *Autor:* » ${video.author.name}`,
+    });
 
     const audioMessage = {
       audio: { url: apiData.download.url },
-      mimetype: "audio/mpeg", ptt: true
-      fileName: `${title}.mp3`,
+      mimetype: "audio/mpeg",
+      ptt: true,
+      fileName: `${video.title}.mp3`,
     };
 
     await conn.sendMessage(m.chat, audioMessage, { quoted: m });
@@ -66,7 +60,7 @@ let handler = async (m, { conn, text }) => {
   }
 };
 
-handler.command = ['playaudio', 'mp3']; // Puedes usar ['play', 'tocar'] si quieres más alias
+handler.command = ['playaudio', 'mp3'];
 handler.help = ['playaudio <texto>', 'mp3'];
 handler.tags = ['downloader'];
 
