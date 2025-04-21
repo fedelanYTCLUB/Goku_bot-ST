@@ -1,7 +1,7 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
+const handler = async (m, { conn, args, usedPrefix, command }) => {
   const text = args.join(' ');
   const chatId = m.chat;
 
@@ -22,16 +22,16 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       result = await queryLuminai(text, name, prompt);
       result = cleanResponse(result);
     } catch (e) {
-      console.error('Error Luminai:', e);
+      console.error('Error en Luminai:', e);
       try {
         result = await queryPerplexity(text, prompt);
       } catch (e) {
-        console.error('Error Perplexity:', e);
-        throw new Error('No se obtuvo respuesta de los servicios');
+        console.error('Error en Perplexity:', e);
+        throw new Error('No se obtuvo respuesta de los servicios IA');
       }
     }
 
-    const responseMsg = `╭───〔 *🌺 RESPUESTA DE MAI* 〕───⬣
+    const response = `╭───〔 *🌺 RESPUESTA DE MAI* 〕───⬣
 │ ✦ *Pregunta:* ${text}
 │ ✦ *Usuario:* ${name}
 ╰━━━━━━━━━━━━━━━━━━⬣
@@ -42,7 +42,7 @@ ${result}
 │ ✦ *Luminai AI*
 ╰━━━━━━━━━━━━━━⬣`;
 
-    await conn.sendMessage(chatId, { text: responseMsg }, { quoted: m });
+    await conn.sendMessage(chatId, { text: response }, { quoted: m });
     await conn.sendMessage(chatId, { react: { text: '✅', key: m.key } });
 
   } catch (error) {
@@ -58,7 +58,8 @@ async function getPrompt() {
   try {
     const res = await fetch('https://raw.githubusercontent.com/elrebelde21/LoliBot-MD/main/src/text-chatgpt.txt');
     return await res.text();
-  } catch {
+  } catch (e) {
+    console.error('Error al obtener el prompt:', e);
     return 'Eres un asistente inteligente';
   }
 }
@@ -92,8 +93,8 @@ async function queryPerplexity(q, prompt) {
   return data.response;
 }
 
+handler.command = ['ai', 'ask', 'ia'];
 handler.help = ['ai <texto>'];
 handler.tags = ['ai'];
-handler.command = ['ai', 'ask', 'ia'];
 handler.register = true;
 export default handler;
