@@ -37,8 +37,8 @@ global.namecomu = 'ᰔᩚ ᥡᥙkіᑲ᥆𝗍-mძ • ᥴ᥆mᥙᥒі𝗍ᥡ �
 global.listo = '❀ *Aquí tienes ฅ^•ﻌ•^ฅ*'
 global.fotoperfil = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://files.catbox.moe/xr2m6u.jpg')
 
-global.canalIdM = ["120363324350463849@newsletter", "120363324350463849@newsletter"]
-global.canalNombreM = ["⏤͟͟͞͞❀ sᥙmі sᥲkᥙrᥲsᥲᥕᥲ • ᥲ᥎іs᥆ ⏤͟͟͞͞❀", "⏤͟͟͞͞❀ sᥙmі sᥲkᥙrᥲsᥲᥕᥲ • ᥲ᥎іs᥆s ⏤͟͟͞͞❀"]
+global.canalIdM = ["120363402846939411@newsletter", "120363419146589983@newsletter"]
+global.canalNombreM = ["⏤͟͟͞͞Vivos Vivientes 🌻❀", "⏤͟͟͞͞❀ Las Mejores frases 🐻‍❄️ Del dia 👻 "]
 global.channelRD = await getRandomChannel()
 
 global.d = new Date(new Date + 3600000)
@@ -90,10 +90,10 @@ global.taguser = '@' + m.sender.split("@s.whatsapp.net")
 var more = String.fromCharCode(8206)
 global.readMore = more.repeat(850)
 
-global.packsticker = `┆❀channelsumi❀
-   ╰https:sumi.online
+global.packsticker = `┆❀channelvivos xd❀
+   ╰https:Mai.👻
 ┊info:❀
- ╰➺https://channelsumi.like\n`
+ ╰➺https://channelFrases.wy\n`
 ;global.packsticker2 = `┊👑Bot: ${botname}\n👑 Usuario: ${nombre}\n✦ Fecha: ${fecha}\nⴵ Hora: ${tiempo}`
   
   
