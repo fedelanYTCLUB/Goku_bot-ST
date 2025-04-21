@@ -35,7 +35,6 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     }
 
     let responseMsg = `
-
 ${result}`;
 
     await conn.reply(chat, responseMsg, m);
