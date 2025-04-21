@@ -34,8 +34,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       }
     }
 
-    let responseMsg = `
-${result}`;
+    let responseMsg = `${result}`;
 
     await conn.reply(chat, responseMsg, m);
     await conn.sendMessage(chat, { react: { text: '✅', key: m.key } });
