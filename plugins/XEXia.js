@@ -34,7 +34,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       }
     }
 
-    let responseMsg = `╭━〔 *RESPUESTA AI* 〕━⬣
+    let responseMsg = `
 
 ${result}`;
 
