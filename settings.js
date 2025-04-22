@@ -40,7 +40,7 @@ global.etiqueta = '🌸 @Wirk 🌸'
 global.moneda = 'MimiCoins🫦'
 global.welcom1 = '⌗ Usa *setwelcome* para editar este mensaje'
 global.welcom2 = '⌗ Usa *setbye* para editar este mensaje'
-global.banner = 'https://qu.ax/ewHHS.jpg'
+global.banner = 'https://files.catbox.moe/36xbc8.jpg'
 global.avatar = 'https://qu.ax/oBByS.jpg'
 
 global.gp1 = 'https://chat.whatsapp.com/GBcSWbfm3JO1HhmbdbnrsH'
