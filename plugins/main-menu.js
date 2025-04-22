@@ -254,7 +254,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #run + <mencion> » Correr
 ❒ #sad ⌇ #triste + <mencion> » Expresar tristeza
 ❒ #scared + <mencion> » Estar asustado
-❒ #seduce + <mencion> » Seducir a alguien
+❒ #seduce ⌇ #seduccion + <mencion> » Seducir a alguien
 ❒ #shy ⌇ #timido + <mencion> » Sentir timidez
 ❒ #slap ⌇ #bofetada + <mencion> » Dar una bofetada
 ❒ #dias ⌇ #days » Darle los buenos días a alguien
@@ -281,7 +281,7 @@ let handler = async (m, { conn, args }) => {
 ❒ *#violar ⌇ #perra + <mencion> » Viola a alguien
 ❒ #grabboobs + <mencion> » Agarrrar tetas
 ❒ #grop + <mencion> » Manosear a alguien
-❒ #lickpussy + <mencion> » Lamer un coño
+❒ #lickpussy + #cogercoño + <mencion> » Lamer un coño
 ❒ #rule34 ⌇ #r34 + [Tags] » Buscar imagenes en Rule34
 ❒ #sixnine ⌇ #69 + <mencion> » Haz un 69 con alguien
 ❒ #spank ⌇ #nalgada + <mencion> » Dar una nalgada
@@ -320,26 +320,31 @@ let handler = async (m, { conn, args }) => {
 ❒ #top » Empieza un top de personas.
 ❒ #formartrio + <mencion> » Forma un trio.
 ❒ #ahorcado » Diviertete con la bot jugando el juego ahorcado.
-❒ #genio » Comienza una pregunta con el genio.
+❒ #genio ⌇ #genius » Comienza una pregunta con el genio.
 ❒ #mates ⌇ #matematicas » Responde las preguntas de matemáticas para ganar recompensas.
 ❒ #ppt » Juega piedra papel o tijeras con la bot.
 ❒ #sopa ⌇ #buscarpalabra » Juega el famoso juego de sopa de letras.
 ❒ #pvp ⌇ #suit + <mencion> » Juega un pvp contra otro usuario.
 ❒ #ttt » Crea una sala de juego.
-`.trim()
+
+Únete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`.trim() // <-- Enlace de la comunidad añadido al final del texto
 
     await conn.sendMessage(m.chat, {
         text: txt,
         contextInfo: {
             mentionedJid: [m.sender, userId],
             isForwarded: true,
-            // Se eliminó el bloque forwardedNewsletterMessageInfo
+            forwardedNewsletterMessageInfo: { // Mantuvimos este bloque ya que quitarlo no resolvió el otro problema
+                newsletterJid: channelRD.id,
+                newsletterName: channelRD.name,
+                serverMessageId: -1,
+            },
             forwardingScore: 999,
             externalAdReply: {
                 title: botname,
                 body: textbot,
-                thumbnailUrl: banner, // Esta es la imagen que se muestra
-                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // Enlace de tu comunidad
+                thumbnailUrl: banner, // La imagen de la vista previa
+                sourceUrl: redes, // Volvimos a poner 'redes' aquí
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
