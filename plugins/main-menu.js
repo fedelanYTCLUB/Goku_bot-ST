@@ -7,9 +7,9 @@ let handler = async (m, { conn, args }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
-    // Añadimos el enlace de la comunidad y una frase al principio
+    // Este intro ya incluye el enlace, lo mantenemos pero lo puedes ajustar si quieres
     let communityIntro = `
-🌺 Cσmunιdαd 🍀
+✨ ¡Únete a nuestra increíble comunidad! ✨
 👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 ---------------------------------------
 `;
@@ -20,6 +20,7 @@ let handler = async (m, { conn, args }) => {
 │ ⋄ Modo: Publica 🙈
 │ ⋄ Bot: ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
 │ ⋄ Activada: ${uptime} 💖
+│ ⋄ Comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY ✨ // <-- Enlace de la comunidad aquí
 │ ⋄ Usuarios: ${totalreg} 🐻‍❄️
 │ ⋄ Comandos: ${totalCommands} 🌹
 │ ⋄ Baileys: Multi Device 🍀
@@ -339,10 +340,9 @@ let handler = async (m, { conn, args }) => {
     let finalTxt = communityIntro + txt;
 
     await conn.sendMessage(m.chat, {
-        text: finalTxt, // Enviamos el texto completo con el enlace al inicio
+        text: finalTxt, // Enviamos el texto completo
         contextInfo: {
             mentionedJid: [m.sender, userId],
-            // Mantenemos el contextInfo simplificado
             externalAdReply: {
                 title: botname,
                 body: textbot,
@@ -350,7 +350,7 @@ let handler = async (m, { conn, args }) => {
                 sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Enlace de la comunidad en la vista previa
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
-                renderLargerThumbnail: true,
+                renderLargerThumbnail: true, // <-- Este ajuste hace la imagen más grande/ancha
             },
         },
     }, { quoted: m })
@@ -364,7 +364,11 @@ handler.command = ['menu', 'menú', 'help']
 export default handler
 
 function clockString(ms) {
-    let seconds = Math.floor((ms / 1000) % 60)
-    let minutes = Math.floor((ms / (1000 * 60)) % 60)
-    let hours = Math.floor((ms / (1000 * 60 * 60)) %
-    
+    let h = Math.floor(ms / 3600000)
+    let m = Math.floor(ms % 3600000 / 60000)
+    let s = Math.floor(ms % 60000 / 1000)
+    return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
+}
+
+// Asegúrate de tener definidas las variables 'botname', 'textbot', 'banner', 'moneda'
+// global.db.data.users, y global.plugins deben estar inicializados en tu bot.
