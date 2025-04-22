@@ -9,7 +9,7 @@ let handler = async (m, { conn, args }) => {
 
     // Contenido del menú integrado en una sola variable (txt)
     let txt = `
-🌟━━━[ ✰ Vivos Vivientes ✰ ]━━━🌟
+[ ✰ Vivos Vivientes ✰ ]
 👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 ---------------------------------------
 
