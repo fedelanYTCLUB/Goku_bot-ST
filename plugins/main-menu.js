@@ -8,8 +8,8 @@ let handler = async (m, { conn, args }) => {
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
     // Este intro ya incluye el enlace, lo mantenemos pero lo puedes ajustar si quieres
-    let communityIntro = `
-✨ ¡Únete a nuestra increíble comunidad! ✨
+    let communityIntro = `✰ *Vivos Vivientes 🌸* ✰
+🌺 Cσmunιdαd 🍀
 👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 ---------------------------------------
 `;
@@ -19,8 +19,7 @@ let handler = async (m, { conn, args }) => {
 │ ⋄ Cliente: @${userId.split('@')[0]} 🫦
 │ ⋄ Modo: Publica 🙈
 │ ⋄ Bot: ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
-│ ⋄ Activada: ${uptime} 💖
-│ ⋄ Comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY ✨ // <-- Enlace de la comunidad aquí
+│ ⋄ Activada: ${uptime} 💖 // <-- Enlace de la comunidad aquí
 │ ⋄ Usuarios: ${totalreg} 🐻‍❄️
 │ ⋄ Comandos: ${totalCommands} 🌹
 │ ⋄ Baileys: Multi Device 🍀
