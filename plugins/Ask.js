@@ -12,7 +12,7 @@ const handler = async (msg, { conn, args, usedPrefix, command }) => {
   }
 
   try {
-    await conn.sendMessage(chatId, { react: { text: '⏳', key: msg.key } });
+    await conn.sendMessage(chatId, { react: { text: '🕳️', key: msg.key } });
 
     const name = msg.pushName || 'Usuario';
     const prompt = await getPrompt();
@@ -37,7 +37,7 @@ const handler = async (msg, { conn, args, usedPrefix, command }) => {
       text: responseMsg
     }, { quoted: msg });
 
-    await conn.sendMessage(chatId, { react: { text: '✅', key: msg.key } });
+    await conn.sendMessage(chatId, { react: { text: '💩', key: msg.key } });
 
   } catch (error) {
     console.error(error);
