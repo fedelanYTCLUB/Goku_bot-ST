@@ -1,4 +1,3 @@
-// Archivo: plugins/ai-luminai.js
 import axios from 'axios';
 import fetch from 'node-fetch';
 
