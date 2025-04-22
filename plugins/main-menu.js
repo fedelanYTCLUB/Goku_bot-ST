@@ -219,7 +219,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #encuesta ⌇ #poll » Crea una encuesta.
 ❒ #delete ⌇ #del » Elimina mensaje de otros usuarios.
 ❒ #fantasmas » Ver lista de inactivos del grupo.
-❒ #kickfantasmas » Elimina a los inactivos del grupo.
+❒ #kickfantasmas ⌇ #kickinactivos » Elimina a los inactivos del grupo.
 ❒ #invocar ⌇ #tagall ⌇ #todos » Invoca a todos los usuarios de un grupo.
 ❒ #setemoji ⌇ #setemo » Cambia el emoji que se usa en la invitación de usuarios.
 ❒ #listnum ⌇ #kicknum » Elimine a usuario por el prefijo de país.
@@ -244,16 +244,16 @@ let handler = async (m, { conn, args }) => {
 ❒ #impregnate ⌇ #preg + <mencion> » Embarazar a alguien
 ❒ #kill + <mencion> » Toma tu arma y mata a alguien
 ❒ #kiss ⌇ #besar ⌇ #kiss2 + <mencion> » Dar un beso
-❒ #laugh + <mencion> » Reírte de algo o alguien
-❒ #lick + <mencion> » Lamer a alguien
+❒ #laugh ⌇ #reir + <mencion> » Reírte de algo o alguien
+❒ #lick ⌇ #lamer + <mencion> » Lamer a alguien
 ❒ #love ⌇ #amor + <mencion> » Sentirse enamorado
-❒ #pat + <mencion> » Acaricia a alguien
-❒ #poke + <mencion> » Picar a alguien
-❒ #pout + <mencion> » Hacer pucheros
-❒ #punch + <mencion> » Dar un puñetazo
-❒ #run + <mencion> » Correr
+❒ #pat ⌇ #acariciar + <mencion> » Acaricia a alguien
+❒ #poke ⌇ #picar + <mencion> » Picar a alguien
+❒ #pout ⌇ #puchero + <mencion> » Hacer pucheros
+❒ #punch ⌇ #puñetazo + <mencion> » Dar un puñetazo
+❒ #run ⌇ #correr + <mencion> » Correr
 ❒ #sad ⌇ #triste + <mencion> » Expresar tristeza
-❒ #scared + <mencion> » Estar asustado
+❒ #scared ⌇ #asustado + <mencion> » Estar asustado
 ❒ #seduce ⌇ #seduccion + <mencion> » Seducir a alguien
 ❒ #shy ⌇ #timido + <mencion> » Sentir timidez
 ❒ #slap ⌇ #bofetada + <mencion> » Dar una bofetada
@@ -272,20 +272,20 @@ let handler = async (m, { conn, args }) => {
 ❒ #bath + <mencion> » Bañarse
 ❒ #blowjob ⌇ #mamada ⌇ #bj + <mencion> » Dar una mamada
 ❒ #boobjob + <mencion> » Hacer una rusa
-❒ #cum + <mencion> » Venirse en alguien.
-❒ #fap + <mencion> » Hacerse una paja
+❒ #cum ⌇ #correrse + <mencion> » Venirse en alguien.
+❒ #fap ⌇ #paja + <mencion> » Hacerse una paja
 ❒ #ppcouple ⌇ #ppcp » Genera imagenes para amistades o parejas.
-❒ #footjob + <mencion> » Hacer una paja con los pies
-❒ #fuck ⌇ #coger ⌇ #fuck2 + <mencion> » Follarte a alguien
+❒ #footjob ⌇ #pajapie + <mencion> » Hacer una paja con los pies
+❒ #fuck ⌇ #coger ⌇ #follar ⌇ #fuck2 + <mencion> » Follarte a alguien
 ❒ #cafe ⌇ #coffe » Tomate un cafecito con alguien
 ❒ *#violar ⌇ #perra + <mencion> » Viola a alguien
-❒ #grabboobs + <mencion> » Agarrrar tetas
-❒ #grop + <mencion> » Manosear a alguien
-❒ #lickpussy + #cogercoño + <mencion> » Lamer un coño
+❒ #grabboobs ⌇ #agarrartetas + <mencion> » Agarrrar tetas
+❒ #grop ⌇ #manosear + <mencion> » Manosear a alguien
+❒ #lickpussy ⌇ #cogercoño + <mencion> » Lamer un coño
 ❒ #rule34 ⌇ #r34 + [Tags] » Buscar imagenes en Rule34
 ❒ #sixnine ⌇ #69 + <mencion> » Haz un 69 con alguien
 ❒ #spank ⌇ #nalgada + <mencion> » Dar una nalgada
-❒ #suckboobs ⌇ #chupar tetas » Chupar tetas
+❒ #suckboobs ⌇ #chupar tetas + <mencion> » Chupar tetas
 ❒ #undress ⌇ #encuerar + <mencion> » Desnudar a alguien
 ❒ #yuri ⌇ #tijeras + <mencion> » Hacer tijeras.
 
@@ -305,11 +305,11 @@ let handler = async (m, { conn, args }) => {
 ❒ #huevo » Agarrale el huevo a alguien.
 ❒ #chupalo + <mencion> » Hacer que un usuario te la chupe.
 ❒ #aplauso + <mencion> » Aplaudirle a alguien.
-❒ #marron + <mencion> » Burlarte del color de piel de un usuario.
+❒ #marron ⌇ #colorpiel + <mencion> » Burlarte del color de piel de un usuario.
 ❒ #suicidar » Suicidate.
 ❒ #iq ⌇ #iqtest + <mencion> » Calcular el iq de alguna persona.
 ❒ #meme » La bot te envía un meme aleatorio.
-❒ #morse » Convierte un texto a codigo morse.
+❒ #morse ⌇ #morsetxt » Convierte un texto a codigo morse.
 ❒ #nombreninja » Busca un nombre ninja aleatorio.
 ❒ #paja ⌇ #pajeame » La bot te hace una paja.
 ❒ #personalidad + <mencion> » La bot busca tu personalidad.
@@ -334,17 +334,13 @@ let handler = async (m, { conn, args }) => {
         contextInfo: {
             mentionedJid: [m.sender, userId],
             isForwarded: true,
-            forwardedNewsletterMessageInfo: { // Mantuvimos este bloque ya que quitarlo no resolvió el otro problema
-                newsletterJid: channelRD.id,
-                newsletterName: channelRD.name,
-                serverMessageId: -1,
-            },
+            // ¡Bloque forwardedNewsletterMessageInfo eliminado nuevamente!
             forwardingScore: 999,
             externalAdReply: {
                 title: botname,
                 body: textbot,
                 thumbnailUrl: banner, // La imagen de la vista previa
-                sourceUrl: redes, // Volvimos a poner 'redes' aquí
+                sourceUrl: redes, // Mantenemos 'redes' aquí, ya que el enlace de comunidad está en el texto
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
@@ -365,4 +361,4 @@ function clockString(ms) {
     let minutes = Math.floor((ms / (1000 * 60)) % 60)
     let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
     return `${hours}h ${minutes}m ${seconds}s`
-}
+                           }
