@@ -11,13 +11,13 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
       return m.reply(`Enlace inválido`);
     }
 
-    m.react('🌸');
+    m.react('💖');
     let json = await ytdl(args[0]);
     let limit = 10485760;
     let size = await getSize(json.url);
 
     const cap = `*「✦」 : ${json.title}*
-\n> ❒ Peso: ${await formatSize(size) || "Desconocido"}\n> 🜸  URL : ${args[0]}`;
+\n> ❒ Peso: ${await formatSize(size) || "Desconocido"}\n> 🜸  URL : ${args[0]}\n> 🌺 Processed By Mai 💮`;
 
     // Enviar el video como un archivo de video normal
     conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m, null, { mimetype: "video/mp4" });
