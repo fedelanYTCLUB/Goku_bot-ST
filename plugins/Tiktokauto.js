@@ -7,7 +7,7 @@ var handler = async (m, { conn }) => {
     if (!match) return;
 
     const url = match[0];
-    const emoji = '🎵'; // Puedes personalizar esto
+    const emoji = '🌸'; // Puedes personalizar esto
 
     try {
         await conn.reply(m.chat, `${emoji} Espere un momento, estoy descargando su video...`, m);
@@ -33,7 +33,7 @@ var handler = async (m, { conn }) => {
 handler.customPrefix = /https?:\/\/(www\.)?(tiktok\.com|vm\.tiktok\.com)\//i;
 handler.command = new RegExp;
 handler.group = true;
-handler.register = true;
+handler.register = false;
 handler.limit = true;
 
 export default handler;
