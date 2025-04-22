@@ -337,22 +337,28 @@ let handler = async (m, { conn, args }) => {
 
     // Combinamos la introducción con el texto principal
     let finalTxt = communityIntro + txt;
-
-    await conn.sendMessage(m.chat, {
-        text: finalTxt, // Enviamos el texto completo
-        contextInfo: {
-            mentionedJid: [m.sender, userId],
-            externalAdReply: {
-                title: botname,
-                body: textbot,
-                thumbnailUrl: banner, // La imagen de la vista previa
-                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Enlace de la comunidad en la vista previa
-                mediaType: 1, // 1 para imagen
-                showAdAttribution: true,
-                renderLargerThumbnail: true, // <-- Este ajuste hace la imagen más grande/ancha
-            },
-        },
-    }, { quoted: m })
+await conn.sendMessage(m.chat, { 
+      text: txt,
+      contextInfo: {
+          mentionedJid: [m.sender, userId],
+          isForwarded: true,
+          forwardedNewsletterMessageInfo: {
+              newsletterJid: channelRD.id,
+              newsletterName: channelRD.name,
+              serverMessageId: -1,
+          },
+          forwardingScore: 4,
+          externalAdReply: {
+              title: botname,
+              body: textbot,
+              thumbnailUrl: banner,
+              sourceUrl: redes,
+              mediaType: 1,
+              showAdAttribution: true,
+              renderLargerThumbnail: true,
+          },
+      },
+  }, { quoted: m })
 
 }
 
