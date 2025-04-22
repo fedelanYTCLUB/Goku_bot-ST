@@ -30,6 +30,6 @@ m.react('✖️');
   }
 }
 
-handler.command = ['play', 'pdoc'];
+handler.command = ['playdoc', 'pdoc'];
 
 export default handler
