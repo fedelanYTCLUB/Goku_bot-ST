@@ -13,7 +13,7 @@ let handler = async (m, { conn, args }) => {
 👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 ---------------------------------------
 
-┌───「 ${botname} 👑 」───┐
+┌─「 ${botname} 👑 」┐
 │ ⋄ Clιєntє: @${userId.split('@')[0]} 🫦
 │ ⋄ Mσdσ: Publica 🙈
 │ ⋄ Bσt: ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
