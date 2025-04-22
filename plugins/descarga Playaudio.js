@@ -39,7 +39,7 @@ let handler = async (m, { conn, text }) => {
 
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
-      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> ✐ *Autor:* » ${video.author.name}`,
+      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
     });
 
     const audioMessage = {
@@ -60,7 +60,7 @@ let handler = async (m, { conn, text }) => {
   }
 };
 
-handler.command = ['playaudio', 'mp3'];
+handler.command = ['playaudio', 'mp3', 'play'];
 handler.help = ['playaudio <texto>', 'mp3'];
 handler.tags = ['downloader'];
 
