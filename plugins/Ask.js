@@ -31,16 +31,7 @@ const handler = async (msg, { conn, args, usedPrefix, command }) => {
       }
     }
 
-    const responseMsg = `╭━〔 *RESPUESTA IA* 〕━⬣
-│  ✦ *Pregunta:* ${text}
-│  ✦ *Usuario:* ${name}
-╰━━━━━━━━━━━━⬣
-
-${result}
-
-╭━〔 *FUENTE* 〕━⬣
-│  ✦ *Powered by Luminai AI*
-╰━━━━━━━━━━━━⬣`;
+    const responseMsg = `${result}`;
 
     await conn.sendMessage(chatId, {
       text: responseMsg
