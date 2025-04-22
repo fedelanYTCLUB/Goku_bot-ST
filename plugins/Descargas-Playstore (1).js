@@ -48,5 +48,5 @@ let handler = async (m, { conn, args, usedPrefix: prefix, command }) => {
 
 handler.help = ['playstore *<url>*']; 
 handler.tags = ['dl'];
-handler.command = /^(playstore)$/i;
+handler.command = ['playstore']
 export default handler;
