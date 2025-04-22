@@ -358,7 +358,7 @@ await conn.sendMessage(m.chat, {
               sourceUrl: redes,
               mediaType: 1,
               showAdAttribution: true,
-              renderLargerThumbnail: true,
+              renderLargerThumbnail: false,
           },
       },
   }, { quoted: m })
