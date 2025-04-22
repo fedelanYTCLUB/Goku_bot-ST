@@ -9,8 +9,8 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     let q = m.quoted ? m.quoted : m
     let mime = (q.msg || q).mimetype || q.mediaType || ''
     if (/webp|image|video/g.test(mime)) {
-      if (/video/g.test(mime) && (q.msg || q).seconds > 15) {
-        return m.reply(`✧ ¡El video no puede durar más de 15 segundos!...`)
+      if (/video/g.test(mime) && (q.msg || q).seconds > 40) {
+        return m.reply(`✧ ¡El video no puede durar más de 40 segundos!...`)
       }
       let img = await q.download?.()
 
