@@ -31,10 +31,8 @@ const handler = async (msg, { conn, args, usedPrefix, command }) => {
       }
     }
 
-    const responseMsg = `${result}`;
-
     await conn.sendMessage(chatId, {
-      text: responseMsg
+      text: result
     }, { quoted: msg });
 
     await conn.sendMessage(chatId, { react: { text: '💩', key: msg.key } });
@@ -87,8 +85,12 @@ async function perplexityQuery(q, prompt) {
   return data.response;
 }
 
+// Soporte para prefijo y sin prefijo
+handler.customPrefix = /^(xex|ai|ask)$/i;
+handler.command = new RegExp('^(xex|ai|ask)$', 'i');
+
 handler.help = ['luminai <pregunta>'];
-handler.command = ['xex', 'ai', 'ask'];
 handler.tags = ['ai'];
 handler.register = true;
+
 export default handler;
