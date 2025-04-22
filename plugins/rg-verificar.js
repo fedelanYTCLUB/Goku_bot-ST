@@ -44,7 +44,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   const sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
 
   const regbot = `
-╭──────❍ *¡Registro Completo!* ❍──────╮
+╭───❍ *Registro 🌸* ❍───╮
 │ ✦ 𝙐𝙨𝙪𝙖𝙧𝙞𝙤 𝙑𝙖𝙡𝙞𝙙𝙖𝙙𝙤 ✦
 │
 │ ᰔᩚ *Nombre:* ${name}
@@ -56,7 +56,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
-╰─────────────•••─────────────╯
+╰─────────────•••─────────╯
          ${dev}
 `.trim()
 
