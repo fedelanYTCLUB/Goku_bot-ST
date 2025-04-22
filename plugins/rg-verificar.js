@@ -57,7 +57,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ❖ *Tokens:* +25
 │
 ╰─────────────•••─────────╯
-         ${dev}
+> ${dev}
 `.trim()
 
   await m.react('📩')
