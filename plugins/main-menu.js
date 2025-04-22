@@ -294,7 +294,7 @@ let handler = async (m, { conn, args }) => {
                 newsletterName: channelRD.name, // Asegúrate que channelRD esté definido y sea correcto si usas esto
                 serverMessageId: -1,
             },
-            forwardingScore: 4, // Mantenemos si estaba funcionando así
+            forwardingScore: 99999999, // Mantenemos si estaba funcionando así
             externalAdReply: {
                 title: botname,
                 body: textbot,
