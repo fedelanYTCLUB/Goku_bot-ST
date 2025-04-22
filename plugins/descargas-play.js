@@ -46,7 +46,7 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
     txt += `> ✰ *Vistas* » ${views}\n`;
     txt += `> ✐ *Publicación* » ${ago}\n`;
     txt += `> ❒ *Tamaño:* » ${sizeHumanReadable} MB\n`;
-    txt += `> 🜸 *Link* » ${url}\n > ❤️ Si quieres el video normal solo pon #playvideo y ${title}`;
+    txt += `> 🜸 *Link* » ${url}\n> ❤️ Si quieres el video normal solo pon #playvideo y ${title}`;
 
     await star.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m);
 
