@@ -25,7 +25,7 @@ const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js'
 import { fileURLToPath } from 'url'
 let crm1 = "Y2QgcGx1Z2lucw" // cd plugins
-let crm2 = "A7IG1kNXN1bS" // ; md5sum
+let crm2 = "A7IG1kNXN1b" // ; md5sum
 let crm3 = "BpbmZvLWRvbmFyLmpz" // info-donar.js
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz" // _autoresponder.js info-bot.js
 let drm1 = ""
@@ -40,8 +40,8 @@ if (global.conns instanceof Array) console.log()
 else global.conns = []
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
 //if (!globalThis.db.data.settings[conn.user.jid].jadibotmd) return m.reply(`♡ Comando desactivado temporalmente.`)
-let time = global.db.data.users[m.sender].Subs + 12000
-if (new Date - global.db.data.users[m.sender].Subs < 12000) return conn.reply(m.chat, `${emoji} Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
+let time = global.db.data.users[m.sender].Subs + 120000
+if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `${emoji} Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
 const subBots = [...new Set([...global.conns.filter((conn) => conn.user && conn.ws.socket && conn.ws.socket.readyState !== ws.CLOSED).map((conn) => conn)])]
 const subBotsCount = subBots.length
 if (subBotsCount === 80) {
@@ -93,8 +93,14 @@ conn.reply(m.chat, `${emoji} Use correctamente el comando » ${usedPrefix + comm
 return
 }
 
-const comb = Buffer.from(crm1 + crm2 + crm3 + crm4, "base64")
-exec(comb.toString("utf-8"), async (err, stdout, stderr) => {
+// Decode each base64 part first, then concatenate
+const cmdPart1 = Buffer.from(crm1, "base64").toString("utf-8");
+const cmdPart2 = Buffer.from(crm2, "base64").toString("utf-8");
+const cmdPart3 = Buffer.from(crm3, "base64").toString("utf-8");
+const cmdPart4 = Buffer.from(crm4, "base64").toString("utf-8");
+const fullCommand = cmdPart1 + cmdPart2 + cmdPart3 + cmdPart4;
+
+exec(fullCommand, async (err, stdout, stderr) => {
 const drmer = Buffer.from(drm1 + drm2, `base64`)
 
 let { version, isLatest } = await fetchLatestBaileysVersion()
@@ -228,7 +234,6 @@ userJid = sock.authState.creds.me.jid || `${path.basename(pathYukiJadiBot)}@s.wh
 console.log(chalk.bold.cyanBright(`\n❒⸺⸺⸺⸺【• SUB-BOT •】⸺⸺⸺⸺❒\n│\n│ 🟢 ${userName} (+${path.basename(pathYukiJadiBot)}) conectado exitosamente.\n│\n❒⸺⸺⸺【• CONECTADO •】⸺⸺⸺❒`))
 sock.isInit = true
 global.conns.push(sock)
-// Removed the call to joinChannels(sock)
 
 m?.chat ? await conn.sendMessage(m.chat, {text: args[0] ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `@${m.sender.split('@')[0]}, genial ya eres parte de nuestra familia de Sub-Bots.`, mentions: [m.sender]}, { quoted: m }) : ''
 
@@ -293,9 +298,3 @@ minutes = (minutes < 10) ? '0' + minutes : minutes
 seconds = (seconds < 10) ? '0' + seconds : seconds
 return minutes + ' m y ' + seconds + ' s '
 }
-
-// Removed the joinChannels function
-// async function joinChannels(conn) {
-// for (const channelId of Object.values(global.ch)) {
-// await conn.newsletterFollow(channelId).catch(() => {})
-// }}
