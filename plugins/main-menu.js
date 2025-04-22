@@ -9,13 +9,13 @@ let handler = async (m, { conn, args }) => {
 
     let txt = `
 ┌─「 ${botname} 」
-│ ⋄ Cliente: @${userId.split('@')[0]}
-│ ⋄ Modo: privado
-│ ⋄ Bot: ${(conn.user.jid == global.conn.user.jid ? 'Principal √' : 'Prem Bot β')}
-│ ⋄ Activada: ${uptime}
-│ ⋄ Usuarios: ${totalreg}
-│ ⋄ Comandos: ${totalCommands}
-│ ⋄ Baileys: Multi Device
+│ ⋄ *Cliente:* @${userId.split('@')[0]} 🫦
+│ ⋄ *Modo:* Publica 🙈
+│ ⋄ *Bot:* ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
+│ ⋄ *Activada:* ${uptime} 💖
+│ ⋄ *Usuarios:* ${totalreg} 🐻‍❄️
+│ ⋄ *Comandos:* ${totalCommands} 🌹
+│ ⋄ *Baileys:* Multi Device 🍀
 └─「 INFO 」
 
 ╰➤ Para crear un Sub-Bot con tu número utiliza #qr o #code
