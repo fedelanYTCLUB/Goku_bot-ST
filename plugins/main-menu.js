@@ -231,18 +231,18 @@ let handler = async (m, { conn, args }) => {
 ❒ #angry ⌇ #enojado + <mencion> » Estar enojado
 ❒ #bite + <mencion> » Muerde a alguien
 ❒ #bleh + <mencion> » Sacar la lengua
-❒ #blush + <mencion> » Sonrojarte
+❒ #blush ⌇ #sonrojar + <mencion> » Sonrojarte
 ❒ #bored ⌇ #aburrido + <mencion> » Estar aburrido
-❒ #cry + <mencion> » Llorar por algo o alguien
-❒ #cuddle + <mencion> » Acurrucarse
-❒ #dance + <mencion> » Sacate los pasitos prohíbidos
-❒ #drunk + <mencion> » Estar borracho
+❒ #cry ⌇ #llorar + <mencion> » Llorar por algo o alguien
+❒ #cuddle ⌇ #acurrucarse + <mencion> » Acurrucarse
+❒ #dance ⌇ #bailar + <mencion> » Sacate los pasitos prohíbidos
+❒ #drunk ⌇ #borracho + <mencion> » Estar borracho
 ❒ #eat ⌇ #comer + <mencion> » Comer algo delicioso
-❒ #facepalm + <mencion> » Darte una palmada en la cara
+❒ #facepalm ⌇ #palmada + <mencion> » Darte una palmada en la cara
 ❒ #happy ⌇ #feliz + <mencion> » Salta de felicidad
-❒ #hug + <mencion> » Dar un abrazo
-❒ #impregnate ⌇ #preg + <mencion> » Embarazar a alguien
-❒ #kill + <mencion> » Toma tu arma y mata a alguien
+❒ #hug ⌇ #abrazo + <mencion> » Dar un abrazo
+❒ #impregnate ⌇ #embarazar ⌇ #preg + <mencion> » Embarazar a alguien
+❒ #kill ⌇ #matar + <mencion> » Toma tu arma y mata a alguien
 ❒ #kiss ⌇ #besar ⌇ #kiss2 + <mencion> » Dar un beso
 ❒ #laugh ⌇ #reir + <mencion> » Reírte de algo o alguien
 ❒ #lick ⌇ #lamer + <mencion> » Lamer a alguien
@@ -259,9 +259,9 @@ let handler = async (m, { conn, args }) => {
 ❒ #slap ⌇ #bofetada + <mencion> » Dar una bofetada
 ❒ #dias ⌇ #days » Darle los buenos días a alguien
 ❒ #noches ⌇ #nights » Darle las buenas noches a alguien
-❒ #sleep + <mencion> » Tumbarte a dormir
-❒ #smoke + <mencion> » Fumar
-❒ #think + <mencion> » Pensar en algo
+❒ #sleep ⌇ #dormir + <mencion> » Tumbarte a dormir
+❒ #smoke ⌇ #fumar + <mencion> » Fumar
+❒ #think ⌇ #pensar + <mencion> » Pensar en algo
 
 —〈 ${botname} ⋆ NSFW 〉—
 
@@ -269,9 +269,9 @@ let handler = async (m, { conn, args }) => {
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #anal + <mencion> » Hacer un anal
 ❒ #waifu » Buscá una waifu aleatorio.
-❒ #bath + <mencion> » Bañarse
+❒ #bath ⌇ #bañarse + <mencion> » Bañarse
 ❒ #blowjob ⌇ #mamada ⌇ #bj + <mencion> » Dar una mamada
-❒ #boobjob + <mencion> » Hacer una rusa
+❒ #boobjob ⌇ #rusa + <mencion> » Hacer una rusa
 ❒ #cum ⌇ #correrse + <mencion> » Venirse en alguien.
 ❒ #fap ⌇ #paja + <mencion> » Hacerse una paja
 ❒ #ppcouple ⌇ #ppcp » Genera imagenes para amistades o parejas.
@@ -303,8 +303,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #formarpareja5 » Forma 5 parejas diferentes.
 ❒ #frase » La bot te da una frase.
 ❒ #huevo » Agarrale el huevo a alguien.
-❒ #chupalo + <mencion> » Hacer que un usuario te la chupe.
-❒ #aplauso + <mencion> » Aplaudirle a alguien.
+❒ #chupalo ⌇ #chupamelx + <mencion> » Hacer que un usuario te la chupe.
+❒ #aplauso ⌇ #aplaudir + <mencion> » Aplaudirle a alguien.
 ❒ #marron ⌇ #colorpiel + <mencion> » Burlarte del color de piel de un usuario.
 ❒ #suicidar » Suicidate.
 ❒ #iq ⌇ #iqtest + <mencion> » Calcular el iq de alguna persona.
@@ -322,25 +322,28 @@ let handler = async (m, { conn, args }) => {
 ❒ #ahorcado » Diviertete con la bot jugando el juego ahorcado.
 ❒ #genio ⌇ #genius » Comienza una pregunta con el genio.
 ❒ #mates ⌇ #matematicas » Responde las preguntas de matemáticas para ganar recompensas.
-❒ #ppt » Juega piedra papel o tijeras con la bot.
+❒ #ppt ⌇ #piedrapapelotijera » Juega piedra papel o tijeras con la bot.
 ❒ #sopa ⌇ #buscarpalabra » Juega el famoso juego de sopa de letras.
 ❒ #pvp ⌇ #suit + <mencion> » Juega un pvp contra otro usuario.
-❒ #ttt » Crea una sala de juego.
+❒ #ttt ⌇ #tresenraya » Crea una sala de juego.
+`;
 
-Únete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`.trim() // <-- Enlace de la comunidad añadido al final del texto
+    let communityLinkText = `\n\nÚnete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`;
+
+    let finalTxt = txt.trim() + communityLinkText; // Concatenamos el texto principal con el enlace
 
     await conn.sendMessage(m.chat, {
-        text: txt,
+        text: finalTxt, // Enviamos el texto final con el enlace
         contextInfo: {
             mentionedJid: [m.sender, userId],
             isForwarded: true,
-            // ¡Bloque forwardedNewsletterMessageInfo eliminado nuevamente!
+            // ¡El bloque forwardedNewsletterMessageInfo sigue eliminado para evitar el botón "Ver canal"!
             forwardingScore: 999,
             externalAdReply: {
                 title: botname,
                 body: textbot,
                 thumbnailUrl: banner, // La imagen de la vista previa
-                sourceUrl: redes, // Mantenemos 'redes' aquí, ya que el enlace de comunidad está en el texto
+                sourceUrl: redes, // Mantenemos 'redes' aquí
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
@@ -361,4 +364,4 @@ function clockString(ms) {
     let minutes = Math.floor((ms / (1000 * 60)) % 60)
     let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
     return `${hours}h ${minutes}m ${seconds}s`
-                           }
+                }
