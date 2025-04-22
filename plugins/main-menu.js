@@ -7,6 +7,13 @@ let handler = async (m, { conn, args }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
+    // Añadimos el enlace de la comunidad y una frase al principio
+    let communityIntro = `
+🌺 Cσmunιdαd 🍀
+👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
+---------------------------------------
+`;
+
     let txt = `
 ┌─「 ${botname} 」
 │ ⋄ Cliente: @${userId.split('@')[0]} 🫦
@@ -142,7 +149,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #setmeta » Estable un pack y autor para los stickers.
 ❒ #delmeta » Elimina tu pack de stickers.
 ❒ #pfp ⌇ #getpic » Obtén la foto de perfil de un usuario.
-❒ #qc » Crea stickers con texto o de un usuario.
+❒ #qc ⌇ #quotesticker » Crea stickers con texto o de un usuario.
 ❒ #toimg ⌇ #img » Convierte stickers en imagen.
 ❒ #brat ⌇ #ttp ⌇ #attp︎ » Crea stickers con texto.
 ❒ #emojimix » Fuciona 2 emojis para crear un sticker.
@@ -229,7 +236,7 @@ let handler = async (m, { conn, args }) => {
 • Comandos de reacciones de anime.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #angry ⌇ #enojado + <mencion> » Estar enojado
-❒ #bite + <mencion> » Muerde a alguien
+❒ #bite ⌇ #muerde + <mencion> » Muerde a alguien
 ❒ #bleh ⌇ #sacalengua + <mencion> » Sacar la lengua
 ❒ #blush ⌇ #sonrojar + <mencion> » Sonrojarte
 ❒ #bored ⌇ #aburrido + <mencion> » Estar aburrido
@@ -326,19 +333,21 @@ let handler = async (m, { conn, args }) => {
 ❒ #sopa ⌇ #buscarpalabra » Juega el famoso juego de sopa de letras.
 ❒ #pvp ⌇ #suit + <mencion> » Juega un pvp contra otro usuario.
 ❒ #ttt ⌇ #tresenraya » Crea una sala de juego.
+`.trim();
 
-Únete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`.trim() // <-- Enlace de la comunidad al final del texto
+    // Combinamos la introducción con el texto principal
+    let finalTxt = communityIntro + txt;
 
     await conn.sendMessage(m.chat, {
-        text: txt, // Enviamos el texto completo incluyendo el enlace al final
+        text: finalTxt, // Enviamos el texto completo con el enlace al inicio
         contextInfo: {
             mentionedJid: [m.sender, userId],
-            // Eliminamos isForwarded y forwardingScore también
+            // Mantenemos el contextInfo simplificado
             externalAdReply: {
                 title: botname,
                 body: textbot,
                 thumbnailUrl: banner, // La imagen de la vista previa
-                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Pusimos el enlace de la comunidad aquí de nuevo
+                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Enlace de la comunidad en la vista previa
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
@@ -357,6 +366,5 @@ export default handler
 function clockString(ms) {
     let seconds = Math.floor((ms / 1000) % 60)
     let minutes = Math.floor((ms / (1000 * 60)) % 60)
-    let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
-    return `${hours}h ${minutes}m ${seconds}s`
-        }
+    let hours = Math.floor((ms / (1000 * 60 * 60)) %
+    
