@@ -8,7 +8,7 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
     }
 
     if (!/^(?:https?:\/\/)?(?:www\.|m\.|music\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/.test(args[0])) {
-      return m.reply(`Enalce inválido`);
+      return m.reply(`Enlace inválido`);
     }
 
     m.react('🌸');
@@ -19,11 +19,12 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
     const cap = `*「✦」 : ${json.title}*
 \n> ❒ Peso: ${await formatSize(size) || "Desconocido"}\n> 🜸  URL : ${args[0]}`;
 
-    conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m, null, { asDocument: true, mimetype: "video/mp4" })
+    // Enviar el video como un archivo de video normal
+    conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m, null, { mimetype: "video/mp4" });
 
     m.react('☑️');
   } catch (e) {
- m.reply(e)
+    m.reply(e);
   }
 };
 
@@ -94,4 +95,4 @@ async function getSize(url) {
   } catch (error) {
       return error;
   }
-}
+    }
