@@ -56,7 +56,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
-╰─────────────•••─────────╯
+╰──────────•••─────────╯
 > ${dev}
 `.trim()
 
