@@ -575,7 +575,7 @@ let handler = async (m, { conn, args }) => {
 » Crea una sala de juego.
 `.trim()
 
-    await conn.sendMessage(m.chat, { text: txt, contextInfo: { mentionedJid: [m.sender, userId], isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1, }, forwardingScore: 999, externalAdReply: { title: botname, body: textbot, thumbnailUrl: banner, sourceUrl: redes, mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true, }, }, }, { quoted: m })
+    await conn.sendMessage(m.chat, { text: txt, contextInfo: { mentionedJid: [m.sender, userId], isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1, }, forwardingScore: 999, externalAdReply: { title: botname, body: textbot, thumbnailUrl: banner, sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", mediaType: 1, showAdAttribution: true, renderLargerThumbnail: true, }, }, }, { quoted: m })
 
 }
 
