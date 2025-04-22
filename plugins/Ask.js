@@ -88,7 +88,7 @@ async function perplexityQuery(q, prompt) {
 }
 
 handler.help = ['luminai <pregunta>'];
-handler.command = ['luminai', 'ia', 'ai', 'ask'];
+handler.command = ['xex' 'ai', 'ask'];
 handler.tags = ['ai'];
 handler.register = true;
 export default handler;
