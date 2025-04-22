@@ -146,7 +146,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #toimg ⌇ #img » Convierte stickers en imagen.
 ❒ #brat ⌇ #ttp ⌇ #attp︎ » Crea stickers con texto.
 ❒ #emojimix » Fuciona 2 emojis para crear un sticker.
-❒ #wm » Cambia el nombre de los stickers.
+❒ #wm ⌇ #watermark » Cambia el nombre de los stickers.
 
 —〈 ${botname} ⋆ herramientas 〉—
 
@@ -157,7 +157,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #horario » Ver el horario global de los países.
 ❒ #fake ⌇ #fakereply » Crea un mensaje falso de un usuario.
 ❒ #enhance ⌇ #remini ⌇ #hd » Mejora la calidad de una imagen.
-❒ #letra » Cambia la fuente de las letras.
+❒ #letra ⌇ #fuente + <texto> » Cambia la fuente de las letras.
 ❒ #read ⌇ #readviewonce ⌇ #ver » Ver imágenes de una sola vista.
 ❒ #whatmusic ⌇ #shazam » Descubre el nombre de canciones o vídeos.
 ❒ #spamwa ⌇ #spam » Envia spam aun usuario.
@@ -192,12 +192,12 @@ let handler = async (m, { conn, args }) => {
 • Comandos de grupos para una mejor gestión de ellos.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #config ⌇ #on » Ver opciones de configuración de grupos.
-❒ #hidetag » Envia un mensaje mencionando a todos los usuarios
+❒ #hidetag ⌇ #tagh » Envia un mensaje mencionando a todos los usuarios
 ❒ #gp ⌇ #infogrupo » Ver la Informacion del grupo.
 ❒ #linea ⌇ #listonline » Ver la lista de los usuarios en linea.
 ❒ #setwelcome » Establecer un mensaje de bienvenida personalizado.
 ❒ #setbye » Establecer un mensaje de despedida personalizado.
-❒ #link » El bot envia el link del grupo.
+❒ #link ⌇ #grouplink » El bot envia el link del grupo.
 ❒ #admins ⌇ #admin » Mencionar a los admins para solicitar ayuda.
 ❒ #restablecer ⌇ #revoke » Restablecer el enlace del grupo.
 ❒ #grupo ⌇ #group [open / abrir] » Cambia ajustes del grupo para que todos los usuarios envien mensaje.
@@ -218,7 +218,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #unmute [mension / etiquetar] » El bot deja de eliminar los mensajes del usuario.
 ❒ #encuesta ⌇ #poll » Crea una encuesta.
 ❒ #delete ⌇ #del » Elimina mensaje de otros usuarios.
-❒ #fantasmas » Ver lista de inactivos del grupo.
+❒ #fantasmas ⌇ #listaoffline » Ver lista de inactivos del grupo.
 ❒ #kickfantasmas ⌇ #kickinactivos » Elimina a los inactivos del grupo.
 ❒ #invocar ⌇ #tagall ⌇ #todos » Invoca a todos los usuarios de un grupo.
 ❒ #setemoji ⌇ #setemo » Cambia el emoji que se usa en la invitación de usuarios.
@@ -230,7 +230,7 @@ let handler = async (m, { conn, args }) => {
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #angry ⌇ #enojado + <mencion> » Estar enojado
 ❒ #bite + <mencion> » Muerde a alguien
-❒ #bleh + <mencion> » Sacar la lengua
+❒ #bleh ⌇ #sacalengua + <mencion> » Sacar la lengua
 ❒ #blush ⌇ #sonrojar + <mencion> » Sonrojarte
 ❒ #bored ⌇ #aburrido + <mencion> » Estar aburrido
 ❒ #cry ⌇ #llorar + <mencion> » Llorar por algo o alguien
@@ -302,7 +302,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #formarpareja » Forma una pareja.
 ❒ #formarpareja5 » Forma 5 parejas diferentes.
 ❒ #frase » La bot te da una frase.
-❒ #huevo » Agarrale el huevo a alguien.
+❒ #huevo ⌇ #agarrarhuevo + <mencion> » Agarrale el huevo a alguien.
 ❒ #chupalo ⌇ #chupamelx + <mencion> » Hacer que un usuario te la chupe.
 ❒ #aplauso ⌇ #aplaudir + <mencion> » Aplaudirle a alguien.
 ❒ #marron ⌇ #colorpiel + <mencion> » Burlarte del color de piel de un usuario.
@@ -310,40 +310,35 @@ let handler = async (m, { conn, args }) => {
 ❒ #iq ⌇ #iqtest + <mencion> » Calcular el iq de alguna persona.
 ❒ #meme » La bot te envía un meme aleatorio.
 ❒ #morse ⌇ #morsetxt » Convierte un texto a codigo morse.
-❒ #nombreninja » Busca un nombre ninja aleatorio.
+❒ #nombreninja ⌇ #ninjaname » Busca un nombre ninja aleatorio.
 ❒ #paja ⌇ #pajeame » La bot te hace una paja.
 ❒ #personalidad + <mencion> » La bot busca tu personalidad.
-❒ #piropo » Lanza un piropo.
-❒ #pregunta » Hazle una pregunta a la bot.
+❒ #piropo ⌇ #lanzarpiropo » Lanza un piropo.
+❒ #pregunta ⌇ #preguntabot » Hazle una pregunta a la bot.
 ❒ #ship ⌇ #pareja » La bot te da la probabilidad de enamorarte de una persona.
-❒ #sorteo » Empieza un sorteo.
-❒ #top » Empieza un top de personas.
+❒ #sorteo ⌇ #iniciarsorteo » Empieza un sorteo.
+❒ #top ⌇ #iniciartop » Empieza un top de personas.
 ❒ #formartrio + <mencion> » Forma un trio.
-❒ #ahorcado » Diviertete con la bot jugando el juego ahorcado.
+❒ #ahorcado ⌇ #jugarahorcado » Diviertete con la bot jugando el juego ahorcado.
 ❒ #genio ⌇ #genius » Comienza una pregunta con el genio.
 ❒ #mates ⌇ #matematicas » Responde las preguntas de matemáticas para ganar recompensas.
 ❒ #ppt ⌇ #piedrapapelotijera » Juega piedra papel o tijeras con la bot.
 ❒ #sopa ⌇ #buscarpalabra » Juega el famoso juego de sopa de letras.
 ❒ #pvp ⌇ #suit + <mencion> » Juega un pvp contra otro usuario.
 ❒ #ttt ⌇ #tresenraya » Crea una sala de juego.
-`;
 
-    let communityLinkText = `\n\nÚnete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`;
-
-    let finalTxt = txt.trim() + communityLinkText; // Concatenamos el texto principal con el enlace
+Únete a nuestra comunidad: https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY`.trim() // <-- Enlace de la comunidad al final del texto
 
     await conn.sendMessage(m.chat, {
-        text: finalTxt, // Enviamos el texto final con el enlace
+        text: txt, // Enviamos el texto completo incluyendo el enlace al final
         contextInfo: {
             mentionedJid: [m.sender, userId],
-            isForwarded: true,
-            // ¡El bloque forwardedNewsletterMessageInfo sigue eliminado para evitar el botón "Ver canal"!
-            forwardingScore: 999,
+            // Eliminamos isForwarded y forwardingScore también
             externalAdReply: {
                 title: botname,
                 body: textbot,
                 thumbnailUrl: banner, // La imagen de la vista previa
-                sourceUrl: redes, // Mantenemos 'redes' aquí
+                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Pusimos el enlace de la comunidad aquí de nuevo
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
@@ -364,4 +359,4 @@ function clockString(ms) {
     let minutes = Math.floor((ms / (1000 * 60)) % 60)
     let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
     return `${hours}h ${minutes}m ${seconds}s`
-                }
+        }
