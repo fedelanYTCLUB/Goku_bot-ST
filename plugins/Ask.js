@@ -1,21 +1,20 @@
-// Archivo: plugins/luminai.js
-const axios = require('axios');
-const fetch = require('node-fetch');
+import axios from 'axios';
+import fetch from 'node-fetch';
 
-const handler = async (m, { conn, args, usedPrefix, command }) => {
+const handler = async (msg, { conn, args, usedPrefix, command }) => {
   const text = args.join(' ');
-  const chatId = m.chat;
+  const chatId = msg.key.remoteJid;
 
   if (!text) {
     return conn.sendMessage(chatId, {
       text: `✳️ Ingresa tu pregunta\nEjemplo: *${usedPrefix + command}* ¿quién inventó WhatsApp?`
-    }, { quoted: m });
+    }, { quoted: msg });
   }
 
   try {
-    await conn.sendMessage(chatId, { react: { text: '⏳', key: m.key } });
+    await conn.sendMessage(chatId, { react: { text: '⏳', key: msg.key } });
 
-    const name = m.pushName || 'Usuario';
+    const name = msg.pushName || 'Usuario';
     const prompt = await getPrompt();
     let result = '';
 
@@ -32,24 +31,30 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
       }
     }
 
-    const responseMsg = `╭─〔 *RESPUESTA IA* 〕─⬣
-│ ✦ *Pregunta:* ${text}
-│ ✦ *Usuario:* ${name}
-╰────────────⬣
+    const responseMsg = `╭━〔 *RESPUESTA IA* 〕━⬣
+│  ✦ *Pregunta:* ${text}
+│  ✦ *Usuario:* ${name}
+╰━━━━━━━━━━━━⬣
 
 ${result}
 
-╭─〔 *FUENTE* 〕─⬣
-│ ✦ *Powered by Luminai AI*
-╰────────────⬣`;
+╭━〔 *FUENTE* 〕━⬣
+│  ✦ *Powered by Luminai AI*
+╰━━━━━━━━━━━━⬣`;
 
-    await conn.sendMessage(chatId, { text: responseMsg }, { quoted: m });
-    await conn.sendMessage(chatId, { react: { text: '✅', key: m.key } });
+    await conn.sendMessage(chatId, {
+      text: responseMsg
+    }, { quoted: msg });
+
+    await conn.sendMessage(chatId, { react: { text: '✅', key: msg.key } });
 
   } catch (error) {
     console.error(error);
-    await conn.sendMessage(chatId, { text: `❌ Error: ${error.message}` }, { quoted: m });
-    await conn.sendMessage(chatId, { react: { text: '❌', key: m.key } });
+    await conn.sendMessage(chatId, {
+      text: `❌ Error: ${error.message}`
+    }, { quoted: msg });
+
+    await conn.sendMessage(chatId, { react: { text: '❌', key: msg.key } });
   }
 };
 
@@ -95,5 +100,4 @@ handler.help = ['luminai <pregunta>'];
 handler.command = ['luminai', 'ia', 'ai', 'ask'];
 handler.tags = ['ai'];
 handler.register = true;
-
-module.exports = handler;
+export default handler;
