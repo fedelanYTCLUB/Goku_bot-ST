@@ -256,7 +256,7 @@ let handler = async (m, { conn, args }) => {
 ❒ #scared + <mencion> » Estar asustado
 ❒ #seduce + <mencion> » Seducir a alguien
 ❒ #shy ⌇ #timido + <mencion> » Sentir timidez
-❒ #slap + <mencion> » Dar una bofetada
+❒ #slap ⌇ #bofetada + <mencion> » Dar una bofetada
 ❒ #dias ⌇ #days » Darle los buenos días a alguien
 ❒ #noches ⌇ #nights » Darle las buenas noches a alguien
 ❒ #sleep + <mencion> » Tumbarte a dormir
@@ -333,17 +333,13 @@ let handler = async (m, { conn, args }) => {
         contextInfo: {
             mentionedJid: [m.sender, userId],
             isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: channelRD.id,
-                newsletterName: channelRD.name,
-                serverMessageId: -1,
-            },
+            // Se eliminó el bloque forwardedNewsletterMessageInfo
             forwardingScore: 999,
             externalAdReply: {
                 title: botname,
                 body: textbot,
                 thumbnailUrl: banner, // Esta es la imagen que se muestra
-                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // <--- Enlace de tu comunidad añadido aquí
+                sourceUrl: 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY', // Enlace de tu comunidad
                 mediaType: 1, // 1 para imagen
                 showAdAttribution: true,
                 renderLargerThumbnail: true,
