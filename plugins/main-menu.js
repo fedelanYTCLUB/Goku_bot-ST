@@ -14,7 +14,10 @@ let handler = async (m, { conn, args }) => {
 ---------------------------------------
 `;
 
-    let txt = `
+    let txt = `✰ *Vivos Vivientes 🌸* ✰
+🌺 Cσmunιdαd 🍀
+👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
+---------------------------------------\n\n
 ┌─「 ${botname} 」
 │ ⋄ Cliente: @${userId.split('@')[0]} 🫦
 │ ⋄ Modo: Publica 🙈
