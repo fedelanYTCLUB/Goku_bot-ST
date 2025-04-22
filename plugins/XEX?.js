@@ -1,5 +1,6 @@
-import axios from 'axios';
-import fetch from 'node-fetch';
+// Archivo: plugins/luminai.js
+const axios = require('axios');
+const fetch = require('node-fetch');
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
   const text = args.join(' ');
@@ -95,4 +96,4 @@ handler.command = ['luminai', 'ia', 'ai', 'ask'];
 handler.tags = ['ai'];
 handler.register = true;
 
-export default handler;
+module.exports = handler;
