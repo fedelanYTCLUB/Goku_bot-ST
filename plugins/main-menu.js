@@ -7,32 +7,26 @@ let handler = async (m, { conn, args }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
-    // Este intro ya incluye el enlace, lo mantenemos pero lo puedes ajustar si quieres
-    let communityIntro = `✰ *Vivos Vivientes 🌸* ✰
-🌺 Cσmunιdαd 🍀
+    // Contenido del menú integrado en una sola variable (txt)
+    let txt = `
+🌟━━━[ ✰ Vivos Vivientes ✰ ]━━━🌟
 👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 ---------------------------------------
-`;
 
-    let txt = `✰ *Vivos Vivientes 🌸* ✰
-🌺 Cσmunιdαd 🍀
-👉 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
----------------------------------------\n\n
-┌─「 ${botname} 」
-│ ⋄ Cliente: @${userId.split('@')[0]} 🫦
-│ ⋄ Modo: Publica 🙈
-│ ⋄ Bot: ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
-│ ⋄ Activada: ${uptime} 💖 
-│ ⋄ Usuarios: ${totalreg} 🐻‍❄️
-│ ⋄ Comandos: ${totalCommands} 🌹
-│ ⋄ Baileys: Multi Device 🍀
-└─「 INFO 」
+┌───「 ${botname} 👑 」───┐
+│ ⋄ Clιєntє: @${userId.split('@')[0]} 🫦
+│ ⋄ Mσdσ: Publica 🙈
+│ ⋄ Bσt: ${(conn.user.jid == global.conn.user.jid ? 'Principal 🌸' : 'Sub Bot 🌻')}
+│ ⋄ Actιvαdα: ${uptime} 💖
+│ ⋄ Uѕυαrισѕ: ${totalreg} 🐻‍❄️
+│ ⋄ Cσmαndσѕ: ${totalCommands} 🌹
+│ ⋄ Bαιlєyѕ: Multi Device 🍀
+└───「 ιnƒσ Pяιncιpαl 」───┘
 
 ╰➤ Para crear un Sub-Bot con tu número utiliza #qr o #code
 
-—〈 ${botname} ⋆ info 〉—
-
-• Comandos para ver estado e información de la Bot.
+🌟〈 ${botname} ⋆ ιnƒσ 〉🌟
+• Cσmαndσѕ pαrα vєr єѕtαdσ є ιnfσrmαcιón dє lα Bσt.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #help ⌇ #menu » Ver la lista de comandos de la Bot.
 ❒ #uptime ⌇ #runtime » Ver tiempo activo o en linea de la Bot.
@@ -52,9 +46,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #ds ⌇ #fixmsgespera » Eliminar archivos de sesión innecesarios.
 ❒ #editautoresponder » Configurar un Prompt personalizado de la Bot.
 
-—〈 ${botname} ⋆ buscadores 〉—
-
-• Comandos para realizar búsquedas en distintas plataformas.
+🌟〈 ${botname} ⋆ вυѕcαdσrєѕ 〉🌟
+• Cσmαndσѕ pαrα rєαlιzαr вúѕqυєdαѕ єn dιѕtιntαѕ plαtαfσrmαѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #tiktoksearch ⌇ #tiktoks » Buscador de videos de tiktok.
 ❒ #tweetposts » Buscador de posts de Twitter/X.
@@ -73,9 +66,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #pornhubsearch ⌇ #phsearch » Buscador de videos de Pornhub.
 ❒ #npmjs » Buscandor de npmjs.
 
-—〈 ${botname} ⋆ descargas 〉—
-
-• Comandos de descargas para varios archivos.
+🌟〈 ${botname} ⋆ dєѕcαrgαѕ 〉🌟
+• Cσmαndσѕ dє dєѕcαrgαѕ pαrα vαrισѕ αrchινσѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #tiktok ⌇ #tt » Descarga videos de TikTok.
 ❒ #mediafire ⌇ #mf » Descargar un archivo de MediaFire.
@@ -98,9 +90,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #npmdl ⌇ #npmdownloader » Descarga paquetes de NPMJs.
 ❒ #animelinks ⌇ #animedl » Descarga Links disponibles de descargas.
 
-—〈 ${botname} ⋆ economia 〉—
-
-• Comandos de economía y rpg para ganar dinero y otros recursos.
+🌟〈 ${botname} ⋆ єcσnσmια 〉🌟
+• Cσmαndσѕ dє єcσnσmíα y rpɢ pαrα gαnαr dιnєrσ y σtrσѕ rєcυrѕσѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #w ⌇ #work ⌇ #trabajar » Trabaja para ganar ${moneda}.
 ❒ #slut ⌇ #protituirse » Trabaja como prostituta y gana ${moneda}.
@@ -131,9 +122,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #halloween » Reclama tu dulce o truco (Solo en Halloween).
 ❒ #christmas ⌇ #navidad » Reclama tu regalo navideño (Solo en Navidad).
 
-—〈 ${botname} ⋆ gacha 〉—
-
-• Comandos de gacha para reclamar y colecciónar personajes.
+🌟〈 ${botname} ⋆ gαchα 〉🌟
+• Cσmαndσѕ dє gαchα pαrα rєclαmαr y cσlєccιónαr pєrѕσnαjєѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #rollwaifu ⌇ #rw ⌇ #roll » Waifu o husbando aleatorio.
 ❒ #claim ⌇ #c ⌇ #reclamar » Reclamar un personaje.
@@ -144,9 +134,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #vote ⌇ #votar » Votar por un personaje para subir su valor.
 ❒ #waifusboard ⌇ #waifustop ⌇ #topwaifus » Ver el top de personajes con mayor valor.
 
-—〈 ${botname} ⋆ sticker 〉—
-
-• Comandos para creaciones de stickers etc.
+🌟〈 ${botname} ⋆ ѕtιckєr 〉🌟
+• Cσmαndσѕ pαrα crєαcισnєѕ dє ѕtιckєrѕ єtc.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #sticker ⌇ #s » Crea stickers de (imagen/video)
 ❒ #setmeta » Estable un pack y autor para los stickers.
@@ -158,9 +147,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #emojimix » Fuciona 2 emojis para crear un sticker.
 ❒ #wm ⌇ #watermark » Cambia el nombre de los stickers.
 
-—〈 ${botname} ⋆ herramientas 〉—
-
-• Comandos de herramientas con muchas funciones.
+🌟〈 ${botname} ⋆ hєrrαmιєntαѕ 〉🌟
+• Cσmαndσѕ dє hєrrαmιєntαѕ cσn mυchαѕ fυncισnєѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #calcular ⌇ #calcular ⌇ #cal » Calcular todo tipo de ecuaciones.
 ❒ #tiempo ⌇ #clima » Ver el clima de un pais.
@@ -177,9 +165,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #todoc ⌇ #toducument » Crea documentos de (audio, imágenes y vídeos).
 ❒ #translate ⌇ #traducir ⌇ #trad » Traduce palabras en otros idiomas.
 
-—〈 ${botname} ⋆ perfil 〉—
-
-• Comandos de perfil para ver, configurar y comprobar estados de tu perfil.
+🌟〈 ${botname} ⋆ pєrƒιl 〉🌟
+• Cσmαndσѕ dє pєrƒιl pαrα vєr, cσnfιgυrαr y cσmprσвαr єѕtαdσѕ dє tυ pєrƒιl.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #reg ⌇ #verificar ⌇ #register » Registra tu nombre y edad en el bot.
 ❒ #unreg » Elimina tu registro del bot.
@@ -197,9 +184,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #comprarpremium ⌇ #premium » Compra un pase premium para usar el bot sin límites.
 ❒ #confesiones ⌇ #confesar » Confiesa tus sentimientos a alguien de manera anonima.
 
-—〈 ${botname} ⋆ grupos 〉—
-
-• Comandos de grupos para una mejor gestión de ellos.
+🌟〈 ${botname} ⋆ grυpσѕ 〉🌟
+• Cσmαndσѕ dє grυpσѕ pαrα υnα mєjσr gєѕtιón dє єllσѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #config ⌇ #on » Ver opciones de configuración de grupos.
 ❒ #hidetag ⌇ #tagh » Envia un mensaje mencionando a todos los usuarios
@@ -234,48 +220,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #setemoji ⌇ #setemo » Cambia el emoji que se usa en la invitación de usuarios.
 ❒ #listnum ⌇ #kicknum » Elimine a usuario por el prefijo de país.
 
-—〈 ${botname} ⋆ anime 〉—
-
-• Comandos de reacciones de anime.
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-❒ #angry ⌇ #enojado + <mencion> » Estar enojado
-❒ #bite ⌇ #muerde + <mencion> » Muerde a alguien
-❒ #bleh ⌇ #sacalengua + <mencion> » Sacar la lengua
-❒ #blush ⌇ #sonrojar + <mencion> » Sonrojarte
-❒ #bored ⌇ #aburrido + <mencion> » Estar aburrido
-❒ #cry ⌇ #llorar + <mencion> » Llorar por algo o alguien
-❒ #cuddle ⌇ #acurrucarse + <mencion> » Acurrucarse
-❒ #dance ⌇ #bailar + <mencion> » Sacate los pasitos prohíbidos
-❒ #drunk ⌇ #borracho + <mencion> » Estar borracho
-❒ #eat ⌇ #comer + <mencion> » Comer algo delicioso
-❒ #facepalm ⌇ #palmada + <mencion> » Darte una palmada en la cara
-❒ #happy ⌇ #feliz + <mencion> » Salta de felicidad
-❒ #hug ⌇ #abrazo + <mencion> » Dar un abrazo
-❒ #impregnate ⌇ #embarazar ⌇ #preg + <mencion> » Embarazar a alguien
-❒ #kill ⌇ #matar + <mencion> » Toma tu arma y mata a alguien
-❒ #kiss ⌇ #besar ⌇ #kiss2 + <mencion> » Dar un beso
-❒ #laugh ⌇ #reir + <mencion> » Reírte de algo o alguien
-❒ #lick ⌇ #lamer + <mencion> » Lamer a alguien
-❒ #love ⌇ #amor + <mencion> » Sentirse enamorado
-❒ #pat ⌇ #acariciar + <mencion> » Acaricia a alguien
-❒ #poke ⌇ #picar + <mencion> » Picar a alguien
-❒ #pout ⌇ #puchero + <mencion> » Hacer pucheros
-❒ #punch ⌇ #puñetazo + <mencion> » Dar un puñetazo
-❒ #run ⌇ #correr + <mencion> » Correr
-❒ #sad ⌇ #triste + <mencion> » Expresar tristeza
-❒ #scared ⌇ #asustado + <mencion> » Estar asustado
-❒ #seduce ⌇ #seduccion + <mencion> » Seducir a alguien
-❒ #shy ⌇ #timido + <mencion> » Sentir timidez
-❒ #slap ⌇ #bofetada + <mencion> » Dar una bofetada
-❒ #dias ⌇ #days » Darle los buenos días a alguien
-❒ #noches ⌇ #nights » Darle las buenas noches a alguien
-❒ #sleep ⌇ #dormir + <mencion> » Tumbarte a dormir
-❒ #smoke ⌇ #fumar + <mencion> » Fumar
-❒ #think ⌇ #pensar + <mencion> » Pensar en algo
-
-—〈 ${botname} ⋆ NSFW 〉—
-
-• Comandos NSFW (Contenido para adultos)
+—〈 ${botname} ⋆ NSFW 〉— // Mantengo NSFW sin cambios por ser sensible
+• Cσmαndσѕ NSFW (Cσntєnιdσ pαrα αdυltσѕ)
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #anal + <mencion> » Hacer un anal
 ❒ #waifu » Buscá una waifu aleatorio.
@@ -299,9 +245,8 @@ let handler = async (m, { conn, args }) => {
 ❒ #undress ⌇ #encuerar + <mencion> » Desnudar a alguien
 ❒ #yuri ⌇ #tijeras + <mencion> » Hacer tijeras.
 
-—〈 ${botname} ⋆ juegos 〉—
-
-• Comandos de juegos para jugar con rus amigos.
+🌟〈 ${botname} ⋆ jυєgσѕ 〉🌟
+• Cσmαndσѕ dє jυєgσѕ pαrα jυgαr cσn rυѕ αmιgσѕ.
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ❒ #amistad ⌇ #amigorandom » hacer amigos con un juego.
 ❒ #chaqueta ⌇ #jalamela » Hacerte una chaqueta.
@@ -338,30 +283,29 @@ let handler = async (m, { conn, args }) => {
 ❒ #ttt ⌇ #tresenraya » Crea una sala de juego.
 `.trim();
 
-    // Combinamos la introducción con el texto principal
-    let finalTxt = communityIntro + txt;
-await conn.sendMessage(m.chat, { 
-      text: txt,
-      contextInfo: {
-          mentionedJid: [m.sender, userId],
-          isForwarded: true,
-          forwardedNewsletterMessageInfo: {
-              newsletterJid: channelRD.id,
-              newsletterName: channelRD.name,
-              serverMessageId: -1,
-          },
-          forwardingScore: 4,
-          externalAdReply: {
-              title: botname,
-              body: textbot,
-              thumbnailUrl: banner,
-              sourceUrl: redes,
-              mediaType: 1,
-              showAdAttribution: true,
-              renderLargerThumbnail: false,
-          },
-      },
-  }, { quoted: m })
+    // Enviamos el texto completo (que ahora incluye la intro de la comunidad)
+    await conn.sendMessage(m.chat, {
+        text: txt,
+        contextInfo: {
+            mentionedJid: [m.sender, userId],
+            isForwarded: true, // Mantenemos si estaba funcionando así
+            forwardedNewsletterMessageInfo: { // Mantenemos si estaba funcionando así, aunque un grupo no es un newsletter
+                newsletterJid: channelRD.id, // Asegúrate que channelRD esté definido y sea correcto si usas esto
+                newsletterName: channelRD.name, // Asegúrate que channelRD esté definido y sea correcto si usas esto
+                serverMessageId: -1,
+            },
+            forwardingScore: 4, // Mantenemos si estaba funcionando así
+            externalAdReply: {
+                title: botname,
+                body: textbot,
+                thumbnailUrl: banner, // La imagen de la vista previa
+                sourceUrl: redes, // Asegúrate que 'redes' esté definida y sea el enlace correcto
+                mediaType: 1, // 1 para imagen
+                showAdAttribution: true,
+                renderLargerThumbnail: true, // <-- Este ajuste hace la imagen más grande/ancha
+            },
+        },
+    }, { quoted: m })
 
 }
 
@@ -378,5 +322,5 @@ function clockString(ms) {
     return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':')
 }
 
-// Asegúrate de tener definidas las variables 'botname', 'textbot', 'banner', 'moneda'
-// global.db.data.users, y global.plugins deben estar inicializados en tu bot.
+// Asegúrate de tener definidas las variables 'botname', 'textbot', 'banner', 'moneda', 'redes'
+// global.db.data.users, global.plugins, y posiblemente 'channelRD' deben estar inicializados en tu bot.
