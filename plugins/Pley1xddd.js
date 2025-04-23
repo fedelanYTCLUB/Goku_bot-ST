@@ -32,24 +32,27 @@ let handler = async (m, { conn, text }) => {
     if (!video) throw new Error("No se encontraron resultados.");
 
     const progreso = [
-      "[░░░░░░░░░░] 0%",
-      "[█░░░░░░░░░] 10%",
-      "[██░░░░░░░░] 20%",
-      "[███░░░░░░░] 30%",
-      "[████░░░░░░] 40%",
-      "[█████░░░░░] 50%",
-      "[██████░░░░] 60%",
-      "[███████░░░] 70%",
-      "[████████░░] 80%",
-      "[█████████░] 90%",
-      "[██████████] 100% ✅"
+      "Enviando audio...\n[░░░░░░░░░░] 0%",
+      "Enviando audio...\n[█░░░░░░░░░] 10%",
+      "Enviando audio...\n[██░░░░░░░░] 20%",
+      "Enviando audio...\n[███░░░░░░░] 30%",
+      "Enviando audio...\n[████░░░░░░] 40%",
+      "Enviando audio...\n[█████░░░░░] 50%",
+      "Enviando audio...\n[██████░░░░] 60%",
+      "Enviando audio...\n[███████░░░] 70%",
+      "Enviando audio...\n[████████░░] 80%",
+      "Enviando audio...\n[█████████░] 90%",
+      "Enviando audio...\n[██████████] 100% ✅"
     ];
 
-    const { key } = await conn.sendMessage(m.chat, { text: "Enviando audio..." }, { quoted: m });
+    const { key } = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
 
-    for (let item of progreso) {
-      await conn.sendMessage(m.chat, { text: item, edit: key.key }, { quoted: m });
-      await new Promise(resolve => setTimeout(resolve, 200));
+    for (let i = 1; i < progreso.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 250));
+      await conn.sendMessage(m.chat, {
+        text: progreso[i],
+        edit: key.key
+      });
     }
 
     const apiUrl = `${getApiUrl()}?url=${encodeURIComponent(video.url)}`;
@@ -60,18 +63,15 @@ let handler = async (m, { conn, text }) => {
       caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
     });
 
-    const audioMessage = {
+    await conn.sendMessage(m.chat, {
       audio: { url: apiData.download.url },
       mimetype: "audio/mpeg",
       ptt: true,
       fileName: `${video.title}.mp3`,
-    };
+    }, { quoted: m });
 
-    await conn.sendMessage(m.chat, audioMessage, { quoted: m });
-    await conn.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
   } catch (error) {
     console.error("Error:", error);
-    await conn.sendMessage(m.chat, { react: { text: "❌", key: m.key } });
     await conn.sendMessage(m.chat, {
       text: `❌ *Error al procesar tu solicitud:*\n${error.message || "Error desconocido"}`,
     });
