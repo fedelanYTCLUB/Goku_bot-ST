@@ -39,7 +39,7 @@ let handler = async (m, { conn, text }) => {
 
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
-      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
+      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> 💮 Si no funciona prueba con .play1 ${video.title}\n> Provived By Mai 🌻`,
     });
 
     const audioMessage = {
