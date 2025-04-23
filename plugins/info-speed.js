@@ -24,7 +24,7 @@ let texto = `${emoji} *${packname}*
 🚀 *Velocidad:*
 → ${latensi.toFixed(4)}
 
-🕒 *Activo Durante:*
+🕒 *Activa Durante:*
 → ${muptime}
 
 💫 *Chats:*
@@ -42,7 +42,7 @@ conn.reply(m.chat, texto, m, )
 handler.help = ['speed']
 handler.tags = ['info']
 handler.command = ['speed']
-handler.register = true
+handler.register = false
 
 export default handler
 
