@@ -32,32 +32,36 @@ let handler = async (m, { conn, text }) => {
     if (!video) throw new Error("No se encontraron resultados.");
 
     const progreso = [
-      "Enviando audio...\n[░░░░░░░░░░] 0%",
-      "Enviando audio...\n[█░░░░░░░░░] 10%",
-      "Enviando audio...\n[██░░░░░░░░] 20%",
-      "Enviando audio...\n[███░░░░░░░] 30%",
-      "Enviando audio...\n[████░░░░░░] 40%",
-      "Enviando audio...\n[█████░░░░░] 50%",
-      "Enviando audio...\n[██████░░░░] 60%",
-      "Enviando audio...\n[███████░░░] 70%",
-      "Enviando audio...\n[████████░░] 80%",
-      "Enviando audio...\n[█████████░] 90%",
-      "Enviando audio...\n[██████████] 100% ✅"
+      "🎶 Enviando audio...\n[░░░░░░░░░░] 0%",
+      "🎶 Enviando audio...\n[█░░░░░░░░░] 10%",
+      "🎶 Enviando audio...\n[██░░░░░░░░] 20%",
+      "🎶 Enviando audio...\n[███░░░░░░░] 30%",
+      "🎶 Enviando audio...\n[████░░░░░░] 40%",
+      "🎶 Enviando audio...\n[█████░░░░░] 50%",
+      "🎶 Enviando audio...\n[██████░░░░] 60%",
+      "🎶 Enviando audio...\n[███████░░░] 70%",
+      "🎶 Enviando audio...\n[████████░░] 80%",
+      "🎶 Enviando audio...\n[█████████░] 90%",
+      "✅ ¡Audio listo!\n[██████████] 100%"
     ];
 
-    const { key } = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
+    // Enviar mensaje inicial
+    const mensajeInicial = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
 
+    // Editar con progreso
     for (let i = 1; i < progreso.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 250));
       await conn.sendMessage(m.chat, {
         text: progreso[i],
-        edit: key.key
+        edit: mensajeInicial,
       });
     }
 
+    // Obtener enlace del audio
     const apiUrl = `${getApiUrl()}?url=${encodeURIComponent(video.url)}`;
     const apiData = await fetchWithRetries(apiUrl);
 
+    // Enviar info y audio
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
       caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
