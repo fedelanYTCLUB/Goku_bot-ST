@@ -22,13 +22,11 @@ const fetchWithRetries = async (url, maxRetries = 2) => {
 let handler = async (m, { conn, text }) => {
   if (!text || !text.trim()) {
     return conn.sendMessage(m.chat, {
-      text: "*❀ Ingresa el nombre de la música a descargar.*\n\n*Ejemplo:* `.play No llores más`",
+      text: "*❀ Ingresa el nombre de la música a descargar.*\n\n*Ejemplo:* `.play1 Ojitos lindos`",
     });
   }
 
   try {
-    await conn.sendMessage(m.chat, { react: { text: "🌻", key: m.key } });
-
     const searchResults = await yts(text.trim());
     const video = searchResults.videos[0];
     if (!video) throw new Error("No se encontraron resultados.");
@@ -47,7 +45,7 @@ let handler = async (m, { conn, text }) => {
       "[██████████] 100% ✅"
     ];
 
-    const key = await conn.sendMessage(m.chat, { text: "Enviando audio..." }, { quoted: m });
+    const { key } = await conn.sendMessage(m.chat, { text: "Enviando audio..." }, { quoted: m });
 
     for (let item of progreso) {
       await conn.sendMessage(m.chat, { text: item, edit: key.key }, { quoted: m });
@@ -80,8 +78,8 @@ let handler = async (m, { conn, text }) => {
   }
 };
 
-handler.command = ['playaudio', 'mp3', 'play'];
-handler.help = ['playaudio <texto>', 'mp3'];
+handler.command = ['play1'];
+handler.help = ['play1 <texto>'];
 handler.tags = ['downloader'];
 
 export default handler;
