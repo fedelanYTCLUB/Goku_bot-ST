@@ -143,7 +143,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 };
 
-handler.command = handler.help = ["play2", "ytmp4", "ytv"];
+handler.command = handler.help = ["play22", "ytv"];
 handler.tags = ["downloader"];
 handler.coin = 0;
 
