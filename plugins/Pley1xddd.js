@@ -46,14 +46,14 @@ let handler = async (m, { conn, text }) => {
     ];
 
     // Enviar mensaje inicial
-    const mensajeInicial = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
+    let mensajeEditado = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
 
     // Editar con progreso
     for (let i = 1; i < progreso.length; i++) {
       await new Promise(resolve => setTimeout(resolve, 250));
-      await conn.sendMessage(m.chat, {
+      mensajeEditado = await conn.sendMessage(m.chat, {
         text: progreso[i],
-        edit: mensajeInicial,
+        edit: mensajeEditado,
       });
     }
 
@@ -61,12 +61,14 @@ let handler = async (m, { conn, text }) => {
     const apiUrl = `${getApiUrl()}?url=${encodeURIComponent(video.url)}`;
     const apiData = await fetchWithRetries(apiUrl);
 
-    // Enviar info y audio
+    // Editar mensaje final con imagen y caption
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
       caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
+      edit: mensajeEditado
     });
 
+    // Enviar audio
     await conn.sendMessage(m.chat, {
       audio: { url: apiData.download.url },
       mimetype: "audio/mpeg",
