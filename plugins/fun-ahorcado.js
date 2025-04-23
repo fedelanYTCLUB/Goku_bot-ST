@@ -70,7 +70,7 @@ let handler = async (m, { conn }) => {
   let mensaje = ocultarPalabra(palabra, letrasAdivinadas)
   gam.set(m.sender, { palabra, letrasAdivinadas, intentos })
 
-  conn.reply(m.chat, `🎮 *Juego del Ahorcado*\n\n🔤 Palabra: ${mensaje}\n❤️ Intentos: ${intentos}\n\nEscribe una letra para empezar.`, m)
+  conn.reply(m.chat, `🎮 *Juego del Ahorcado*\n\n🔤 Palabra: ${mensaje}\n❤️ Intentos: ${intentos}\n\n> Escribe una letra para empezar.`, m)
 }
 
 handler.before = async (m, { conn }) => {
@@ -100,6 +100,6 @@ handler.before = async (m, { conn }) => {
 
 handler.help = ['ahorcado']
 handler.tags = ['game']
-handler.command = ['ahorcadotest']
+handler.command = ['ahorcado']
 handler.register = true
 export default handler
