@@ -115,7 +115,7 @@ gam.delete(m.sender)
 }}
 handler.help = ['ahorcado']
 handler.tags = ['game']
-handler.command = ['ahorcado']
+handler.command = ['ahorcadotest']
 handler.register = true
 export default handler
 
