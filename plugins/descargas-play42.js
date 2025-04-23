@@ -1,4 +1,3 @@
-//import { youtubedl, youtubedlv2 } from '@bochilteam/scraper'
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 import ytdl from 'ytdl-core';
@@ -22,20 +21,16 @@ if (videoIdToFind) {
 const videoId = videoIdToFind[1];
 ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)}
 ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2;
-await conn.sendMessage(m.chat, { text: `*╭─❍「 YOUTUBE - PLAY 」❍─╮*
+await conn.sendMessage(m.chat, { text: `${yt_play[0].title}
+> [ YOUTUBE - PLAY ] 
 
-*📌 Título:* ${yt_play[0].title}
-*⏱️ Duración:* ${secondString(yt_play[0].duration.seconds)}
-
-*⏳ Por favor, espera mientras preparo tu ${tipoDescarga}...*
-> *Download By Mai 🌸*
-
-*╰───────────────╯*`,
+*ੈ✰‧₊˚ /Duración ${secondString(yt_play[0].duration.seconds)}
+*ੈ✰‧₊˚ Aguarde un momento en lo que envío su ${tipoDescarga}*`,  
 contextInfo:{  
 forwardedNewsletterMessageInfo: { 
-newsletterJid: '120363402846939411@newsletter', 
+newsletterJid: '120363371008200788@newsletter', 
 serverMessageId: '', 
-newsletterName: 'Vivos Vivientes 🌸' },
+newsletterName: 'The Kantu Bot ⚡' },
 forwardingScore: 9999999,  
 isForwarded: true,   
 mentionedJid: null,  
@@ -116,60 +111,8 @@ const fileSize = await getFileSize(mediaData);
 if (fileSize > LimitAud) {
 await conn.sendMessage(m.chat, { document: isDirect ? mediaData : { url: mediaData }, mimetype: 'audio/mpeg', fileName: `${yt_play[0].title}.mp3` }, { quoted: m });
 } else {
-await conn.sendMessage(m.chat, { audio: isDirect ? mediaData : { url: mediaData }, mimetype: 'audio/mpeg', ptt: true }, { quoted: m });
+await conn.sendMessage(m.chat, { audio: isDirect ? mediaData : { url: mediaData }, mimetype: 'audio/mpeg' }, { quoted: m });
 }} else {
-await m.react('❌');
-}}
-
-if (command === 'play2' || command === 'video') {
-const { mediaData, isDirect } = await download(videoApis);
-if (mediaData) {
-const fileSize = await getFileSize(mediaData);
-const messageOptions = { fileName: `${yt_play[0].title}.mp4`, caption: `🔰 Aquí está tu video \n🔥 Título: ${yt_play[0].title}`, mimetype: 'video/mp4' };
-if (fileSize > LimitVid) {
-await conn.sendMessage(m.chat, { document: isDirect ? mediaData : { url: mediaData }, ...messageOptions }, { quoted: m });
-} else {
-await conn.sendMessage(m.chat, { video: isDirect ? mediaData : { url: mediaData }, thumbnail: yt_play[0].thumbnail, ...messageOptions }, { quoted: m });
-}} else {
-await m.react('❌');
-}}
-
-if (command === 'play3' || command === 'playdoc') {
-const { mediaData, isDirect } = await download(audioApis);
-if (mediaData) {
-await conn.sendMessage(m.chat, { document: isDirect ? mediaData : { url: mediaData }, mimetype: 'audio/mpeg', ptt: true, fileName: `${yt_play[0].title}.mp3`}, { quoted: m });
-} else {
-await m.react('❌');
-}}
-
-if (command === 'play4' || command === 'playdoc2') {
-const { mediaData, isDirect } = await download(videoApis);
-if (mediaData) {
-await conn.sendMessage(m.chat, { document: isDirect ? mediaData : { url: mediaData }, fileName: `${yt_play[0].title}.mp4`, caption: `🔰Título: ${yt_play[0].title}`, thumbnail: yt_play[0].thumbnail, mimetype: 'video/mp4'}, { quoted: m })
-} else {
-await m.react('❌');
-}}};
-handler.help = ['play', 'play2', 'play3', 'play4', 'playdoc'];
-handler.tags = ['downloader'];
-handler.command = ['play3', 'play4', 'audio', 'video', 'playdoc', 'playdoc2'];
-handler.register = true;
-export default handler;
-
-async function search(query, options = {}) {
-const search = await yts.search({query, hl: 'es', gl: 'ES', ...options});
-return search.videos;
-}
-
-function MilesNumber(number) {
-const exp = /(\d)(?=(\d{3})+(?!\d))/g;
-const rep = '$1.';
-const arr = number.toString().split('.');
-arr[0] = arr[0].replace(exp, rep);
-return arr[1] ? arr.join('.') : arr[0];
-}
-
-function secondString(seconds) {
-seconds = Number(seconds);
 const d = Math.floor(seconds / (3600 * 24));
 const h = Math.floor((seconds % (3600 * 24)) / 3600);
 const m = Math.floor((seconds % 3600) / 60);
