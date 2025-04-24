@@ -10,7 +10,7 @@ let handler = async (m, { conn, args }) => {
     let txt = `https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
-✨ ¡Hola, ${name}! Soy *${botname}* ✨
+✨ Hola, ${name} Soy *${botname}* ✨
        Como estas :3? 💖
 ┗━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┛
 
