@@ -31,6 +31,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
 ╰┈┈┈┈┈┈┈┈╯`.trim();
 
     await conn.sendMini(m.chat, welcomeTitle, dev, bienvenida, img, img, redes, fkontak);
+    await conn.sendFile(m.chat, 'https://files.catbox.moe/6w3m3o.mp3', 'bienvenida.mp3', null, m, true, { type: 'audioMessage', ptt: true });
   }
 
   if (chat.welcome && (m.messageStubType === 28 || m.messageStubType === 32)) {
@@ -44,5 +45,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
 ╰┈┈┈┈┈┈┈┈╯`.trim();
 
     await conn.sendMini(m.chat, goodbyeTitle, dev, despedida, img, img, redes, fkontak);
+    await conn.sendFile(m.chat, 'https://files.catbox.moe/c8ekzx.mp3', 'despedida.mp3', null, m, true, { type: 'audioMessage', ptt: true });
   }
 }
