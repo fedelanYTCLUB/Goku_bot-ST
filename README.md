@@ -99,8 +99,81 @@
 
 ➮ **Instalación por Termux**
 
-<details>
+<details> 
+  
   <summary><b> ✎ Haz clic para ver los comandos </b></summary>
 
-  ❀ Instalación manual por Termux:
+### **❀ Instalación manual por termux**
+> Nota: Copie y pegue los comandos en termux uno por uno.
+```bash
+termux-setup-storage
+```
+
+```bash
+apt update && apt upgrade && pkg install -y git nodejs ffmpeg imagemagick yarn
+```
+
+```bash
+git clone https://github.com/Ado926/MaiBot.git && cd MaiBot
+```
+
+```bash
+yarn install
+```
+
+```bash
+npm install
+```
+
+```bash
+npm update
+```
+
+```bash
+npm start
+```
+
+> Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
+
+### **🜸 Activar en caso de detenerse en termux**
+
+> Si después de instalar el bot en Termux se detiene (pantalla en blanco, pérdida de conexión a Internet, reinicio del dispositivo), sigue estos pasos:
+
+❒ Abre Termux y navega al directorio del bot:
+   
+   ```bash
+    cd MaiBot
+   ```
+
+❒ Inicia el bot nuevamente:
+  
+   ```bash
+    npm start
+   ```
+
+### **✰ Volverte owner del Bot**
+
+> Si después de instalar el bot en Termux y iniciar la session del bot (deseas poner tu número es la lista de owner pon este comando:
+
+   ```bash
+    cd MaiBot && nano settings.js
+   ```
+
+</details>
+
+### **`➮ Enlaces útiles`**
+
+<details>
+ <summary><b> 🜸 Enlaces Oficiales </b></summary>
+
+ * Canal Oficial  [`Clickea 🤘`](https://whatsapp.com/channel/0029Vb5UfTC4CrfeKSamhp1f)
+* Grupo Oficial [`Click Aqui 👻`](https://chat.whatsapp.com/GBcSWbfm3JO1HhmbdbnrsH)
+* Comunidad Oficial [`Click aca 🐻‍❄️`](https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY)
+</details>
+
+<details>
+<summary><b> ✰ Contácto</b></summary>
+
+* WhatsApp: [`Aquí`](https:/Wa.me/50493732693)
+  
   
