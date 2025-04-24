@@ -30,7 +30,7 @@
 </details>
 
 <details>
-  <summary><b> ➮ Lista de Comandos</b></summary>
+  <summary><b> ➮ Lista de algunos Comandos</b></summary>
 
   ✦ *Información General*  
   - .ping  
@@ -40,7 +40,7 @@
   ✦ *Descargas*  
   - .play (nombre)  
   - .ytmp3 (usa link)  
-  - .ytmp4  (usa link 
+  - .ytmp4 (usa link)
   - .spotify  
   - .tiktok  
   - .pinterest  
