@@ -1,10 +1,10 @@
 <h1 align="center">✦ Mai - Bot ✦</h1>
 <p align="center"><img src="https://files.catbox.moe/elx34q.jpg" alt="Imagen del Bot Mai" width="300px"></p>
 
-❕️ **Información importante**
+❕️ **Información**
 
 <details>
-  <summary><b> ➮ Info • Bot</b></summary>
+  <summary><b> ➮ Info Importante</b></summary>
   Este proyecto no está afiliado de ninguna manera con WhatsApp, Inc. WhatsApp es una marca registrada de WhatsApp LLC, y este bot es un desarrollo independiente que no tiene ninguna relación oficial con la compañía.
 </details>
 
