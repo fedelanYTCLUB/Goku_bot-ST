@@ -175,5 +175,32 @@ npm start
 <summary><b> ✰ Contácto</b></summary>
 
 * WhatsApp: [`Aquí`](https:/Wa.me/50493732693)
-  
+
+</details>
+
+---
+
+✧ **SKY-ULTRA-PLUS HOST 🌺** ✧
+
+<a href="https://dash.skyultraplus.com/home">
+<img src="https://qu.ax/zFzXF.png" height="125px">
+</a>
+
+<details>
+<summary><b> ❒ Servidor Sky-Ultra-Plus</b></summary>
+Dashboard: [Dash](#)  
+Panel: [Panel](#)  
+Canal de WhatsApp: [Canal Sky](#)  
+Comunidad: [Aquí](#)  
+Contacto(s): Gata Dios / Russell / elrebelde21  
+Discord: [SkyUltraPlus](#)
+</details>
+
+---
+
+ᥫ💚 **Propietario**
+
+<a href="https://github.com/Ado926">
+<img src="https://github.com/Ado926.png" width="130" height="130" alt="Ado926"/>
+</a>
   
