@@ -7,10 +7,7 @@ let handler = async (m, { conn, args }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
-    let txt = `
-╔═╍╍๑ 🌟 _Vivos Vivientes_ 🌟 ๑╍═╗
-║   https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
-╚═╍╍๑ 🌸 Únete y Diviértete 🌸 ๑╍╍═╝
+    let txt = `https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
 ✨ ¡Hola, ${name}! Soy *${botname}* ✨
