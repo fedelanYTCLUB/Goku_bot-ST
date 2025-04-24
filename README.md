@@ -14,7 +14,7 @@
   Bot en desarrollo, si presenta alguna falla, reportar al creador para darle una solución óptima.
   
   ✦ *Funcionalidades Principales*:
-  - [x] Interacción con voz y texto  
+  - [ ] Interacción con voz y texto  
   - [x] Bienvenida personalizada y mensajes de salida  
   - [x] Antidelete, antilink, antifake, etc.  
   - [x] SubBots (Jadibots multiusuario)  
@@ -26,7 +26,7 @@
   - [x] Convertidor de stickers (imagen/video/audio a sticker)  
   - [x] Descargas de YouTube, Spotify, TikTok y más  
   - [x] Comandos +18 (activables)  
-  - [x] Comandos con botones y listas interactivas  
+  - [ ] Comandos con botones y listas interactivas  
 </details>
 
 <details>
