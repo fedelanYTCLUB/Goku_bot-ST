@@ -9,18 +9,16 @@ let q = m.quoted ? m.quoted : m;
   if (!mime) return m.reply("No media found", null, { quoted: fkontak });
   let media = await q.download();
 let link = await catbox(media);
-  let caption = `📮 *L I N K :*
+  let caption = `🌸 *L I N K :*
  \`\`\`• ${link}\`\`\`
-📊 *S I Z E :* ${formatBytes(media.length)}
-📛 *E x p i r e d :* "No Expiry Date" 
+📊 *TAMAÑO:* ${formatBytes(media.length)}
+📛 *Expired:* "No Expiry Date" 
 `;
 
   await m.reply(caption);
 }
 handler.command = handler.help = ['tourl']
 handler.tags = ['tools']
-handler.diamond = true
-handler.estrellas = 5;
 export default handler
 
 
