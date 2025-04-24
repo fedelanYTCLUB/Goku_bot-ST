@@ -12,7 +12,8 @@ import moment from 'moment-timezone'
 global.botNumber = ''
 
 global.owner = [
-  ['50493732693', '♡ Wirk ♡', true]
+  ['50493732693', '♡ Wirk ♡', true],
+  ['51921826291', 'Maycol', true]
 ]
 
 global.mods = []
