@@ -19,10 +19,10 @@ export async function before(m, { conn, participants, groupMetadata }) {
  if (chat.welcome && m.messageStubType === 27) {
     this.sendMessage(m.chat, { audio: { url: vn }, 
     contextInfo: { forwardedNewsletterMessageInfo: { 
-    newsletterJid: "120363307694217288@newsletter",
+    newsletterJid: "120363402846939411@newsletter",
     serverMessageId: '', 
-    newsletterName: ' 𝕭𝖑𝖆𝖈𝖐 𝕮𝖑𝖔𝖛𝖊𝖗 ☘' }, forwardingScore: 9999999, isForwarded: true, mentionedJid: getMentionedJid(), "externalAdReply": { 
-    "title": `♧ ＷＥＬＣＯＭＥ ⫷┈┈╯`, 
+    newsletterName: 'Vivos Vivientes 👻' }, forwardingScore: 9999999, isForwarded: true, mentionedJid: getMentionedJid(), "externalAdReply": { 
+    "title": `♧ ＷＥＬＣＯＭＥ 👻 ⫷┈┈╯`, 
     "body": `${userName}`, 
     "previewType": "PHOTO", 
     "thumbnailUrl": null,
@@ -35,16 +35,16 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (chat.welcome && (m.messageStubType === 28 || m.messageStubType === 32)) {
     this.sendMessage(m.chat, { audio: { url: vn2 }, 
     contextInfo: { forwardedNewsletterMessageInfo: { 
-    newsletterJid: "120363307694217288@newsletter",
+    newsletterJid: "120363402846939411@newsletter",
     serverMessageId: '', 
-    newsletterName: ' 𝕭𝖑𝖆𝖈𝖐 𝕮𝖑𝖔𝖛𝖊𝖗 ☘' }, forwardingScore: 9999999, isForwarded: true, mentionedJid: getMentionedJid(), "externalAdReply": { 
-    "title": `  ͟͞ Ａ Ｄ Ｉ Ｏ Ｓ ͟͞  `, 
+    newsletterName: 'Vivos Vivientes 🌸' }, forwardingScore: 9999999, isForwarded: true, mentionedJid: getMentionedJid(), "externalAdReply": { 
+    "title": `  ͟͞ C H A U ͟͞  `, 
     "body": `${userName}, se despide.`, 
     "previewType": "PHOTO", 
     "thumbnailUrl": null,
     "thumbnail": icons, 
     "sourceUrl": redes, 
     "showAdAttribution": true}}, 
-     seconds: '4556', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+     seconds: '543', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
   }
 }
