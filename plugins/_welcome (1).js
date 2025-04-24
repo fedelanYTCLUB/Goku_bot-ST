@@ -4,8 +4,8 @@ import fetch from 'node-fetch';
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return true;
 
-  let vn = 'https://files.catbox.moe/or87jd.mp4';
-  let vn2 = 'https://files.catbox.moe/51b21l.mp4';
+  let vn = 'https://files.catbox.moe/da91w0.mp4';
+  let vn2 = 'https://files.catbox.moe/lzvv5u.mp4';
   let chat = global.db.data.chats[m.chat];
   const getMentionedJid = () => {
     return m.messageStubParameters.map(param => `${param}@s.whatsapp.net`);
@@ -29,7 +29,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
     "thumbnail": icons, 
     "sourceUrl": redes, 
     "showAdAttribution": true}}, 
-     seconds: '4556', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+     seconds: '2000', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 
   if (chat.welcome && (m.messageStubType === 28 || m.messageStubType === 32)) {
@@ -45,6 +45,6 @@ export async function before(m, { conn, participants, groupMetadata }) {
     "thumbnail": icons, 
     "sourceUrl": redes, 
     "showAdAttribution": true}}, 
-     seconds: '543', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+     seconds: '2000', ptt: true, mimetype: 'audio/mpeg', fileName: `error.mp3` }, { quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
   }
 }
