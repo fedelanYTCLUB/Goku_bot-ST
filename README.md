@@ -186,16 +186,6 @@ npm start
 <img src="https://qu.ax/zFzXF.png" height="125px">
 </a>
 
-<details>
-<summary><b> ❒ Servidor Sky-Ultra-Plus</b></summary>
-Dashboard: [Dash](#)  
-Panel: [Panel](#)  
-Canal de WhatsApp: [Canal Sky](#)  
-Comunidad: [Aquí](#)  
-Contacto(s): Gata Dios / Russell / elrebelde21  
-Discord: [SkyUltraPlus](#)
-</details>
-
 ---
 
 ᥫ💚 **Propietario**
