@@ -13,12 +13,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     const video = searchData.data[0]; // Tomar el primer resultado
-  
-    await conn.sendMessage(m.chat, {
-      image: { url: video.image },
-      caption: videoDetails.trim()
-    }, { quoted: m });
-
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
@@ -26,14 +20,14 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     if (!downloadData?.result?.download?.url) {
       return m.reply("❌ No se pudo obtener el audio del video.");
     }
+
     await conn.sendMessage(m.chat, {
       audio: { url: downloadData.result.download.url },
-      mimetype: 'audio/mpeg', 
+      mimetype: 'audio/mpeg',
       ptt: true,
       fileName: `${video.title}.mp3`
     }, { quoted: m });
- 
-    await m.react("✅");
+
   } catch (error) {
     console.error(error);
     m.reply(`❌ Error al procesar la solicitud:\n${error.message}`);
