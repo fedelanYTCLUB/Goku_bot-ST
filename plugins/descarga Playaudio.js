@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const video = searchData.data[0]; // Tomar el primer resultado
     const videoDetails = `
-*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n\n> Provived By Mai 🌻`;
+*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.duration}\n\n> Provived By Mai 🌻`;
   
     await conn.sendMessage(m.chat, {
       image: { url: video.image },
@@ -30,7 +30,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
     await conn.sendMessage(m.chat, {
       audio: { url: downloadData.result.download.url },
-      mimetype: 'audio/mpeg',
+      mimetype: 'audio/mpeg', 
+      ptt: true,
       fileName: `${video.title}.mp3`
     }, { quoted: m });
  
