@@ -1,91 +1,47 @@
-import fetch from "node-fetch";
-import yts from "yt-search";
+import fetch from 'node-fetch';
 
-const encodedApi = "aHR0cHM6Ly9hcGkudnJlZGVuLndlYi5pZC9hcGkveXRtcDM=";
-const getApiUrl = () => Buffer.from(encodedApi, "base64").toString("utf-8");
-
-const fetchWithRetries = async (url, maxRetries = 2) => {
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data?.status === 200 && data.result?.download?.url) {
-        return data.result;
-      }
-    } catch (error) {
-      console.error(`Intento ${attempt + 1} fallido:`, error.message);
-    }
-  }
-  throw new Error("No se pudo obtener la música después de varios intentos.");
-};
-
-let handler = async (m, { conn, text }) => {
-  if (!text || !text.trim()) {
-    return conn.sendMessage(m.chat, {
-      text: "*❀ Ingresa el nombre de la música a descargar.*\n\n*Ejemplo:* `.play1 Ojitos lindos`",
-    });
-  }
+let handler = async (m, { conn, usedPrefix, command, text }) => {
+  if (!text) return m.reply(`✨ Ingresa un texto para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Shakira`);
 
   try {
-    const searchResults = await yts(text.trim());
-    const video = searchResults.videos[0];
-    if (!video) throw new Error("No se encontraron resultados.");
+    const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${text}`;
+    const searchResponse = await fetch(searchApi);
+    const searchData = await searchResponse.json();
 
-    const progreso = [
-      "🎶 Descargando...\n[░░░░░░░░░░] 0%",
-      "🎶 [█░░░░░░░░░] 10%",
-      "🎶 [██░░░░░░░░] 20%",
-      "🎶 [███░░░░░░░] 30%",
-      "🎶 [████░░░░░░] 40%",
-      "🎶 [█████░░░░░] 50%",
-      "🎶 [██████░░░░] 60%",
-      "🎶 [███████░░░] 70%",
-      "🎶 [████████░░] 80%",
-      "🎶 [█████████░] 90%",
-      "🍀 *Enviando Audio*\n[██████████] 100%"
-    ];
-
-    // Enviar mensaje inicial
-    let mensajeEditado = await conn.sendMessage(m.chat, { text: progreso[0] }, { quoted: m });
-
-    // Editar con progreso
-    for (let i = 1; i < progreso.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 250));
-      mensajeEditado = await conn.sendMessage(m.chat, {
-        text: progreso[i],
-        edit: mensajeEditado,
-      });
+    if (!searchData?.data || searchData.data.length === 0) {
+      return m.reply(`⚠️ No se encontraron resultados para "${text}".`);
     }
 
-    // Obtener enlace del audio
-    const apiUrl = `${getApiUrl()}?url=${encodeURIComponent(video.url)}`;
-    const apiData = await fetchWithRetries(apiUrl);
-
-    // Editar mensaje final con imagen y caption
+    const video = searchData.data[0]; // Tomar el primer resultado
+  
     await conn.sendMessage(m.chat, {
-      image: { url: video.thumbnail },
-      caption: `*「✦」Descargando ${video.title}*\n\n> ✦ Canal » *${video.author.name}*\n> ✰ *Vistas:* » ${video.views}\n> ⴵ *Duración:* » ${video.timestamp}\n> Provived By Mai 🌻`,
-      edit: mensajeEditado
-    });
-
-    // Enviar audio
-    await conn.sendMessage(m.chat, {
-      audio: { url: apiData.download.url },
-      mimetype: "audio/mpeg",
-      ptt: true,
-      fileName: `${video.title}.mp3`,
+      image: { url: video.image },
+      caption: videoDetails.trim()
     }, { quoted: m });
 
-  } catch (error) {
-    console.error("Error:", error);
+    const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
+    const downloadResponse = await fetch(downloadApi);
+    const downloadData = await downloadResponse.json();
+
+    if (!downloadData?.result?.download?.url) {
+      return m.reply("❌ No se pudo obtener el audio del video.");
+    }
     await conn.sendMessage(m.chat, {
-      text: `❌ *Error al procesar tu solicitud:*\n${error.message || "Error desconocido"}`,
-    });
+      audio: { url: downloadData.result.download.url },
+      mimetype: 'audio/mpeg', 
+      ptt: true,
+      fileName: `${video.title}.mp3`
+    }, { quoted: m });
+ 
+    await m.react("✅");
+  } catch (error) {
+    console.error(error);
+    m.reply(`❌ Error al procesar la solicitud:\n${error.message}`);
   }
 };
 
-handler.command = ['play1'];
-handler.help = ['play1 <texto>'];
-handler.tags = ['downloader'];
+handler.command = ['play1', 'playmp3'];
+handler.help = ['play <texto>', 'playaudio <texto>'];
+handler.tags = ['media'];
 
 export default handler;
