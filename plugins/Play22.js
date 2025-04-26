@@ -10,14 +10,12 @@ const handler = async (m, { conn, text, command, args }) => {
   let youtubeUrl = input;
   let calidad = '360p';
 
-  // Extrae calidad si se incluye (ej. full 720p)
   const calidadMatch = input.match(/(?:full\s*)?(\d{3,4}p)/i);
   if (calidadMatch) {
     calidad = calidadMatch[1];
     youtubeUrl = input.replace(calidadMatch[0], '').trim();
   }
 
-  // Si no es URL, realiza búsqueda
   if (!/^https?:\/\//i.test(youtubeUrl)) {
     try {
       const search = await yts(youtubeUrl);
@@ -32,6 +30,9 @@ const handler = async (m, { conn, text, command, args }) => {
   }
 
   try {
+    // Reacción inicial (⏳)
+    await conn.sendReaction(m.chat, m.key, '⏳'); 
+
     const apiUrl = `http://api-nevi.ddns.net:8000/youtube?url=${encodeURIComponent(youtubeUrl)}&audio=false&calidad=${calidad}`;
     const res = await fetch(apiUrl);
 
@@ -42,16 +43,13 @@ const handler = async (m, { conn, text, command, args }) => {
     }
 
     const buffer = await res.buffer();
-    const fileSizeMB = buffer.length / (1024 * 1024);
     const fileName = res.headers.get("content-disposition")?.split("filename=")[1]?.replace(/"/g, '') || 'video.mp4';
 
-    const fileMsg = {
-      [fileSizeMB > 100 ? 'document' : 'video']: buffer,
-      mimetype: contentType,
-      fileName
-    };
+    // Enviar el video rápidamente
+    await conn.sendFile(m.chat, buffer, fileName, '', m, false, { mimetype: contentType });
 
-    await conn.sendMessage(m.chat, fileMsg, { quoted: m });
+    // Reacción final (✅)
+    await conn.sendReaction(m.chat, m.key, '✅');
 
   } catch (err) {
     console.error('Error al contactar la API:', err);
