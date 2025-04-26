@@ -30,8 +30,13 @@ const handler = async (m, { conn, text, command, args }) => {
   }
 
   try {
-    // Reacción inicial (⏳)
-    await conn.sendReaction(m.chat, m.key, '⏳'); 
+    // Reacción inicial ⏳
+    await conn.sendMessage(m.chat, {
+      react: {
+        text: '⏳',
+        key: m.key,
+      }
+    });
 
     const apiUrl = `http://api-nevi.ddns.net:8000/youtube?url=${encodeURIComponent(youtubeUrl)}&audio=false&calidad=${calidad}`;
     const res = await fetch(apiUrl);
@@ -48,8 +53,13 @@ const handler = async (m, { conn, text, command, args }) => {
     // Enviar el video rápidamente
     await conn.sendFile(m.chat, buffer, fileName, '', m, false, { mimetype: contentType });
 
-    // Reacción final (✅)
-    await conn.sendReaction(m.chat, m.key, '✅');
+    // Reacción final ✅
+    await conn.sendMessage(m.chat, {
+      react: {
+        text: '✅',
+        key: m.key,
+      }
+    });
 
   } catch (err) {
     console.error('Error al contactar la API:', err);
