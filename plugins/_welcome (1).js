@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return true;
 
-  let vn = 'https://files.catbox.moe/da91w0.mp4';
+  let vn = 'https://files.catbox.moe/2sox0j.mp4';
   let vn2 = 'https://files.catbox.moe/lzvv5u.mp4';
   let chat = global.db.data.chats[m.chat];
   const getMentionedJid = () => {
@@ -15,7 +15,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   let userName = user ? user.name : await conn.getName(who);
 
   const thumbnail = await (await fetch('https://files.catbox.moe/elx34q.jpg')).buffer();
-  const redes = 'https://chat.whatsapp.com/tu-grupo'; // Ajustá si querés un link real
+  const redes = 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY'; // Ajustá si querés un link real
 
   if (chat.welcome && m.messageStubType === 27) {
     this.sendMessage(m.chat, {
