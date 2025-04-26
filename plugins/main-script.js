@@ -1,5 +1,5 @@
 const handler = async (m, { conn }) => {
-  const message = `
+  const texto = `
 🌸 _*Mai Bot Sc*_ 🌸
 
 \`\`\`Repositorio OFC:\`\`\`
@@ -8,12 +8,13 @@ https://github.com/Ado926/MaiBot
 > 🌻 Deja tu estrellita ayudaría mucho :D
 
 🔗 *Comunidad Oficial:* https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
-  `;
-  await conn.reply(m.chat, message.trim(), m);
-};
+  `.trim()
 
-handler.command = ['script'];
-handler.help = ['script'];
-handler.tags = ['info'];
+  await conn.reply(m.chat, texto, m)
+}
 
-export default handler;
+handler.help = ['script']
+handler.tags = ['info']
+handler.command = /^script$/i
+
+export default handler
