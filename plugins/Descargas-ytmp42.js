@@ -1,3 +1,4 @@
+//Codigo OFC de Mai
 import fetch from "node-fetch";
 import axios from 'axios';
 
@@ -11,13 +12,13 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
       return m.reply(`Enalce inválido`);
     }
 
-    m.react('🌸');
+    m.react('⏱️');
     let json = await ytdl(args[0]);
     let limit = 10485760;
     let size = await getSize(json.url);
 
     const cap = `*「✦」 : ${json.title}*
-\n> ❒ Peso: ${await formatSize(size) || "Desconocido"}\n> 🜸  URL : ${args[0]}`;
+\n> ❒ Peso: ${await formatSize(size) || "Desconocido"}\n> 🜸  URL : ${args[0]}\n> ⨶ ⍴r᥆᥎і᥎ᥱძ ᑲᥡ mᥲі ッ`;
 
     conn.sendFile(m.chat, await (await fetch(json.url)).buffer(), `${json.title}.mp4`, cap, m, null, { asDocument: true, mimetype: "video/mp4" })
 
