@@ -10,42 +10,46 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('📭');
 
     try {
+      // Llamada a la API con el término de búsqueda
       const response = await fetch(`https://delirius-apiofc.vercel.app/download/apk?query=${encodeURIComponent(text)}`);
       const data = await response.json();
       if (!data.status || !data.data)
         throw new Error("No se encontró la aplicación.");
 
       const app = data.data;
+      // Guardamos la sesión con la info de la app
       apkSession.set(m.chat, { app });
 
+      // Descripción de la aplicación
       let description = `\`\`\`◜Apk - Download◞\`\`\`\n\n`;
       description += `° 🌴 *\`Name:\`* ${app.name}\n`;
       description += `° 🌵 *\`Dev:\`* ${app.developer}\n`;
       description += `° ⚖️ *\`Tamaño:\`* ${app.size}\n\n`;
-      description += `> By Mai 🌸`; // Arreglé aquí también, antes tenías un error con la variable "dev"
+      description += `> By Mai 🌸`;
 
-      const buttons = [
-        {
-          buttonId: `${usedPrefix}apk_download`,
-          buttonText: { displayText: "☀️ Descargar 🌻" },
-          type: 1
-        }
-      ];
-
-      // Aquí se quitó viewOnce: true
+      // Enviar mensaje con imagen y botones
       await conn.sendMessage(
         m.chat,
         {
           image: { url: app.image },
           caption: description,
-          buttons: buttons,
-          footer: '🌸 Elige una opción', // Opcional: puedes poner un footer bonito
+          footer: '🌸 Elige una opción',
+          templateButtons: [
+            {
+              index: 1,
+              quickReplyButton: {
+                displayText: "☀️ Descargar 🌻",
+                id: `${usedPrefix}apk_download`
+              }
+            }
+          ]
         },
         { quoted: m }
       );
+
     } catch (error) {
       console.error("*❌ Error:*", error);
-      await m.react('❌'); // Reacción de error
+      await m.react('❌');
       await conn.sendMessage(
         m.chat,
         { text: `*❌ Ocurrió un error:*\n${error.message || "Error desconocido"}` },
