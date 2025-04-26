@@ -1,34 +1,28 @@
-import moment from 'moment-timezone';
-import fetch from 'node-fetch';
-
-let handler = async (m, { conn, args }) => {
+const handler = async (m, { conn, text, command }) => {
   try {
-    let res = await fetch('https://api.github.com/repos/Ado926/MaiBot');
-    if (!res.ok) throw new Error('Error al obtener datos del repositorio');
-    let json = await res.json();
+    // Verifica si el comando es 'script'
+    if (command === 'script') {
+      // Responde con el mensaje profesional y emojis
+      const message = `
+🌸 _*Mai Bot Sc*_  🌸
 
-    let txt = `*乂  S C R I P T  -  M A I N  乂*\n\n`;
-    txt += `✩  *Nombre* : ${json.name}\n`;
-    txt += `✩  *Visitas* : ${json.watchers_count}\n`;
-    txt += `✩  *Peso* : ${(json.size / 1024).toFixed(2)} MB\n`;
-    txt += `✩  *Actualizado* : ${moment(json.updated_at).format('DD/MM/YY - HH:mm:ss')}\n`;
-    txt += `✩  *Url* : ${json.html_url}\n`;
-    txt += `✩  *Forks* : ${json.forks_count}\n`;
-    txt += `✩  *Stars* : ${json.stargazers_count}\n\n`;
-    txt += `💥 *${packname}*`;
+```Repositorio OFC:```
+https://github.com/Ado926/MaiBot
 
-    let img = imagen1;
+> 🌻 Deja tu estrellita ayudaría mucho :D
 
-    await conn.sendMini(m.chat, packname, wm, txt, img, img, redes, fkontak);
+🔗 *Comunidad Oficial* https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
+      `;
+      // Envía el mensaje
+      await conn.reply(m.chat, message, m);
+    }
   } catch (error) {
-    console.error(error);
-    await m.react(error);  // Reacciona con un emoji de error si ocurre un problema
+    console.error("Error en el comando 'script':", error);
+    return m.reply(`⚠️ *Hubo un error al procesar tu solicitud.*`);
   }
 };
 
-handler.help = ['script'];
-handler.tags = ['main'];
-handler.command = ['script', 'sc'];
-handler.register = true;
+handler.command = handler.help = ['script'];
+handler.tags = ['info'];
 
 export default handler;
