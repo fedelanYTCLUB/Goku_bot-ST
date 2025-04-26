@@ -14,65 +14,39 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       const app = data.data;
       apkSession.set(m.chat, { app });
 
+      // Mensaje de descripción simple
       let description = `\`\`\`◜Apk - Download◞\`\`\`\n\n`;
       description += `° 🌴 *\`Nombre:\`* ${app.name}\n`;
       description += `° 🌵 *\`Dev:\`* ${app.developer}\n`;
       description += `° ⚖️ *\`Tamaño:\`* ${app.size}\n\n`;
       description += `> By Mai 🌸`;
 
-      const buttons = [
-        {
-          buttonId: `${usedPrefix}apk_download`,
-          buttonText: { displayText: "☀️ Descargar 🌻" },
-          type: 1
-        }
-      ];
+      // Enviar solo el mensaje de texto con la descripción
+      await conn.sendMessage(
+        m.chat,
+        { text: description },
+        { quoted: m }
+      );
 
+      // Luego enviar el APK directamente
+      await m.react('⏳');
       await conn.sendMessage(
         m.chat,
         {
-          image: { url: app.image },
-          caption: description,
-          buttons: buttons,
-          // No ponemos viewOnce
+          document: { url: app.download },
+          mimetype: "application/vnd.android.package-archive",
+          fileName: `${app.name}.apk`,
+          caption: `> By Mai 🌸`
         },
         { quoted: m }
       );
 
+      await m.react('✅');
     } catch (error) {
       console.error("*❌ Error:*", error);
       await m.react('❌');
       await conn.sendMessage(m.chat, { text: `*❌ Ocurrió un error:*\n${error.message || "Error desconocido"}` }, { quoted: m });
     }
-    return;
-  }
-
-  if (command === 'apk_download') {
-    let session = apkSession.get(m.chat);
-    if (!session) {
-      return conn.sendMessage(
-        m.chat,
-        { text: `⚠️ No hay sesión activa. Usa ${usedPrefix}apk <nombre>` },
-        { quoted: m }
-      );
-    }
-    let { app } = session;
-    const downloadUrl = app.download;
-
-    await m.react('⏳');
-
-    await conn.sendMessage(
-      m.chat,
-      {
-        document: { url: downloadUrl },
-        mimetype: "application/vnd.android.package-archive",
-        fileName: `${app.name}.apk`,
-        caption: `> By Mai 🌸`
-      },
-      { quoted: m }
-    );
-
-    await m.react('✅');
     return;
   }
 
@@ -86,5 +60,5 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 };
 
-handler.command = ['apk', 'apk_download'];
+handler.command = ['apk'];
 export default handler;
