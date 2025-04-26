@@ -15,6 +15,6 @@ https://github.com/Ado926/MaiBot
 
 handler.help = ['script']
 handler.tags = ['info']
-handler.command = /^script$/i
+handler.command = ['script']
 
 export default handler
