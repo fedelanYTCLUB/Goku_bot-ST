@@ -1,9 +1,9 @@
 import axios from 'axios';
 import fetch from 'node-fetch';
 
-const handler = async (msg, { conn, args, usedPrefix, command, text }) => {
+const handler = async (msg, { conn, text }) => {
   const chatId = msg.key.remoteJid;
-
+  
   if (!text) return;
 
   try {
@@ -80,15 +80,10 @@ async function perplexityQuery(q, prompt) {
   return data.response;
 }
 
-// Detectar solo si el mensaje empieza con "Ai "
-handler.before = async (msg, { text }) => {
-  if (!text) return false;
-  if (!/^ai\s/i.test(text)) return false; // solo si empieza con "ai "
-  return true;
-};
-
+// Ahora sí:
+handler.customPrefix = /^ai\s/i; // si mensaje inicia con "Ai "
+handler.command = new RegExp; // aceptar cualquier comando, lo maneja customPrefix
 handler.help = ['ai <pregunta>'];
-handler.command = /^$/i; // sin prefijo ni nombre de comando
 handler.tags = ['ai'];
 handler.register = true;
 
