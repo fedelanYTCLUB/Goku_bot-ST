@@ -59,7 +59,7 @@ const handler = async (m, { conn, text, command, args }) => {
   }
 };
 
-handler.command = ['play22'];
+handler.command = ['play2x'];
 handler.help = ['play2 <nombre/url> [calidad]'];
 handler.tags = ['descargas'];
 handler.register = true;
