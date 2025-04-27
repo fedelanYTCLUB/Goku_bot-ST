@@ -28,8 +28,8 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
   }
 };
 
-handler.help = ['ytmp42'];
-handler.command = ['ytv2', 'ytmp42'];
+handler.help = ['ytmp4doc'];
+handler.command = ['ytvdoc', 'ytmp4doc'];
 handler.tags = ['downloader'];
 handler.diamond = true;
 
