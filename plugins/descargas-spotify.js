@@ -165,7 +165,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   // Enviar solo el audio sin miniatura
   const audioMessage = {
     audio: { url: download },
-    mimetype: 'audio/mp4',
+    mimetype: 'audio/mp4', 
+    ptt: true,
     fileName: `${name}.mp3`
   };
 
