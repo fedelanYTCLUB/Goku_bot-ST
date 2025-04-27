@@ -1,21 +1,14 @@
-/* 
-- aquie de que se trata de CPF By Alex
-- Power By Team Code Titans
-- https://whatsapp.com/channel/0029ValMlRS6buMFL9d0iQ0S 
-*/
-
-// DOWNLOAD - SPOTIFY
 
 import axios from 'axios'
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
 
-    if (!text) return conn.reply(m.chat, `${emoji} Por favor proporciona el nombre de una canción o artista.`, m)
+    if (!text) return conn.reply(m.chat, `🪼 Por favor proporciona el nombre de una canción o artista.`, m)
 
     try {
         let songInfo = await spotifyxv(text)
-        if (!songInfo.length) throw `${emoji2} No se encontró la canción.`
+        if (!songInfo.length) throw `No se encontró la canción.`
         let song = songInfo[0]
         const res = await fetch(`https://archive-ui.tanakadomp.biz.id/download/spotify?url=${song.url}`)
 
@@ -28,14 +21,14 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
         if (!data || !data.result || !data.result.data || !data.result.data.download) throw "No se pudo obtener el enlace de descarga."
 
-        const info = `「✦」Descargando: ${data.result.data.title}\n\n> 👤 *Artista:* ${data.result.data.artis}\n> 💽 *Álbum:* ${song.album}\n> 🕒 *Duración:* ${timestamp(data.result.data.durasi)}\n> 🔗 *Enlace:* ${song.url}`
+        const info = `🪼 *Descargando:* ${data.result.data.title}\n\n🪽 *Artista:* ${data.result.data.artis}\n🪸 *Álbum:* ${song.album}\n🪷 *Duración:* ${timestamp(data.result.data.durasi)}\n⛓️‍💥 *Enlace:* ${song.url}`
 
-        await conn.sendMessage(m.chat, { text: info, contextInfo: { forwardingScore: 9999999, isForwarded: false, 
+        await conn.sendMessage(m.chat, { text: info, contextInfo: { forwardingScore: 9999999, isForwarded: true, 
         externalAdReply: {
             showAdAttribution: true,
             containsAutoReply: true,
             renderLargerThumbnail: true,
-            title: packname,
+            title: 'Spotify Music',
             body: dev,
             mediaType: 1,
             thumbnailUrl: data.result.data.image,
@@ -52,10 +45,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
 handler.help = ['spotify', 'music']
 handler.tags = ['downloader']
-handler.command = ['spotify', 'splay']
-handler.group = true
-handler.register = true
-
+handler.command = ['spotify', 'music']
 export default handler
 
 async function spotifyxv(query) {
