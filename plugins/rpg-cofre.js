@@ -1,68 +1,65 @@
-const handler = async (m, {isPrems, conn}) => {
-  const time = global.db.data.users[m.sender].lastcofre + 86400000; // 36000000 10 Horas //86400000 24 Horas
-  if (new Date - global.db.data.users[m.sender].lastcofre < 86400000) throw `🎁 Ya Reclamastes Tu Cofre\n⏰️Regresa En: *${msToTime(time - new Date())}* Para Volver A Reclamar`;
+const handler = async (m, { isPrems, conn }) => {
+    if (!global.db.data.users[m.sender]) {
+        throw `${emoji4} Usuario no encontrado.`;
+    }
 
-  const img = imagen1
-  const dia = Math.floor(Math.random() * 30);
-  const tok = Math.floor(Math.random() * 10);
-  const ai = Math.floor(Math.random() * 4000);
-  const expp = Math.floor(Math.random() * 5000);
+    const lastCofreTime = global.db.data.users[m.sender].lastcofre;
+    const timeToNextCofre = lastCofreTime + 86400000;
 
-  global.db.data.users[m.sender].chocolates += dia;
-  global.db.data.users[m.sender].money += ai;
-  global.db.data.users[m.sender].joincount += tok;
-  global.db.data.users[m.sender].exp += expp;
+    if (Date.now() < timeToNextCofre) {
+        const tiempoRestante = timeToNextCofre - Date.now();
+        const mensajeEspera = `${emoji3} Ya reclamaste tu cofre\n⏰️ Regresa en: *${msToTime(tiempoRestante)}* para volver a reclamar.`;
+        await conn.sendMessage(m.chat, { text: mensajeEspera }, { quoted: m });
+        return;
+    }
 
-  const texto = `
-╭━〔 ${global.botname} 〕⬣
-┃🚩 *Obtienes Un Cofre*
-┃ ${saludo}
-╰━━━━━━━━━━━━⬣
+    const img = '[https://files.catbox.moe/jrkhlc.jpg](https://files.catbox.moe/jrkhlc.jpg)';
+    const dia = Math.floor(Math.random() * 100);
+    const tok = Math.floor(Math.random() * 10);
+    const ai = Math.floor(Math.random() * 40);
+    const expp = Math.floor(Math.random() * 5000);
 
-╭━〔 ${global.botname} 〕⬣
-┃ *${dia} ${moneda}* 🍪
-┃ *${tok} Tokens* 💰
-┃ *${expp} Exp* ⚡
-╰━━━━━━━━━━━━⬣`;
+    global.db.data.users[m.sender].coin += dia;
+    global.db.data.users[m.sender].diamonds += ai;
+    global.db.data.users[m.sender].joincount += tok;
+    global.db.data.users[m.sender].exp += expp;
+    global.db.data.users[m.sender].lastcofre = Date.now();
 
-  const fkontak = {
-    'key': {
-      'participants': '0@s.whatsapp.net',
-      'remoteJid': 'status@broadcast',
-      'fromMe': false,
-      'id': 'Halo',
-    },
-    'message': {
-      'contactMessage': {
-        'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
-      },
-    },
-    'participant': '0@s.whatsapp.net',
-  };
+    const texto = `╭━〔 *Cofre de la Suerte* 〕⬣
+┃ ¡Felicidades, ${m.pushName}! Has abierto un nuevo cofre. 🌟
+╰━━━━━━━━━━━━━━━━━━━━⬣
 
- // await conn.sendFile(m.chat, img, 'yoshiko.jpg', texto, fkontak);
-   await conn.sendButton(m.chat, texto, wm, img, [['💲 ʙᴀʟᴀɴᴄᴇ', '/balance'] ], fkontak)
-  global.db.data.users[m.sender].lastcofre = new Date * 1;
+╭━〔 *Premios Recolectados* 〕⬣
+┃ *${dia} ${moneda}* ⛀ ┃ *${tok} Tokens* ❖ ┃ *${ai} Diamantes* ✦ ┃ *${expp} Exp* ✰
+╰━━━━━━━━━━━━━━━━━━━━⬣
+
+💎 ¡Recuerda que cada cofre puede traerte sorpresas únicas! 🟨🟨🟨🟨🟨🟨🟨🟨`;
+    
+    try {
+        await conn.sendFile(m.chat, img, 'yuki.jpg', texto, fkontak);
+    } catch (error) {
+        throw `${msm} Ocurrió un error al enviar el cofre.`;
+    }
 };
-handler.help = ['daily'];
-handler.tags = ['xp'];
-handler.command = ['coffer', 'cofre', 'abrircofre', 'cofreabrir'];
-handler.register = true
+
+handler.help = ['cofre'];
+handler.tags = ['rpg'];
+handler.command = ['cofre'];
+handler.level = 5;
+handler.group = true;
+handler.register = true;
+
 export default handler;
 
-function pickRandom(list) {
-  return list[Math.floor(Math.random() * list.length)];
-}
-
 function msToTime(duration) {
-  const milliseconds = parseInt((duration % 1000) / 100);
-  let seconds = Math.floor((duration / 1000) % 60);
-  let minutes = Math.floor((duration / (1000 * 60)) % 60);
-  let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+    const milliseconds = parseInt((duration % 1000) / 100);
+    let seconds = Math.floor((duration / 1000) % 60);
+    let minutes = Math.floor((duration / (1000 * 60)) % 60);
+    let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-  hours = (hours < 10) ? '0' + hours : hours;
-  minutes = (minutes < 10) ? '0' + minutes : minutes;
-  seconds = (seconds < 10) ? '0' + seconds : seconds;
+    hours = (hours < 10) ? '0' + hours : hours;
+    minutes = (minutes < 10) ? '0' + minutes : minutes;
+    seconds = (seconds < 10) ? '0' + seconds : seconds;
 
-  return hours + ' Horas ' + minutes + ' Minutos';
+    return `${hours} Horas ${minutes} Minutos`;
 }
