@@ -5,7 +5,7 @@ import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysoc
 const handler = async (m, { conn, args, usedPrefix }) => {
     if (!args[0]) return conn.reply(m.chat, '*`Por favor ingresa un término de búsqueda`*', m);
 
-    await m.react('🕓');
+    await m.react('⏱️');
     try {
         let searchResults = await searchVideos(args.join(" "));
         let spotifyResults = await searchSpotify(args.join(" "));
