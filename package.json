@@ -1,6 +1,6 @@
 {
-"name": "YukiBot-MD",
-"version": "2.2.0",
+"name": "MaiBot",
+"version": "1.1.0",
 "description": "Super WhatsApp Bot Multi Device",
 "main": "index.js",
 "type": "module",
@@ -18,16 +18,16 @@
 "eslint": "eslint .",
 "eslintfix": "eslint --fix ."
 },
-"homepage": "https://github.com/The-King-Destroy/Yuki_Suou-Bot",
+"homepage": "https://github.com/Ado926/MaiBot",
 "author": {
-"name": "The-King-Destroy"
+"name": "Ado926"
 },
 "repository": {
 "type": "git",
-"url": "git+https://github.com/The-King-Destroy/Yuki_Suou-Bot.git"
+"url": "git+https://github.com/Ado926/MaiBot.git"
 },
 "bugs": {
-"url": "https://github.com/The-King-Destroy/Yuki_Suou-Bot/issues"
+"url": "https://github.com/Ado926/MaiBot/issues"
 },
 "license": "GPL-3.0-or-later",
 "dependencies": {
