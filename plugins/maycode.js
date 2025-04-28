@@ -12,16 +12,16 @@ const handler = async (m, { conn, text }) => {
 
     const respuesta = `💻 *_MayCode_* 💻
 
-*Tu:* ${User}
+*Hey* ${User}
 
-*MayCode:* ${MayCode}
+*_MayCode Respuesta Breve:_* ${MayCode}
 
 *Código:* 
-\`\`\`html
+\`\`\`
 ${Code}
 \`\`\`
 
-> Usando NightAPI 🌃`;
+> Usando NightAPI 🌃✨`;
 
     await conn.sendMessage(m.chat, { text: respuesta }, { quoted: m });
 
@@ -36,5 +36,6 @@ handler.tags = ['tools'];
 handler.command = ['maycode', 'codigo'];
 handler.group = false;
 handler.register = true;
+handel.coin = 1;
 
 export default handler;
