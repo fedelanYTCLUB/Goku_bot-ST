@@ -34,8 +34,7 @@ if (!args[0].match(/(https?:\/\/)?(www\.)?(vm\.|vt\.)?tiktok\.com\//)) {
     }
 };
 
-handler.help = ['tiktok2
-                ']
+handler.help = ['tiktok']
 handler.tags = ['descargas']
 handler.command = ['tt', 'tiktok']
 handler.coin = 2
