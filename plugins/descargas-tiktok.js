@@ -1,38 +1,43 @@
-import fg from 'api-dylux';
+import fetch from 'node-fetch';
 
-const handler = async (m, { conn, text, args, usedPrefix, command }) => {
+var handler = async (m, { conn, args, usedPrefix, command }) => {
+    if (!args[0]) {
+        return conn.reply(m.chat, `${emoji} Por favor, ingresa un enlace de TikTok.`, m);
+    }
+
     try {
-        if (!args[0]) {
-            return conn.reply(m.chat, `✳️ Debes ingresar un enlace de TikTok.\n\n📌 *Ejemplo:* ${usedPrefix + command} https://vm.tiktok.com/ZMreHF2dC/`, m);
+        await conn.reply(m.chat, `${emoji} Espere un momento, estoy descargando su video...`, m);
+
+        const tiktokData = await tiktokdl(args[0]);
+
+        if (!tiktokData || !tiktokData.data || !tiktokData.data.play) {
+            return conn.reply(m.chat, "Error: No se pudo obtener el video.", m);
         }
 
-        if (!/(?:https:?\/{2})?(?:w{3}|vm|vt|t)?\.?tiktok.com\/([^\s&]+)/gi.test(text)) {
-            return conn.reply(m.chat, `❎ Enlace de TikTok inválido.`, m);
+        const videoURL = tiktokData.data.play;
+
+        if (videoURL) {
+            await conn.sendFile(m.chat, videoURL, "tiktok.mp4", `${emoji} Aquí tienes ฅ^•ﻌ•^ฅ`, m);
+        } else {
+            return conn.reply(m.chat, "No se pudo descargar.", m);
         }
-
-        m.react('🕒');
-
-        let data = await fg.tiktok(`${args[0]}`);
-        let { title, play, duration } = data.result;
-        let { nickname } = data.result.author;
-
-        let caption = `
-  乂 TikTok Download
-
-  ◦ 👤 *Autor:* ${nickname}
-  ◦ 📌 *Título:* ${title}
-  ◦ ⏱️ *Duración:* ${duration}`;
-
-        await conn.sendFile(m.chat, play, `tiktok.mp4`, caption, m);
-
-        m.react('✅');
-    } catch (e) {
-        return conn.reply(m.chat, `❌ *Error:* ${e.message}`, m);
+    } catch (error1) {
+        return conn.reply(m.chat, `Error: ${error1.message}`, m);
     }
 };
 
-handler.help = ["tiktok"];
-handler.tags = ["dl"];
-handler.command = ["tt", "tiktok", "ttdl"];
+handler.help = ['tiktok'].map((v) => v + ' *<link>*');
+handler.tags = ['descargas'];
+handler.command = ['tiktok', 'tt'];
+handler.group = true;
+handler.register = true;
+handler.coin = 2;
+handler.limit = true;
 
 export default handler;
+
+async function tiktokdl(url) {
+    let tikwm = `https://www.tikwm.com/api/?url=${url}?hd=1`;
+    let response = await (await fetch(tikwm)).json();
+    return response;
+}
