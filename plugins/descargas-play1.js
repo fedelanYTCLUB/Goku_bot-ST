@@ -1,14 +1,14 @@
-import fetch from "node-fetch";
-import yts from 'yt-search';
+import fetch from "node-fetch"; 
+import yts from 'yt-search'; 
 import axios from "axios";
 
-const formatAudio = ['mp3', 'm4a', 'webm', 'acc', 'flac', 'opus', 'ogg', 'wav'];
+const formatAudio = ['mp3', 'm4a', 'webm', 'acc', 'flac', 'opus', 'ogg', 'wav']; 
 const formatVideo = ['360', '480', '720', '1080', '1440', '4k'];
 
-const ddownr = {
-  download: async (url, format) => {
-    if (!formatAudio.includes(format) && !formatVideo.includes(format)) {
-      throw new Error('Formato no soportado, verifica la lista de formatos disponibles.');
+const ddownr = { 
+  download: async (url, format) => { 
+    if (!formatAudio.includes(format) && !formatVideo.includes(format)) { 
+      throw new Error('Formato no soportado, verifica la lista de formatos disponibles.'); 
     }
 
     const config = {
@@ -40,14 +40,15 @@ const ddownr = {
       console.error('Error:', error);
       throw error;
     }
-  },
-  cekProgress: async (id) => {
-    const config = {
-      method: 'GET',
-      url: `https://p.oceansaver.in/ajax/progress.php?id=${id}`,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
+  }, 
+
+  cekProgress: async (id) => { 
+    const config = { 
+      method: 'GET', 
+      url: `https://p.oceansaver.in/ajax/progress.php?id=${id}`, 
+      headers: { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, como Gecko) Chrome/91.0.4472.124 Safari/537.36' 
+      } 
     };
 
     try {
@@ -63,13 +64,13 @@ const ddownr = {
       console.error('Error:', error);
       throw error;
     }
-  }
+  } 
 };
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
-  try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `✎ ingresa el nombre de la música a descargar.`, m);
+const handler = async (m, { conn, text, usedPrefix, command }) => { 
+  try { 
+    if (!text.trim()) { 
+      return conn.reply(m.chat, '✎ Ingresa el nombre de la música a descargar.', m); 
     }
 
     const search = await yts(text);
@@ -80,30 +81,38 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
     const vistas = formatViews(views);
-    const infoMessage = `「✦」Descargando *<${title}>*\n\n> ✦ Canal » *${videoInfo.author.name || 'Desconocido'}*\n> ✰ Vistas » *${views}*\n> ⴵ Duración » *${timestamp}*\n> ✐ Publicación » *${ago}*\n> 🜸 Link » ${url}\n`;
-       const thumb = (await conn.getFile(thumbnail))?.data;
-m.react('🌸')
-    const JT = {
-      contextInfo: {
-        externalAdReply: {
-          title: packname,
-          body: dev,
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: url,
-          sourceUrl: url,
-          thumbnail: thumb,
-          renderLargerThumbnail: true,
-        },
-      },
-    };
+    const infoMessage = `
+╭━━〔🌸 Detalles del Video 🌸〕━━
+┃ ✦ Título: *${title}*
+┃ ✦ Canal: *${videoInfo.author.name || 'Desconocido'}*
+┃ ✦ Vistas: *${vistas}*
+┃ ✦ Duración: *${timestamp}*
+┃ ✦ Publicado: *${ago}*
+┃ ✦ Enlace: ${url}
+╰━━━━━━━━━━━━━━━━━━━
+`.trim();
 
-      await conn.reply(m.chat, infoMessage, m, JT);
+    const thumb = (await conn.getFile(thumbnail))?.data;
+
+    await conn.reply(m.chat, infoMessage, m, { 
+      contextInfo: { 
+        externalAdReply: { 
+          title: packname, 
+          body: dev, 
+          mediaType: 1, 
+          previewType: 0, 
+          mediaUrl: url, 
+          sourceUrl: url, 
+          thumbnail: thumb, 
+          renderLargerThumbnail: true, 
+        }, 
+      }, 
+    });
 
     if (command === 'play' || command === 'yta' || command === 'mp3') {
-        const api = await ddownr.download(url, 'mp3');
-        const result = api.downloadUrl;
-        await conn.sendMessage(m.chat, { audio: { url: result }, mimetype: "audio/mpeg" }, { quoted: m });
+      const api = await ddownr.download(url, 'mp3');
+      const result = api.downloadUrl;
+      await conn.sendMessage(m.chat, { audio: { url: result }, mimetype: "audio/mpeg" }, { quoted: m });
 
     } else if (command === 'playvideo' || command === 'ytv' || command === 'mp4') {
       let sources = [
@@ -142,9 +151,10 @@ m.react('🌸')
     } else {
       throw "Comando no reconocido.";
     }
-  } catch (error) {
-    return m.reply(`❀ *Error:* ${error.message}`);
-  }
+
+  } catch (error) { 
+    return m.reply(`❀ *Error:* ${error.message}`); 
+  } 
 };
 
 handler.command = handler.help = ['playvideo', 'mp4', 'ytv']; 
@@ -152,10 +162,10 @@ handler.tags = ['downloader'];
 
 export default handler;
 
-function formatViews(views) {
-  if (views >= 1000) {
-    return (views / 1000).toFixed(1) + 'k (' + views.toLocaleString() + ')';
-  } else {
-    return views.toString();
-  }
+function formatViews(views) { 
+  if (views >= 1000) { 
+    return (views / 1000).toFixed(1) + 'k (' + views.toLocaleString() + ')'; 
+  } else { 
+    return views.toString(); 
+  } 
 }
