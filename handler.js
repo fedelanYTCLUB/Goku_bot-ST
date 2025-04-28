@@ -184,6 +184,10 @@ if (!('delete' in chat))
 chat.delete = false
 if (!isNumber(chat.expired))
 chat.expired = 0
+if (!('antiLag' in chat))
+chat.antiLag = false
+if (!('per' in chat))
+chat.per = []
 } else
 global.db.data.chats[m.chat] = {
 isBanned: false,
@@ -202,7 +206,9 @@ antiLink: true,
 antifake: false,
 reaction: false,
 nsfw: false,
-expired: 0, 
+expired: 0,
+antiLag: false,
+per: [],
 }
 var settings = global.db.data.settings[this.user.jid]
 if (typeof settings !== 'object') global.db.data.settings[this.user.jid] = {}
@@ -211,18 +217,35 @@ if (!('self' in settings)) settings.self = false
 if (!('restrict' in settings)) settings.restrict = true
 if (!('jadibotmd' in settings)) settings.jadibotmd = true
 if (!('antiPrivate' in settings)) settings.antiPrivate = false
+if (!('welcome' in settings)) settings.welcome = ""
+if (!('bye' in settings)) settings.bye = ""
+if (!('botName' in settings)) settings.botName = ""
 if (!('autoread' in settings)) settings.autoread = false
+if (!('logo' in settings)) settings.logo = { banner: '', welcome: '' }
 } else global.db.data.settings[this.user.jid] = {
 self: false,
 restrict: true,
 jadibotmd: true,
 antiPrivate: false,
 autoread: false,
-status: 0
+status: 0,
+botName: "",
+welcome: "",
+bye: "",
+logo: { banner: '', welcome: '' },
 }
 } catch (e) {
 console.error(e)
 }
+const mainBot = global.conn.user.jid
+const chat = global.db.data.chats[m.chat] || {}
+const isSubbs = chat.antiLag === true
+const allowedBots = chat.per || []
+if (!allowedBots.includes(mainBot)) allowedBots.push(mainBot)
+const isAllowed = allowedBots.includes(this.user.jid)
+if (isSubbs && !isAllowed) 
+return
+
 if (opts['nyimak'])  return
 if (!m.fromMe && opts['self'])  return
 if (opts['swonly'] && m.chat !== 'status@broadcast')  return
