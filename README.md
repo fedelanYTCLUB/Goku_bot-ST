@@ -103,7 +103,7 @@
   
   <summary><b> ✎ Haz clic para ver los comandos </b></summary>
 
-### **❀ Instalación manual por termux**
+### **🌸 Instalación manual por termux :D**
 > Nota: Copie y pegue los comandos en termux uno por uno.
 ```bash
 termux-setup-storage
@@ -135,7 +135,7 @@ npm start
 
 > Si aparece (Y/I/N/O/D/Z) [default=N] ? use la letra "y" + "ENTER" para continuar con la instalación
 
-### **🜸 Activar en caso de detenerse en termux**
+### **🌹 Activar en caso de detenerse en termux 🙈**
 
 > Si después de instalar el bot en Termux se detiene (pantalla en blanco, pérdida de conexión a Internet, reinicio del dispositivo), sigue estos pasos:
 
@@ -151,7 +151,7 @@ npm start
     npm start
    ```
 
-### **✰ Volverte owner del Bot**
+### **Quieres Volverte owner del Bot? 🍀**
 
 > Si después de instalar el bot en Termux y iniciar la session del bot (deseas poner tu número es la lista de owner pon este comando:
 
@@ -161,7 +161,7 @@ npm start
 
 </details>
 
-### **`➮ Enlaces útiles`**
+### **`➮ Enlaces útiles 💚`**
 
 <details>
  <summary><b> 🜸 Enlaces Oficiales </b></summary>
