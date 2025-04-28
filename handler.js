@@ -567,16 +567,16 @@ let user2 = m.pushName || 'Anónimo'
 let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom()
 
 const msg = {
-  rowner: `🌸 *Acceso Especial* 🌸\n\n┊ El comando *${comando}* solo puede ser usado por los *creadores* del bot. ✨`,
-  owner: `🎀 *Zona de Desarrolladores* 🎀\n\n┊ El comando *${comando}* solo está disponible para los *desarrolladores* del bot. ♡`,
-  mods: `🍥 *Solo para Moderadores* 🍥\n\n┊ El comando *${comando}* es exclusivo para *moderadores*. UwU`,
-  premium: `💖 *Usuario Premium* 💖\n\n┊ El comando *${comando}* está reservado para los *usuarios premium*. ₊˚ʚ♡ɞ˚₊`,
-  group: `🌼 *Disponible en Grupos* 🌼\n\n┊ El comando *${comando}* solo puede usarse en *grupos*. (≧◡≦)`,
-  private: `💌 *Solo en Privado* 💌\n\n┊ El comando *${comando}* solo funciona en *chats privados*. ꒰ᐢ. .ᐢ꒱`,
-  admin: `⭐ *Requiere Admin* ⭐\n\n┊ El comando *${comando}* es para los *administradores* del grupo. ฅ^•ﻌ•^ฅ`,
-  botAdmin: `⚙️ *Necesito Ser Admin* ⚙️\n\n┊ Para ejecutar *${comando}*, primero debo ser *admin* del grupo, ¡ayúdame! (｡•́︿•̀｡)`,
-  unreg: `🔐 *Registro Necesario* 🔐\n\n┊ Para usar el comando *${comando}* necesitas estar *registrado*. ⸜(｡˃ ᵕ ˂ )⸝\n\n✨ Usa el comando:\n> » *#${verifyaleatorio} ${user2}.${edadaleatoria}*`,
-  restrict: `🚫 *Función No Disponible* 🚫\n\n┊ Esta característica está *desactivada* por ahora. ₍ᐢ.ˬ.ᐢ₎`
+rowner: `🌸 *Acceso Especial* 🌸\n\n┊ El comando *${comando}* solo puede ser usado por los *creadores* del bot. ✨`,
+owner: `🎀 *Zona de Desarrolladores* 🎀\n\n┊ El comando *${comando}* solo está disponible para los *desarrolladores* del bot. ♡`,
+mods: `🍥 *Solo para Moderadores* 🍥\n\n┊ El comando *${comando}* es exclusivo para *moderadores*. UwU`,
+premium: `💖 *Usuario Premium* 💖\n\n┊ El comando *${comando}* está reservado para los *usuarios premium*. ₊˚ʚ♡ɞ˚₊`,
+group: `🌼 *Disponible en Grupos* 🌼\n\n┊ El comando *${comando}* solo puede usarse en *grupos*. (≧◡≦)`,
+private: `💌 *Solo en Privado* 💌\n\n┊ El comando *${comando}* solo funciona en *chats privados*. ꒰ᐢ. .ᐢ꒱`,
+admin: `⭐ *Requiere Admin* ⭐\n\n┊ El comando *${comando}* es para los *administradores* del grupo. ฅ^•ﻌ•^ฅ`,
+botAdmin: `⚙️ *Necesito Ser Admin* ⚙️\n\n┊ Para ejecutar *${comando}*, primero debo ser *admin* del grupo, ¡ayúdame! (｡•́︿•̀｡)`,
+unreg: `🔐 *Registro Necesario* 🔐\n\n┊ Para usar el comando *${comando}* necesitas estar *registrado*. ⸜(｡˃ ᵕ ˂ )⸝\n\n✨ Usa el comando:\n> » *#${verifyaleatorio} ${user2}.${edadaleatoria}*`,
+restrict: `🚫 *Función No Disponible* 🚫\n\n┊ Esta característica está *desactivada* por ahora. ₍ᐢ.ˬ.ᐢ₎`
 }[type];
 if (msg) return m.reply(msg).then(_ => m.react('✖️'))}
 
