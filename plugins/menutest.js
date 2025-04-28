@@ -1,8 +1,3 @@
-import {
-    MessageType,
-    Mimetype
-} from '@whiskeysockets/baileys'; // Make sure to import necessary types if needed
-
 let handler = async (m, {
     conn,
     args
