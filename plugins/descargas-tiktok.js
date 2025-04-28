@@ -1,43 +1,53 @@
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'
 
 var handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!args[0]) {
-        return conn.reply(m.chat, `${emoji} Por favor, ingresa un enlace de TikTok.`, m);
+        throw m.reply(`*[ 🔗 ] Ingrese un link de TikTok*\n\n*[ 💡 ] Ejemplo:* ${usedPrefix + command} https://vm.tiktok.com/ZMkcmTCa6/`);
     }
 
+if (!args[0].match(/(https?:\/\/)?(www\.)?(vm\.|vt\.)?tiktok\.com\//)) {
+    throw m.reply(`*[ ⚠️ ] El enlace ingresado no es válido. Asegúrese de que sea un link de TikTok.*`);
+}
+
     try {
-        await conn.reply(m.chat, `${emoji} Espere un momento, estoy descargando su video...`, m);
+        await conn.reply(m.chat, "*[ ⏳ ] Aguarde un momento, estoy enviando su video...*", m);
 
         const tiktokData = await tiktokdl(args[0]);
 
-        if (!tiktokData || !tiktokData.data || !tiktokData.data.play) {
-            return conn.reply(m.chat, "Error: No se pudo obtener el video.", m);
+        if (!tiktokData) {
+            throw m.reply("*Error api!*");
         }
 
         const videoURL = tiktokData.data.play;
+        const videoURLWatermark = tiktokData.data.wmplay;
+        const infonya_gan = `*📖 Descrip꯭ción:*\n> ${tiktokData.data.title}`;
 
-        if (videoURL) {
-            await conn.sendFile(m.chat, videoURL, "tiktok.mp4", `${emoji} Aquí tienes ฅ^•ﻌ•^ฅ`, m);
+        if (videoURL || videoURLWatermark) {
+            await conn.sendFile(m.chat, videoURL, "tiktok.mp4", "*\`DESCARGAS - TIKTOK\`*" + `\n\n${infonya_gan}`, m);
+            setTimeout(async () => {
+            }, 1500);
         } else {
-            return conn.reply(m.chat, "No se pudo descargar.", m);
+            throw m.reply("*[ ❌ ] No se pudo descargar.*");
         }
     } catch (error1) {
-        return conn.reply(m.chat, `Error: ${error1.message}`, m);
+        conn.reply(m.chat, `Error: ${error1}`, m);
     }
 };
 
-handler.help = ['tiktok'].map((v) => v + ' *<link>*');
-handler.tags = ['descargas'];
-handler.command = ['tiktok', 'tt'];
-handler.group = true;
-handler.register = true;
-handler.coin = 2;
-handler.limit = true;
-
-export default handler;
+handler.help = ['tiktok2
+                ']
+handler.tags = ['descargas']
+handler.command = ['tt', 'tiktok']
+handler.coin = 2
+handler.before = async (m, { conn }) => {
+    let text = m.text?.toLowerCase()?.trim();
+    if (text === 'tt' || text === 'tiktok') {
+        return handler(m, { conn });
+    }
+}
+export default handler
 
 async function tiktokdl(url) {
-    let tikwm = `https://www.tikwm.com/api/?url=${url}?hd=1`;
-    let response = await (await fetch(tikwm)).json();
-    return response;
-}
+    let tikwm = `https://www.tikwm.com/api/?url=${url}?hd=1`
+    let response = await (await fetch(tikwm)).json()
+    return response
