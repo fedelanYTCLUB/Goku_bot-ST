@@ -13,14 +13,17 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     const video = searchData.data[0]; // Primer resultado
+
     const waitMessage = `☁️ *︙${video.title}*\n\n` +
       `🎧 *Artista:* ${video.author.name}\n` +
       `⏳ *Duración:* ${video.duration}\n` +
       `👀 *Vistas:* ${video.views}\n` +
-      `📅 *Publicado:* ${video.published}\n\n` +
-      `➺ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐, 𝒔𝒆 𝒆𝒔𝒕á 𝒅𝒆𝒔𝒄𝒂𝒓𝒈𝒂𝒏𝒅𝒐...`;
+      `➺ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐, 𝒆𝒔𝒕𝒂𝒎𝒐𝒔 𝒃𝒂𝒋𝒂𝒏𝒅𝒐 𝒕𝒖 𝒄𝒂𝒏𝒄𝒊ó𝒏...`;
 
-    await m.reply(waitMessage.trim()); // Mensaje de espera kawaii bonito
+    await conn.sendMessage(m.chat, {
+      image: { url: video.image },
+      caption: waitMessage.trim()
+    }, { quoted: m });
 
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
@@ -34,10 +37,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       audio: { url: downloadData.result.download.url },
       mimetype: 'audio/mpeg',
       ptt: false,
-      fileName: `${video.title}.mp3`
+      fileName: `🎵 ${video.title}.mp3`
     }, { quoted: m });
 
-    await m.react("✨"); // Reacción kawaii
+    await m.react("✨");
   } catch (error) {
     console.error(error);
     m.reply(`❌ Ocurrió un error:\n${error.message}`);
