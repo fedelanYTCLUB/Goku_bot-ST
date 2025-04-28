@@ -495,7 +495,7 @@ await plugin.after.call(this, m, extra)
 console.error(e)
 }}
 if (m.coin)
-conn.reply(m.chat, `₊˚ʚ♡ɞ˚₊  ¡Gastaste *${+m.coin}* ${moneda}!  ₊˚ʚ♡ɞ˚₊\n\n✿ No te quedes pobre ₊˚ෆ`, m)
+conn.reply(m.chat, `₊˚ʚ♡ɞ˚₊  ¡Gastaste ${+m.coin} ${moneda}!  ₊˚ʚ♡ɞ˚₊\n\n✿ No te quedes pobre ₊˚ෆ`, m)
 }
 break
 }}
