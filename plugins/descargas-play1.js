@@ -82,7 +82,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
     const vistas = formatViews(views);
     const infoMessage = `
-╭━━〔🌸 Detalles del Video 🌸〕━━
+╭〔🌸 Detalles del Video 🌸〕
 ┃ ✦ Título: *${title}*
 ┃ ✦ Canal: *${videoInfo.author.name || 'Desconocido'}*
 ┃ ✦ Vistas: *${vistas}*
@@ -135,7 +135,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
               video: { url: downloadUrl },
               fileName: `${title}.mp4`,
               mimetype: 'video/mp4',
-              caption: ``,
+              caption: `${title}`,
               thumbnail: thumb
             }, { quoted: m });
             break;
