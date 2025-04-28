@@ -43,13 +43,13 @@ let { say } = cfonts
 
 console.log(chalk.bold.redBright(`\n❤️ Iniciando a Mai 👻\n`))
 
-say('MaiBot', {
+say('MaiBot 🌻', {
 font: 'block',
 align: 'center',
 colors: ['magentaBright']
 })
 
-say(`Dev • Wirk`, {
+say(`By • Wirk 👻`, {
 font: 'console',
 align: 'center',
 colors: ['blueBright']
@@ -125,7 +125,7 @@ opcion = '1'
 }
 if (!methodCodeQR && !methodCode && !fs.existsSync(`./${sessions}/creds.json`)) {
 do {
-opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
+opcion = await question(colores('🌺 Seleccione una opción:\n') + opcionQR('💛 1. Con código QR\n') + opcionTexto('❤️ 2. Con código de texto de 8 dígitos\n--> '))
 
 if (!/^[1-2]$/.test(opcion)) {
 console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`))
@@ -212,7 +212,7 @@ if (opcion == '1' || methodCodeQR) {
 console.log(chalk.bold.yellow(`\n❐ ESCANEA EL CÓDIGO QR EXPIRA EN 45 SEGUNDOS`))}
 }
 if (connection == 'open') {
-console.log(chalk.bold.green('\n❀ YukiBot-MD Conectada con éxito ❀'))
+console.log(chalk.bold.green('\n🌸 Tu botsita Mai ha sido Conectada con éxito 🌹'))
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === 'close') {
