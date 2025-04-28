@@ -84,7 +84,7 @@ const replyMessage = message.length === 0
 const totalUsers = users.length;
 
 const responseMessage = `
-╭─❍༻🌸 *SUB-BOTS ACTIVOS* 🌸༺❍─╮
+╭❍🌸 *SUBS ACTIVOS* 🌸❍╮
 
 ${emoji2} \`\`\`
 Cada Sub-Bot utiliza sus funciones de manera independiente.
@@ -95,7 +95,7 @@ El número principal no se hace responsable del mal uso.
 
 ${replyMessage}
 
-╰─❍༻🌺 *Comunidad Oficial* 🌺༺❍─╯
+╰❍🌺 *Comunidad Ofc* 🌺❍╯
 🔗 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
 `.trim();
 
