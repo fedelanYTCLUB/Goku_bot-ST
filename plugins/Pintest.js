@@ -51,6 +51,6 @@ const handler = async (m, { conn, text }) => {
 handler.help = ['pinterest <término>'];
 handler.tags = ['pin'];
 handler.register = true;
-handler.command = ['pinterest'];
+handler.command = ['pintest'];
 
 export default handler;
