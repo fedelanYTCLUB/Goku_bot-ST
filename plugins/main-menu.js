@@ -8,7 +8,7 @@ let handler = async (m, { conn, args }) => {
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
     let txt = `💛 *New:* \`Prueba mi pagina de descargas:\`
-URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:* \`${uptime}\`\n
+URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:*\n\`${uptime}\`\n
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
 ✨ Hola, ${name} Soy *${botname}* ✨
        Como estas :3? 💖
