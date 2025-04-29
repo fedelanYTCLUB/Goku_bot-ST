@@ -9,7 +9,7 @@ let handler = async (m, { conn, args }) => {
 
     let txt = `https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY\n
 💛 *New:* \`Prueba mi pagina de descargas:\`
-URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:$ \`${uptime}\`\n
+URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:* \`${uptime}\`\n
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
 ✨ Hola, ${name} Soy *${botname}* ✨
        Como estas :3? 💖
