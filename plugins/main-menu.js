@@ -9,7 +9,7 @@ let handler = async (m, { conn, args }) => {
 
     let txt = `https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY\n
 💛 *New:* \`Prueba mi pagina de descargas:\`
-URL: https://play-youtubedescargas.vercel.app/\n\n
+URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:$ \`${uptime}\`\n
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
 ✨ Hola, ${name} Soy *${botname}* ✨
        Como estas :3? 💖
@@ -19,7 +19,6 @@ URL: https://play-youtubedescargas.vercel.app/\n\n
 ╭ ◇ Cliente: @${userId.split('@')[0]}
 │ ✦ Modo: Publica
 │ ⚡️ Bot: ${(conn.user.jid == global.conn.user.jid ? 'Principal ⭐' : 'Sub Bot 💎')}
-│ ⏳ Activa: ${uptime}
 │ 👥 Usuarios: ${totalreg}
 │ 📜 Comandos: ${totalCommands}
 ╰ ⚙️ Baileys: Multi Device
