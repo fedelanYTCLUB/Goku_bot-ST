@@ -8,23 +8,23 @@ let handler = async (m, { conn, args }) => {
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
     let txt = `
-ଘ(੭ˊ꒳ˋ)੭✧ New! Mira mi página de descargas:
+*ଘ(੭ˊ꒳ˋ)੭✧ New! Mira mi página de descargas:*
 💖 URL: https://play-youtubedescargas.vercel.app/
-🌸 He estado activa desde: \`${uptime}\`
+🌸 \`\`\`He estado activa desde:\`\`\` \`${uptime}\`
 
 ╭─── ✿・°・✿ ───╮
 ✨ ¡Hola, ${name}! Soy ${botname} ✨
  ¿Cómo estás hoy, dulzura? :3 💖
 ╰─── ✿・°・✿ ───╯
 
-🌸 Información Rápida 🌸
-・ Cliente: @${userId.split('@')[0]}
-・ Modo: Pública
-・ Bot: ${(conn.user.jid == global.conn.user.jid ? '✐ 𝖯𝗋𝗂𝗇𝖼𝗂𝗉𝖺𝗅 ' : 'Sub Bot 💎')}
-・ Usuarios: ${totalreg}
-・ Comandos: ${totalCommands}
-・ Baileys: Multi Device
-✨───────────────────✨
+*🌸 Información Rápida 🌸*
+・ *Cliente:* @${userId.split('@')[0]}
+・ *Modo:* Pública
+・ *Bot:* ${(conn.user.jid == global.conn.user.jid ? '✐ 𝖯𝗋𝗂𝗇𝖼𝗂𝗉𝖺𝗅 ' : 'Sub Bot 💎')}
+・ *TotalUsuarios:* ${totalreg}
+・ *Comandos:* ${totalCommands}
+・ *Baileys:* Multi Device
+🪴───────────────────🪴
 
 💡 Tip: ¡Crea tu propio Sub-Bot usando *#qr* o *#code*!
 
@@ -33,7 +33,6 @@ let handler = async (m, { conn, args }) => {
 ・ *#help • #menu* ➢ Lista de comandos (ﾉ◕ヮ◕)ﾉ*.✧
 ・ *#uptime • #runtime* ➢ ¿Cuánto llevo despierta? 💤
 ・ *#sc • #script* ➢ Mi casita en GitHub 🏡
-・ *#staff • #colaboradores* ➢ ¡Conoce a mis papis! ✨
 ・ *#serbot • #serbot code* ➢ ¡Hazme tuya! (づ｡◕‿‿◕｡)づ
 ・ *#bots • #sockets* ➢ Mis amiguitos bots activos 🤖
 ・ *#creador* ➢ ¿Quieres hablar con mi creador? 📞
