@@ -40,10 +40,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       contextInfo: {
         externalAdReply: {
           title: video.title,
-          body: video.title,  // El título del video en el cuerpo
+          body: video.views,  // El título del video en el cuerpo
           mediaType: 1,
           previewType: "PHOTO",
-          thumbnailUrl: video.image,
+          thumbnailUrl: video.duration,
           sourceUrl: video.url,
           showAdAttribution: true,
           renderLargerThumbnail: true,
