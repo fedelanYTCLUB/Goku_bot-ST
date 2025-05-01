@@ -37,8 +37,8 @@ global.namecomu = 'ᰔᩚ ᥡᥙkіᑲ᥆𝗍-mძ • ᥴ᥆mᥙᥒі𝗍ᥡ �
 global.listo = '❀ *Aquí tienes ฅ^•ﻌ•^ฅ*'
 global.fotoperfil = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://files.catbox.moe/xr2m6u.jpg')
 
-global.canalIdM = ["120363402846939411@newsletter", "120363419146589983@newsletter"]
-global.canalNombreM = ["⏤͟͟͞͞Vivos Vivientes 🌻❀", "⏤͟͟͞͞❀ Las Mejores frases 🐻‍❄️ Del dia 👻 "]
+global.canalIdM = ["120363402846939411@newsletter", "120363402846939411@newsletter"]
+global.canalNombreM = ["⏤͟͟͞͞Vivos Vivientes 🌻❀", "🌳 𝖵𝗂𝗏𝗈𝗌 𝖵𝗂𝗏𝗂𝖾𝗇𝗍𝖾𝗌 🍄"]
 global.channelRD = await getRandomChannel()
 
 global.d = new Date(new Date + 3600000)
