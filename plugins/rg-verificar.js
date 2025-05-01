@@ -57,6 +57,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
+├─ 📢 *Verifica Tu Registro Aqui:*
+│ https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd
+│
 ╰──────────•••─────────╯
 > @Wirk
 `.trim()
@@ -68,9 +71,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     contextInfo: {
       externalAdReply: {
         title: '✧ Registro Completado ✧',
-        body: '¡Gracias por registrarte!',
+        body: 'https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd',
         thumbnailUrl: pp,
-        sourceUrl: 'https://chat.whatsapp.com/tu-enlace-de-canal-o-grupo',
+        sourceUrl: 'https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd',
         mediaType: 1,
         showAdAttribution: true,
         renderLargerThumbnail: true
