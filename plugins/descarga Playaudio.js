@@ -62,8 +62,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         externalAdReply: {
           title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁",
           body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵",
-          thumbnailUrl: banner,
-          sourceUrl: video.url,
+          sourceUrl: "https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd",
           mediaType: 1,
           showAdAttribution: true,
           renderLargerThumbnail: true
