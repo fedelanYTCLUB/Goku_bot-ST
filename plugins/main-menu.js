@@ -31,7 +31,6 @@ URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:*\n\`${u
 ❖ *#help • #menu* ➢ Lista de comandos.
 ❖ *#uptime • #runtime* ➢ Tiempo activa.
 ❖ *#sc • #script* ➢ Repositorio oficial.
-❖ *#staff • #colaboradores* ➢ Desarrolladores.
 ❖ *#serbot • #serbot code* ➢ Crea Sub-Bot.
 ❖ *#bots • #sockets* ➢ Sub-Bots activos.
 ❖ *#creador* ➢ Contacto del creador.
@@ -334,10 +333,10 @@ URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:*\n\`${u
               newsletterName: channelRD.name,
               serverMessageId: -1,
           },
-          forwardingScore: 999,
+          forwardingScore: 16,
           externalAdReply: {
-              title: "Mai 🐤", // Asegúrate de que botname esté definido
-              body: "Powered By Wirk 💛", // Asegúrate de que textbot esté definido
+              title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤", // Asegúrate de que botname esté definido
+              body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛", // Asegúrate de que textbot esté definido
               thumbnailUrl: banner, // Asegúrate de que banner esté definido
               sourceUrl: redes, // Asegúrate de que redes esté definido
               mediaType: 1,
