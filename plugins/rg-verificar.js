@@ -3,7 +3,7 @@ import fs from 'fs'
 import PhoneNumber from 'awesome-phonenumber'
 import { createHash } from 'crypto'
 import fetch from 'node-fetch'
-import moment from 'moment-timezone' // Asegúrate de tener esta dependencia instalada
+import moment from 'moment-timezone'
 
 const Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 
@@ -57,8 +57,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
-╰─────────•••────────╯
-*🌻 Comprueba tu registro aquí:*\nhttps://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd\n
+╰──────────•••─────────╯
 > @Wirk
 `.trim()
 
@@ -79,24 +78,33 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     }
   }, { quoted: m })
 
-  // Enviar notificación al grupo
+  // Enviar notificación al grupo desde el bot principal
   const grupoNotificacion = '120363399440277900@g.us'
-  let mensajeNotificacion = `┏━❀ *Nuevo Registro* ❀━┓
-┃ ｡･ﾟ✧ Una linda personita Nueva
-┃ 
-┃ ✦ *Nombre:* ${name} ꒰՞•ﻌ•՞꒱
-┃ ✦ *Edad:* ${age} añitos
-┃ ✦ *ID:* ${sn}
-┃
-┃ ˗ˏˋ 🎁 *Recompensas Q Obtuvo:* ˎˊ˗
-┃ ₊ ⛁ Moneditas: +46
-┃ ₊ ✰ Experiencia: +310
-┃ ₊ ❖ Tokens: +25
-┃
-┃ 🗓️ *Se Registro Hoy:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
-┗━━━━━━━━━━━━━━━━━━━━━┛`
+  const mensajeNotificacion = `
+╭───❍ *Nuevo Registro* ❍───╮
+│ ᰔᩚ *Nombre:* ${name}
+│ ✎ *Edad:* ${age} años
+│ 🆔 *ID:* ${sn}
+│
+├─ 🎁 *Recompensas:*
+│ ⛁ Monedas: +46
+│ ✰ Experiencia: +310
+│ ❖ Tokens: +25
+│
+📅 *Fecha:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
+╰──────────•••─────────╯`
 
-  await conn.sendMessage(grupoNotificacion, { text: mensajeNotificacion })
+  try {
+    if (global.conn?.sendMessage) {
+      const ppGroup = await conn.profilePictureUrl(who, 'image').catch(() => null)
+      await global.conn.sendMessage(grupoNotificacion, {
+        image: { url: ppGroup || pp },
+        caption: mensajeNotificacion
+      })
+    }
+  } catch (e) {
+    console.error('Error al enviar notificación al grupo desde el bot principal:', e)
+  }
 }
 
 handler.help = ['reg']
