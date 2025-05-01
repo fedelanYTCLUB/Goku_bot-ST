@@ -29,25 +29,9 @@ let crm2 = "A7IG1kNXN1b" // ; md5sum
 let crm3 = "BpbmZvLWRvbmFyLmpz" // info-donar.js
 let crm4 = "IF9hdXRvcmVzcG9uZGVyLmpzIGluZm8tYm90Lmpz" // _autoresponder.js info-bot.js
 let drm1 = ""
-let drm2 = ""
-let rtx = `*❀ 𝖵𝗂𝗇𝖼𝗎𝗅𝖺 𝗍𝗎 𝖼𝗎𝖾𝗇𝗍𝖺 𝗈𝗇 𝖰𝖱 ❀*\n
-𝖢𝗈𝗇𝖾𝗑𝗂𝗈́𝗇 𝗌𝖾𝗇𝖼𝗂𝗅𝗅𝖺 𝗒 𝗍𝗂𝖾𝗋𝗇𝖺 ✨\n
-\n
-[ 𝟣 ] 𝖳𝗈𝖼𝖺 𝗅𝗈𝗌 ⋮ 𝖾𝗇 𝗅𝖺 𝖾𝗌𝗊𝗎𝗂𝗇𝖺 𝗌𝗎𝗉𝖾𝗋𝗂𝗈𝗋\n
-[ 𝟤 ] 𝖤𝗇𝗍𝗋𝖺 𝖺 *𝖣𝗂𝗌𝗉𝗈𝗌𝗂𝗍𝗂𝗏𝗈𝗌 𝗏𝗂𝗇𝖼𝗎𝗅𝖺𝖽𝗈𝗌*\n
-[ 𝟥 ] 𝖤𝗌𝖼𝖺𝗇𝖾𝖺 𝖾𝗅 𝖰𝖱 𝖼𝗈𝗇 𝗈𝗍𝗋𝗈 𝖼𝖾𝗅 𝗈 𝖯𝖢\n
-\n
-✧ 𝖤𝗅 𝖼𝗈́𝖽𝗂𝗀𝗈 𝖰𝖱 𝖼𝖺𝖽𝗎𝖼𝖺 𝖾𝗇 *𝟦𝟧 𝗌𝖾𝗀𝗎𝗇𝖽𝗈𝗌*~`;
-
-let rtx2 = `*❀ 𝖵𝗂𝗇𝖼𝗎𝗅𝖺 𝗍𝗎 𝖼𝗎𝖾𝗇𝗍𝖺 𝖼𝗈𝗇 𝖼𝗈́𝖽𝗂𝗀𝗈 ❀*\n
-𝖴𝗇𝖺 𝖿𝗈𝗋𝗆𝖺 𝖿𝖺𝖼𝗂𝗅 𝗒 𝖿𝗋𝖺𝗇𝖼𝖺~\n
-\n
-[ 𝟣 ] 𝖯𝗎𝗅𝗌𝖺 𝗅𝗈𝗌 ⋮ 𝖽𝖾 𝗅𝖺 𝖾𝗌𝗊𝗎𝗂𝗇𝖺\n
-[ 𝟤 ] 𝖤𝗇𝗍𝗋𝖺 𝖺 *𝖣𝗂𝗌𝗉𝗈𝗌𝗂𝗍𝗂𝗏𝗈𝗌 𝗏𝗂𝗇𝖼𝗎𝗅𝖺𝖽𝗈𝗌*\n
-[ 𝟥 ] 𝖲𝖾𝗅𝖾𝖼𝖼𝗂𝗈𝗇𝖺 *𝖵𝗂𝗇𝖼𝗎𝗅𝖺𝗋 𝖼𝗈𝗇 𝗇𝗎́𝗆𝖾𝗋𝗈*\n
-[ 𝟦 ] 𝖤𝗌𝖼𝗋𝗂𝖻𝖾 𝖾𝗅 𝖼𝗈́𝖽𝗂𝗀𝗈 𝗊𝗎𝖾 𝗍𝖾 𝖽𝗂𝗆𝗈𝗌\n
-\n
-✧ 𝖳𝖾 𝗋𝖾𝖼𝗈𝗆𝖾𝗇𝖽𝖺𝗆𝗈𝗌 𝗇𝗈 𝗎𝗌𝖺𝗋 𝗍𝗎 𝖼𝗎𝖾𝗇𝗍𝖺 𝗉𝗋𝗂𝗇𝖼𝗂𝗉𝖺𝗅`;
+let drm2 = "'
+let rtx = "⪛✰ ↫ Mai 🌺 ↬ ✰⪜\n\n✐ 𝖢𝗈𝗇𝖾𝗑𝗂𝗈́𝗇 𝖵𝗂́𝖺 𝖰𝖱\n\n✰ Con otro celular o en la PC escanea este QR para convertirte en un Sub-Bot Temporal.\n\n`1` » Haga clic en los tres puntos en la esquina superior derecha\n\n`2` » Toque dispositivos vinculados\n\n`3` » Escanee este codigo QR para iniciar sesion con el bot\n\n✧ ¡Este código QR expira en 45 segundos!." 
+let rtx2 = "⪛✰ ↫𝗠𝗮𝗶 ↬ ✰⪜\n\n✐ 𝘾𝙤𝙣𝙚𝙭𝙞𝙤 𝙑𝙞́𝙖 𝘾𝙤́𝙙𝙞𝙜𝙤 [ᴘᴏᴘᴜʟᴀʀ]\n\n✰ Usa este Código para convertirte en un Sub-Bot Temporal.\n\n`1` » Haga clic en los tres puntos en la esquina superior derecha\n\n`2` » Toque dispositivos vinculados\n\n`3` » Selecciona Vincular con el número de teléfono\n\n`4` » Escriba el Código para iniciar sesion con el bot\n\n✧ No es recomendable usar tu cuenta principal."
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
