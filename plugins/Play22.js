@@ -67,7 +67,7 @@ const handler = async (m, { conn, text, command, args }) => {
   }
 };
 
-handler.command = ['play2x'];
+handler.command = ['playmp4'];
 handler.help = ['play2 <nombre/url> [calidad]'];
 handler.tags = ['descargas'];
 handler.register = true;
