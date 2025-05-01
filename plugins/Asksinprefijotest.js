@@ -7,7 +7,7 @@ const handler = async (msg, { conn, text }) => {
   if (!text) return;
 
   try {
-    await conn.sendMessage(chatId, { react: { text: '⏱️', key: msg.key } });
+    await conn.sendMessage(chatId, { react: { text: '🫆', key: msg.key } });
 
     const name = msg.pushName || 'Usuario';
     const prompt = await getPrompt();
@@ -30,7 +30,7 @@ const handler = async (msg, { conn, text }) => {
       text: result
     }, { quoted: msg });
 
-    await conn.sendMessage(chatId, { react: { text: '🌺', key: msg.key } });
+    await conn.sendMessage(chatId, { react: { text: '🪴, key: msg.key } });
 
   } catch (error) {
     console.error(error);
