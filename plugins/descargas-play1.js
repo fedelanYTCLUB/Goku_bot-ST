@@ -81,15 +81,17 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const videoInfo = search.all[0];
     const { title, thumbnail, timestamp, views, ago, url } = videoInfo;
     const vistas = formatViews(views);
+    
     const infoMessage = `
-╭〔🌸 Detalles del Video 🌸〕
-┃ ✦ Título: *${title}*
-┃ ✦ Canal: *${videoInfo.author.name || 'Desconocido'}*
-┃ ✦ Vistas: *${vistas}*
-┃ ✦ Duración: *${timestamp}*
-┃ ✦ Publicado: *${ago}*
-┃ ✦ Enlace: ${url}
-╰━━━━━━━━━━━━━━━━━━━
+╭˚₊· ͟͟͞͞➳❥ 𝖨𝗇𝖿𝗈 𝖽𝖾𝗅 𝖵𝗂𝖽𝖾𝗂𝗍𝗈 ꒰⑅ᵕ༚ᵕ꒱˖♡
+│ ˗ˏˋ ✦ 𝖳𝗂́𝗍𝗎𝗅𝗈: *${title}*
+│ ˗ˏˋ ✦ 𝖢𝖺𝗇𝖺𝗅: *${videoInfo.author.name || '𝖣𝖾𝗌𝖼𝗈𝗇𝗈𝖼𝗂𝖽𝗈'}*
+│ ˗ˏˋ ✦ 𝖵𝗂𝗌𝗍𝖺𝗌: *${vistas}*
+│ ˗ˏˋ ✦ 𝖣𝗎𝗋𝖺𝖼𝗂𝗈́𝗇: *${timestamp}*
+│ ˗ˏˋ ✦ 𝖯𝗎𝖻𝗅𝗂𝖼𝖺𝖽𝗈: *${ago}*
+│ ˗ˏˋ ✦ 𝖤𝗇𝗅𝖺𝖼𝖾: ${url}
+╰─♡̷̷̷̷ ༘*.ﾟ⋆
+꒰₊✧ By Mai 🌺 ˚.༄
 `.trim();
 
     const thumb = (await conn.getFile(thumbnail))?.data;
@@ -135,7 +137,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
               video: { url: downloadUrl },
               fileName: `${title}.mp4`,
               mimetype: 'video/mp4',
-              caption: `${title}`,
+              caption: `\`🪴 Titulo:\` *${title}*`,
               thumbnail: thumb
             }, { quoted: m });
             break;
@@ -146,7 +148,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       }
 
       if (!success) {
-        return m.reply(` ✱ *No se pudo descargar el video:* No se encontró un enlace de descarga válido.`);
+        return m.reply(`✱ *No se pudo descargar el video:* No se encontró un enlace de descarga válido.`);
       }
     } else {
       throw "Comando no reconocido.";
