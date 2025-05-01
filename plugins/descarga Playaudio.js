@@ -20,32 +20,23 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       `👀 *Vistas:* ${video.views}\n` +
       `➺ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐, 𝒆𝒔𝒕𝒂𝒎𝒐𝒔 𝒃𝒂𝒋𝒂𝒏𝒅𝒐 𝒕𝒖 𝒄𝒂𝒏𝒄𝒊ó𝒏...`;
 
-    const waicontext = {
+    // Solo reenviado desde canal (sin externalAdReply)
+    const canalContext = {
       contextInfo: {
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
-          newsletterJid: channelRD.id,         // Define esto
-          newsletterName: channelRD.name,      // Define esto
+          newsletterJid: channelRD.id,
+          newsletterName: channelRD.name,
           serverMessageId: -1
         },
-        forwardingScore: 16,
-        externalAdReply: {
-          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤",
-          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛",
-          thumbnailUrl: banner,                // Define esto
-          sourceUrl: redes,                    // Define esto
-          mediaType: 1,
-          showAdAttribution: true,
-          renderLargerThumbnail: true
-        }
+        forwardingScore: 16
       }
     };
 
-    // Imagen con waitMessage como si viniera del canal
     await conn.sendMessage(m.chat, {
       image: { url: video.image },
       caption: waitMessage.trim(),
-      ...waicontext
+      ...canalContext
     }, { quoted: m });
 
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
@@ -58,13 +49,34 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const audioUrl = downloadData.result.download.url;
 
-    // Audio también como si viniera del canal
+    // Reenvío desde canal + externalAdReply decorado
+    const audioContext = {
+      contextInfo: {
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: channelRD.id,
+          newsletterName: channelRD.name,
+          serverMessageId: -1
+        },
+        forwardingScore: 16,
+        externalAdReply: {
+          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁",
+          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵",
+          thumbnailUrl: banner,
+          sourceUrl: video.url,
+          mediaType: 1,
+          showAdAttribution: true,
+          renderLargerThumbnail: true
+        }
+      }
+    };
+
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
       ptt: false,
       fileName: `🎵 ${video.title}.mp3`,
-      ...waicontext
+      ...audioContext
     }, { quoted: m });
 
     await m.react("✨");
