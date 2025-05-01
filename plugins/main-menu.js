@@ -303,29 +303,24 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 `.trim()
 
   await conn.sendMessage(m.chat, {
-      text: txt,
-      contextInfo: {
-          mentionedJid: [m.sender, userId],
-          isForwarded: true,
-          forwardedNewsletterMessageInfo: {
-              // Asegúrate de que channelRD esté definido en tu bot con un ID y nombre válidos
-              newsletterJid: channelRD.id,
-              newsletterName: channelRD.name,
-              serverMessageId: -1,
-          },
-          forwardingScore: 16,
-          externalAdReply: {
-              title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤", // Título cute existente
-              body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛", // Cuerpo cute existente
-              thumbnailUrl: banner, // Asegúrate de que banner esté definido
-              sourceUrl: redes, // Asegúrate de que redes esté definido
-              mediaType: 1,
-              showAdAttribution: true,
-              renderLargerThumbnail: true,
-          },
-      },
-  }, { quoted: m })
-
+  await conn.sendMessage(m.chat, {
+  text: txt,
+  contextInfo: {
+    mentionedJid: [m.sender, userId],
+    isForwarded: true,
+    forwardingScore: 999,
+    externalAdReply: {
+      title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤",
+      body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛",
+      thumbnailUrl: banner, // Asegúrate que banner esté definido como URL de imagen válida
+      mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+      mediaType: 2,
+      showAdAttribution: true,
+      renderLargerThumbnail: true,
+    }
+  }
+}, { quoted: m });
+    
 }
 
 handler.help = ['menu']
