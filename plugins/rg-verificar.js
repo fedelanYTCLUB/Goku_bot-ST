@@ -76,24 +76,16 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
       }
     }
   }, { quoted: m })
+  
+  const canalID = '120363402846939411@newsletter';  // ID de tu canal de WhatsApp
+    let notificationMessage = `¡Nuevo registro! 🎉\n\n`
+    notificationMessage += `🆔 *Usuario:* ${name}\n`
+    notificationMessage += `🔹 *Edad:* ${age} años\n`
+    notificationMessage += `📅 *Fecha de Registro:* ${moment().format('YYYY-MM-DD HH:mm:ss')}\n\n`
+    notificationMessage += `¡Bienvenido(a) a la comunidad! 🎉`
 
-  // Mensaje al canal
-  let mensajeCanal = `
-╭─ 「 *Nuevo Registro* 」─╮
-│ ᰔᩚ *Nombre:* ${name}
-│ ✎ *Edad:* ${age} años
-│ 🆔 *ID:* ${sn}
-│ 🎁 *Recompensas:*
-│    ⛁ +46 ${moneda}
-│    ✰ +310 EXP
-│    ❖ +25 Tokens
-╰──────────────╯`.trim()
-
-  await conn.sendMessage('120363402846939411@newsletter', {
-    text: mensajeCanal
-  })
-}
-
+    await conn.sendMessage(canalID, { text: notificationMessage });
+  
 handler.help = ['reg']
 handler.tags = ['rg']
 handler.command = ['verify', 'verificar', 'reg', 'register', 'registrar']
