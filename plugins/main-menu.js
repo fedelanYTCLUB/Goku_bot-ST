@@ -24,7 +24,7 @@ let handler = async (m, { conn, args }) => {
 ・ *TotalUsuarios:* ${totalreg}
 ・ *Comandos:* ${totalCommands}
 ・ *Baileys:* Multi Device
-🪴───────────────────🪴
+🪴──────────────────🪴
 
 💡 Tip: ¡Crea tu propio Sub-Bot usando *#qr* o *#code*!
 
