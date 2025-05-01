@@ -3,13 +3,12 @@ import fs from 'fs'
 import PhoneNumber from 'awesome-phonenumber'
 import { createHash } from 'crypto'
 import fetch from 'node-fetch'
+import moment from 'moment'
 
 const Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   const who = m.mentionedJid?.[0] || (m.fromMe ? conn.user.jid : m.sender)
-  const mentionedJid = [who]
-
   const pp = await conn.profilePictureUrl(who, 'image').catch(() => 'https://files.catbox.moe/xr2m6u.jpg')
   const user = global.db.data.users[m.sender]
   const name2 = conn.getName(m.sender)
@@ -37,11 +36,16 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.regTime = +new Date()
   user.registered = true
 
-  user.coin += 46
-  user.exp += 310
-  user.joincount += 25
+  user.coin = (user.coin || 0) + 46
+  user.exp = (user.exp || 0) + 310
+  user.joincount = (user.joincount || 0) + 25
 
   const sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
+
+  const moneda = 'Monedas'
+  const dev = 'By @Wirk'
+  const textbot = 'Tu registro fue exitoso.'
+  const channel = 'https://wa.me/120363402846939411'
 
   const regbot = `
 ╭───❍ *Registro 🌸* ❍───╮
@@ -76,16 +80,31 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
       }
     }
   }, { quoted: m })
-  
-  const canalID = '120363402846939411@newsletter';  // ID de tu canal de WhatsApp
-    let notificationMessage = `¡Nuevo registro! 🎉\n\n`
-    notificationMessage += `🆔 *Usuario:* ${name}\n`
-    notificationMessage += `🔹 *Edad:* ${age} años\n`
-    notificationMessage += `📅 *Fecha de Registro:* ${moment().format('YYYY-MM-DD HH:mm:ss')}\n\n`
-    notificationMessage += `¡Bienvenido(a) a la comunidad! 🎉`
 
-    await conn.sendMessage(canalID, { text: notificationMessage });
-  
+  // Notificación al canal o grupo
+  const canalID = '120363402846939411@newsletter' // puede fallar
+  const notificationMessage = `
+╭───❍ *Nuevo Registro* ❍───╮
+│ ᰔᩚ *Nombre:* ${name}
+│ ✎ *Edad:* ${age} años
+│ 🆔 *ID:* ${sn}
+│
+├─ 🎁 *Recompensas:*
+│ ⛁ *${moneda}:* +46
+│ ✰ *Experiencia:* +310
+│ ❖ *Tokens:* +25
+│
+📅 *Registrado:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
+╰────────────────────────╯`.trim()
+
+  try {
+    await conn.sendMessage(canalID, { text: notificationMessage })
+  } catch (e) {
+    console.error('[ERROR AL ENVIAR AL CANAL]', e)
+    // Opcional: envía error a consola o admin
+  }
+}
+
 handler.help = ['reg']
 handler.tags = ['rg']
 handler.command = ['verify', 'verificar', 'reg', 'register', 'registrar']
