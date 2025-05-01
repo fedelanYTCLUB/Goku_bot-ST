@@ -80,18 +80,20 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 
   // Enviar notificación al grupo
   const grupoNotificacion = '120363399440277900@g.us'
-  let mensajeNotificacion = `╭───❍ *Nuevo Registro* ❍───╮
-│ ᰔᩚ *Nombre:* ${name}
-│ ✎ *Edad:* ${age} años
-│ 🆔 *ID:* ${sn}
-│
-├─ 🎁 *Recompensas:*
-│ ⛁ Monedas: +46
-│ ✰ Experiencia: +310
-│ ❖ Tokens: +25
-│
-📅 *Fecha:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
-╰──────────•••─────────╯`
+  let mensajeNotificacion = `┏━❀ *Nuevo Registro* ❀━┓
+┃ ｡･ﾟ✧ Una linda personita Nueva
+┃ 
+┃ ✦ *Nombre:* ${name} ꒰՞•ﻌ•՞꒱
+┃ ✦ *Edad:* ${age} añitos
+┃ ✦ *ID:* ${sn}
+┃
+┃ ˗ˏˋ 🎁 *Recompensas Q Obtuvo:* ˎˊ˗
+┃ ₊ ⛁ Moneditas: +46
+┃ ₊ ✰ Experiencia: +310
+┃ ₊ ❖ Tokens: +25
+┃
+┃ 🗓️ *Se Registro Hoy:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
+┗━━━━━━━━━━━━━━━━━━━━━┛`
 
   await conn.sendMessage(grupoNotificacion, { text: mensajeNotificacion })
 }
