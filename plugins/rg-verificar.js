@@ -3,12 +3,14 @@ import fs from 'fs'
 import PhoneNumber from 'awesome-phonenumber'
 import { createHash } from 'crypto'
 import fetch from 'node-fetch'
-import moment from 'moment'
+import moment from 'moment-timezone' // Asegúrate de tener esta dependencia instalada
 
 const Reg = /\|?(.*)([.|] *?)([0-9]*)$/i
 
 let handler = async function (m, { conn, text, usedPrefix, command }) {
   const who = m.mentionedJid?.[0] || (m.fromMe ? conn.user.jid : m.sender)
+  const mentionedJid = [who]
+
   const pp = await conn.profilePictureUrl(who, 'image').catch(() => 'https://files.catbox.moe/xr2m6u.jpg')
   const user = global.db.data.users[m.sender]
   const name2 = conn.getName(m.sender)
@@ -36,16 +38,11 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   user.regTime = +new Date()
   user.registered = true
 
-  user.coin = (user.coin || 0) + 46
-  user.exp = (user.exp || 0) + 310
-  user.joincount = (user.joincount || 0) + 25
+  user.coin += 46
+  user.exp += 310
+  user.joincount += 25
 
   const sn = createHash('md5').update(m.sender).digest('hex').slice(0, 20)
-
-  const moneda = 'Monedas'
-  const dev = 'By @Wirk'
-  const textbot = 'Tu registro fue exitoso.'
-  const channel = 'https://wa.me/120363402846939411'
 
   const regbot = `
 ╭───❍ *Registro 🌸* ❍───╮
@@ -56,12 +53,12 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ 🆔 *ID:* ${sn}
 │
 ├─ 🎁 *Recompensas Recibidas:*
-│ ⛁ *${moneda}:* +46
+│ ⛁ *Monedas:* +46
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
 ╰──────────•••─────────╯
-> ${dev}
+> @Wirk
 `.trim()
 
   await m.react('📩')
@@ -71,9 +68,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     contextInfo: {
       externalAdReply: {
         title: '✧ Registro Completado ✧',
-        body: textbot,
+        body: '¡Gracias por registrarte!',
         thumbnailUrl: pp,
-        sourceUrl: channel,
+        sourceUrl: 'https://chat.whatsapp.com/tu-enlace-de-canal-o-grupo',
         mediaType: 1,
         showAdAttribution: true,
         renderLargerThumbnail: true
@@ -81,28 +78,22 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     }
   }, { quoted: m })
 
-  // Notificación al canal o grupo
-  const canalID = '120363402846939411@newsletter' // puede fallar
-  const notificationMessage = `
-╭───❍ *Nuevo Registro* ❍───╮
+  // Enviar notificación al grupo
+  const grupoNotificacion = '120363399440277900@g.us'
+  let mensajeNotificacion = `╭───❍ *Nuevo Registro* ❍───╮
 │ ᰔᩚ *Nombre:* ${name}
 │ ✎ *Edad:* ${age} años
 │ 🆔 *ID:* ${sn}
 │
 ├─ 🎁 *Recompensas:*
-│ ⛁ *${moneda}:* +46
-│ ✰ *Experiencia:* +310
-│ ❖ *Tokens:* +25
+│ ⛁ Monedas: +46
+│ ✰ Experiencia: +310
+│ ❖ Tokens: +25
 │
-📅 *Registrado:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
-╰────────────────────────╯`.trim()
+📅 *Fecha:* ${moment().format('YYYY-MM-DD HH:mm:ss')}
+╰──────────•••─────────╯`
 
-  try {
-    await conn.sendMessage(canalID, { text: notificationMessage })
-  } catch (e) {
-    console.error('[ERROR AL ENVIAR AL CANAL]', e)
-    // Opcional: envía error a consola o admin
-  }
+  await conn.sendMessage(grupoNotificacion, { text: mensajeNotificacion })
 }
 
 handler.help = ['reg']
