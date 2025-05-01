@@ -303,7 +303,6 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 `.trim()
 
   await conn.sendMessage(m.chat, {
-  await conn.sendMessage(m.chat, {
   text: txt,
   contextInfo: {
     mentionedJid: [m.sender, userId],
