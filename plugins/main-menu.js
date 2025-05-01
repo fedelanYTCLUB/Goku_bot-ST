@@ -68,8 +68,8 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 🐇 *#mediafire • #mf* ➢ ¡Archivos de MediaFire listos! 📥💾
 🌷 *#pinvid • #pinvideo* + [enlacé] ➢ ¡Videos de Pinterest bonitos! ✨👇
 🎀 *#mega • #mg* + [enlacé] ➢ ¡Archivos de MEGA! 👇💾
-🍓 *#play • #play2 • #playaudio • #playvideo* ➢ Música y videos de YouTube! 🎶▶️📥
-💖 *#ytmp3 • #ytmp4* ➢ Descarga por URL de YouTube! 👇✨
+🍓 *#play • #play2 • #playvideo • #playmp3 • #playmp4* ➢ Música y videos de YouTube Por Nombre! ▶️📥
+💖 *#ytmp3 • #ytmp4 • #ytmp4doc*➢ Descarga por URL de YouTube! 👇✨
 ✨ *#fb • #facebook* ➢ ¡Videos de Facebook! 👇📱
 🐰 *#twitter • #x* + [Link] ➢ ¡Videos de Twitter/X! 👇🐦
 💭 *#ig • #instagram* ➢ ¡Todo de Instagram! 👇📸
