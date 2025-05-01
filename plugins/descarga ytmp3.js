@@ -5,7 +5,7 @@ import axios from "axios"
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Por favor, escribe el nombre de la canción que quieres escuchar.`, m)
+      return conn.reply(m.chat, `❀ Ingrese el nombre de la música que quieres descargar.`, m)
     }
 
     const search = await yts(text)
@@ -18,83 +18,87 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       return m.reply('✧ No se pudo obtener información del video.')
     }
 
-    const { title, thumbnail, timestamp, url } = videoInfo
-    if (!title || !thumbnail || !timestamp || !url) {
+    const { title, thumbnail, timestamp, views, ago, url, author } = videoInfo
+
+    if (!title || !thumbnail || !timestamp || !views || !ago || !url || !author) {
       return m.reply('✧ Información incompleta del video.')
     }
 
+    const vistas = formatViews(views)
+    const canal = author.name ? author.name : 'Desconocido'
+    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✦ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicación » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
+
     const thumb = (await conn.getFile(thumbnail))?.data
-    m.react('🌸')
+  m.react('🪴') 
+  
+  const JT = {
+      contextInfo: {
+        externalAdReply: {
+          title: botname,
+          body: dev,
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: url,
+          sourceUrl: url,
+          thumbnail: thumb,
+          renderLargerThumbnail: true,
+        },
+      },
+    }
+
+    //await conn.reply(m.chat, infoMessage, m, JT)
 
     if (command === 'play' || command === 'yta' || command === 'ytmp3') {
       try {
         const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-        const result = api.result?.download?.url
+        const resulta = api.result
+        const result = resulta.download.url
+
         if (!result) throw new Error('⚠ El enlace de audio no se generó correctamente.')
 
-        await conn.sendMessage(m.chat, {
-          audio: { url: result },
-          fileName: `${api.result.title}.mp3`,
-          mimetype: 'audio/mpeg',
-          contextInfo: {
-            externalAdReply: {
-              title: title,
-              body: `⏳ Duración: ${timestamp}`,
-              mediaType: 1,
-              previewType: "PHOTO",
-              thumbnail: thumb,
-              showAdAttribution: true,
-              renderLargerThumbnail: true,
-              sourceUrl: url
-            }
-          }
-        }, { quoted: m })
+        await conn.sendMessage(m.chat, { audio: { url: result }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
       } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Puede que el archivo sea muy pesado o hubo un error. Intenta más tarde.', m)
+        return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
     } else if (command === 'play2' || command === 'ytv' || command === 'ytmp4') {
       try {
-        const json = await (await fetch(`https://api.vreden.my.id/api/ytmp4?url=${url}`)).json()
-        const resultado = json.result?.download?.url
-        if (!resultado) throw new Error('⚠ El enlace de video no se generó correctamente.')
+        const response = await fetch(`https://api.vreden.my.id/api/ytmp4?url=${url}`)
+        const json = await response.json()
+        const resultad = json.result
+        const resultado = resultad.download.url
 
-        await conn.sendMessage(m.chat, {
-          video: { url: resultado },
-          fileName: `${json.result.title}.mp4`,
-          mimetype: 'video/mp4',
-          caption: `╭•⋯⋯⋯⋯⋯⋯⋯⋯•╮
-  ✿ 𝙑𝙞𝙙𝙚𝙤 𝙡𝙞𝙨𝙩𝙤 ✿
-╰•⋯⋯⋯⋯⋯⋯⋯⋯•╯
+        if (!resultad || !resultado) throw new Error('⚠ El enlace de video no se generó correctamente.')
 
-🍡 *${title}*
-⏳ *Duración:* ${timestamp}`,
-          contextInfo: {
-            externalAdReply: {
-              title: title,
-              body: `⏳ Duración: ${timestamp}`,
-              mediaType: 1,
-              previewType: "PHOTO",
-              thumbnail: thumb,
-              showAdAttribution: true,
-              renderLargerThumbnail: true,
-              sourceUrl: url
-            }
-          }
-        }, { quoted: m })
+        await conn.sendMessage(m.chat, { video: { url: resultado }, fileName: resultad.title, mimetype: 'video/mp4', caption: title }, { quoted: m })
       } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Puede que el archivo sea muy pesado o hubo un error. Intenta más tarde.', m)
+        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
     } else {
       return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
     }
 
   } catch (error) {
-    return m.reply(`⚠︎ Ocurrió un error inesperado:\n${error}`)
+    return m.reply(`⚠︎ Ocurrió un error: ${error}`)
   }
 }
 
-handler.command = handler.help = ['yta', 'ytmp3']
+handler.command = handler.help = ['yta', 'ytmp3',]
 handler.tags = ['descargas']
 handler.group = true
 
 export default handler
+
+function formatViews(views) {
+  if (views === undefined) {
+    return "No disponible"
+  }
+
+  if (views >= 1_000_000_000) {
+    return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`
+  } else if (views >= 1_000_000) {
+    return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`
+  } else if (views >= 1_000) {
+    return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`
+  }
+  return views.toString()
+}
