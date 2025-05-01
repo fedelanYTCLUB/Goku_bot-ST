@@ -10,7 +10,7 @@ let handler = async (m, { conn, args }) => {
     let txt = `💛 *New:* \`Prueba mi pagina de descargas:\`
 URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:*\n\`${uptime}\`\n
 ┏━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┓
-✨ Hola, ${name} Soy *${botname}* ✨
+✨ Hola, ${name} Soy *Mai* ✨
        Como estas :3? 💖
 ┗━━━°´-̗̀¡!'-̗̀¡!'-̗̀¡!'-̗̀¡!´-°━━━┛
 
@@ -336,8 +336,8 @@ URL: https://play-youtubedescargas.vercel.app/\n🌸 *Activa desde hace:*\n\`${u
           },
           forwardingScore: 999,
           externalAdReply: {
-              title: botname, // Asegúrate de que botname esté definido
-              body: textbot, // Asegúrate de que textbot esté definido
+              title: "Mai 🐤", // Asegúrate de que botname esté definido
+              body: "Powered By Wirk 💛", // Asegúrate de que textbot esté definido
               thumbnailUrl: banner, // Asegúrate de que banner esté definido
               sourceUrl: redes, // Asegúrate de que redes esté definido
               mediaType: 1,
