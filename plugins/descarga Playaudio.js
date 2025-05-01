@@ -33,11 +33,30 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return m.reply("❌ No se pudo obtener el audio del video.");
     }
 
+    const audioUrl = downloadData.result.download.url;
+    
+    // Añadir contextInfo con el título en el body
+    const contextInfo = {
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: video.title,  // El título del video en el cuerpo
+          mediaType: 1,
+          previewType: "PHOTO",
+          thumbnailUrl: video.image,
+          sourceUrl: video.url,
+          showAdAttribution: true,
+          renderLargerThumbnail: true,
+        },
+      }
+    };
+
     await conn.sendMessage(m.chat, {
-      audio: { url: downloadData.result.download.url },
+      audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
       ptt: false,
-      fileName: `🎵 ${video.title}.mp3`
+      fileName: `🎵 ${video.title}.mp3`,
+      ...contextInfo
     }, { quoted: m });
 
     await m.react("✨");
