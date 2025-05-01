@@ -103,7 +103,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
           body: dev, 
           mediaType: 1, 
           previewType: 0, 
-          mediaUrl: url, 
+          mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", 
           sourceUrl: url, 
           thumbnail: thumb, 
           renderLargerThumbnail: true, 
