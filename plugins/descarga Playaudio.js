@@ -34,29 +34,37 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     const audioUrl = downloadData.result.download.url;
-    
-    // Añadir contextInfo con el título en el body
-    const contextInfo = {
-      contextInfo: {
-        externalAdReply: {
-          title: video.title,
-          body: video.duration,  // El título del video en el cuerpo
-          mediaType: 1,
-          previewType: "PHOTO",
-          thumbnailUrl: video.image,
-          sourceUrl: video.url,
-          showAdAttribution: true,
-          renderLargerThumbnail: true,
-        },
-      }
-    };
 
+    // Enviar audio sin contextInfo decorado
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
       ptt: false,
-      fileName: `🎵 ${video.title}.mp3`,
-      ...contextInfo
+      fileName: `🎵 ${video.title}.mp3`
+    }, { quoted: m });
+
+    // Enviar mensaje tipo canal (waimessage)
+    await conn.sendMessage(m.chat, {
+      text: `✨ *Disfruta tu canción: ${video.title}*`,
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: channelRD.id,         // Asegúrate de definir esto
+          newsletterName: channelRD.name,      // Asegúrate de definir esto
+          serverMessageId: -1
+        },
+        forwardingScore: 16,
+        externalAdReply: {
+          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤",
+          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛",
+          thumbnailUrl: banner,                // Asegúrate de definir esto
+          sourceUrl: redes,                    // Asegúrate de definir esto
+          mediaType: 1,
+          showAdAttribution: true,
+          renderLargerThumbnail: true,
+        }
+      }
     }, { quoted: m });
 
     await m.react("✨");
