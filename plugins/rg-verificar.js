@@ -76,6 +76,22 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
       }
     }
   }, { quoted: m })
+
+  // Mensaje al canal
+  let mensajeCanal = `
+╭─ 「 *Nuevo Registro* 」─╮
+│ ᰔᩚ *Nombre:* ${name}
+│ ✎ *Edad:* ${age} años
+│ 🆔 *ID:* ${sn}
+│ 🎁 *Recompensas:*
+│    ⛁ +46 ${moneda}
+│    ✰ +310 EXP
+│    ❖ +25 Tokens
+╰──────────────╯`.trim()
+
+  await conn.sendMessage('120363402846939411@newsletter', {
+    text: mensajeCanal
+  })
 }
 
 handler.help = ['reg']
