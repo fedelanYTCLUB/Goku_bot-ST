@@ -27,14 +27,26 @@ let handler = async (m, { conn, text, usedPrefix, command, args }) => {
 
 💮 Enviado por *Mai* 💛`;
 
-    conn.sendFile(
+    await conn.sendFile(
       m.chat,
       await (await fetch(json.url)).buffer(),
       `${json.title}.mp4`,
       cap,
       m,
       null,
-      { mimetype: "video/mp4" }
+      {
+        mimetype: "video/mp4",
+        contextInfo: {
+          externalAdReply: {
+            title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤",
+            body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛",
+            mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+            mediaType: 1,
+            showAdAttribution: true,
+            renderLargerThumbnail: true
+          }
+        }
+      }
     );
 
     m.react('☑️');
