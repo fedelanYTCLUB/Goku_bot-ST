@@ -1,32 +1,21 @@
-let handler = async (m, { text, conn, usedPrefix, command }) => {
-  if (!text) return m.reply(`『✦』Uso correcto:\n*${usedPrefix + command} <enlace del canal>*`)
+let handler = async (m, { text, usedPrefix, command }) => {
+  if (!text) return m.reply(`『✦』Uso correcto:\n*${usedPrefix + command} <link del canal>*`)
 
-  if (!text.includes('whatsapp.com/channel/')) return m.reply('『✦』El enlace debe ser de un canal de WhatsApp.')
+  const regex = /https?:\/\/whatsapp\.com\/channel\/([\w\d]+)/i
+  const match = text.match(regex)
+  if (!match) return m.reply('『✦』Enlace inválido. Asegúrate de que sea un link de canal.')
 
-  try {
-    const code = text.trim().split('/').pop()
-    const result = await conn.groupGetInviteInfo(code)
+  const inviteCode = match[1]
+  const jid = `${inviteCode}@newsletter`
 
-    if (!result.id || !result.id.endsWith('@newsletter')) {
-      return m.reply('『✦』No se pudo obtener la ID real del canal.')
-    }
-
-    let info = `
-╭─「 *Canal Inspeccionado* 」
-│ ✦ *Nombre:* ${result.subject || 'Desconocido'}
-│ ✎ *ID real:* ${result.id}
-│ 🗓️ *Creado:* ${result.creation ? new Date(result.creation * 1000).toLocaleString() : 'N/A'}
-╰───────────────`.trim()
-
-    m.reply(info)
-  } catch (e) {
-    console.log(e)
-    m.reply('『✦』Error al inspeccionar el canal. Asegúrate de que el enlace sea válido y que el bot no esté bloqueado.')
-  }
+  m.reply(`╭─「 *Inspección de Canal* 」
+│ ✦ *Código:* ${inviteCode}
+│ ✎ *JID correcto:* ${jid}
+╰───────────────`)
 }
 
-handler.help = ['inspeccionar <enlace>']
+handler.help = ['inspeccionar <link>']
 handler.tags = ['tools']
-handler.command = ['inspeccionar']
+handler.command = ['inspeccionar', 'channelid']
 
 export default handler
