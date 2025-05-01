@@ -60,7 +60,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 ├─ 📢 *Verifica Tu Registro Aqui:*
 │ https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd
 │
-╰──────────•••─────────╯
+╰────────•••────────╯
 > @Wirk
 `.trim()
 
