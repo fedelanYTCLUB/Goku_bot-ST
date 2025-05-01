@@ -13,15 +13,15 @@ let handler = async (m, { conn, args }) => {
 ૮₍´˶• . • ⑅ ₎ა ¡Holiii, ${name} 👋!
 Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 
-🎀 Llevo despierta desde hace: \`${uptime}\`
-🌷 Tengo ${totalreg} amiguitos registrad@s!
-💖 Y sé hacer ${totalCommands} cositas para ti!
+🎀 *Llevo despierta desde hace:* \`${uptime}\`
+🌷 Tengo *${totalreg}* amiguitos registrad@s!
+\`💖 Y sé hacer ${totalCommands} cositas para ti\`
 
-₊˚⊹ ꒰ Sobre Mí ꒱ ‧₊˚
-🐰 Tú eres: @${userId.split('@')[0]} ✨
-💭 Modo: Público para todos! 🌎
-🍓 Soy: ${(conn.user.jid == global.conn.user.jid ? 'Botsita Principal 🪴' : 'Sub Bot 🌸')}
-🫧 Versión: Multi Dispositivo! 📱💻
+*₊˚⊹ ꒰ 𝘚𝘰𝘣𝘳𝘦 𝘔𝘪 ꒱ ‧₊˚*
+🐰 *Tú eres:* @${userId.split('@')[0]} ✨
+💭 *Modo:* _Público para todos 🌎_
+🍓 *Soy:* ${(conn.user.jid == global.conn.user.jid ? '𝗕𝗼𝘁𝘀𝗶𝘁𝗮 𝗣𝗿𝗶𝗻𝗰𝗶𝗽𝗮𝗹 🪴' : '𝙎𝙪𝙗 𝘽𝙤𝙩🌸')}
+🫧 *Versión:* _Multi Dispositivo 📱💻&
 
 *💌 Un secretito:* Puedes tener tu propio Sub-Bot con *#qr* o *#code*
 
