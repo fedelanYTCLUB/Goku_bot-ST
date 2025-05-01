@@ -35,7 +35,7 @@ global.botname = '🌷 Mᴀɪ 🌷'
 global.wm = '💫 ᴘʀᴏᴄᴇssᴇᴅ ʙʏ ᴍᴀɪ-ʙᴏᴛ ʙʏ ᴡɪʀᴋ 💫'
 global.author = '🍡 By Wirk 🍡'
 global.dev = '🌼 Wirk Dev 🌼'
-global.textbot = '💖 Mᴀɪ-Bᴏᴛ • Wᴏʀʟᴅ ᴏғ Cᴜᴛᴇ 💖'
+global.textbot = '💖 Mᴀɪ-Bᴏᴛ • 𝖯𝗈𝖽𝖾𝗋𝖾𝗌 𝖡𝗒 𝖶𝗂𝗋𝗄 💖'
 global.etiqueta = '🌸 @Wirk 🌸'
 
 global.moneda = 'MimiCoins🫦'
