@@ -57,7 +57,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ✰ *Experiencia:* +310
 │ ❖ *Tokens:* +25
 │
-╰──────────•••─────────╯
+╰─────────•••────────╯
 *🌻 Comprueba tu registro aquí:*\nhttps://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd\n
 > @Wirk
 `.trim()
