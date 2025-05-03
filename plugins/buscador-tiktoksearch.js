@@ -11,7 +11,7 @@ let handler = async (m, { conn, text }) => {
 
     try {
         await m.react('🕓');
-        conn.reply(m.chat, '*Buscando en tiktok 👻*', m);
+        conn.reply(m.chat, '*Descargando su video...*', m);
 
         let apiUrl = `https://delirius-apiofc.vercel.app/search/tiktoksearch?query=${encodeURIComponent(text)}`;
         let { data: response } = await axios.get(apiUrl);
@@ -57,8 +57,8 @@ let handler = async (m, { conn, text }) => {
     }
 };
 
-handler.help = ['tiktoksearch'];
+handler.help = ['tiktoksearch2'];
 handler.tags = ['search'];
-handler.command = ['tiktoksearch', 'ttsearch', 'ttss'];
+handler.command = ['tiktoksearch2', 'ttsearch2', 'ttss2'];
 handler.register = true;
 export default handler;
