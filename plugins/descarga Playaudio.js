@@ -17,17 +17,28 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const waitMessage = `☁️ *︙${video.title}*\n\n` +
       `🎧 *Artista:* ${video.author.name}\n` +
       `⏳ *Duración:* ${video.duration}\n` +
-      `👀 *Vistas:* ${video.views}\n` +
+      `👀 *Vistas:* ${video.views}\n\n` +
       `➺ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐, 𝒆𝒔𝒕𝒂𝒎𝒐𝒔 𝒃𝒂𝒋𝒂𝒏𝒅𝒐 𝒕𝒖 𝒄𝒂𝒏𝒄𝒊ó𝒏...`;
 
-    await conn.sendMessage(m.chat, {
+    const message = await conn.sendMessage(m.chat, {
       image: { url: video.image },
       caption: waitMessage.trim(),
       contextInfo: {
         forwardingScore: 999,
-        isForwarded: true
+        isForwarded: true,
+        externalAdReply: {
+          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁",
+          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵",
+          thumbnailUrl: video.image,
+          mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+          mediaType: 2,
+          showAdAttribution: true,
+          renderLargerThumbnail: true
+        }
       }
     }, { quoted: m });
+
+    await m.react("⏱️");
 
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
@@ -46,20 +57,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       fileName: `🎵 ${video.title}.mp3`,
       contextInfo: {
         forwardingScore: 999,
-        isForwarded: true,
-        externalAdReply: {
-          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁",
-          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵",
-          thumbnailUrl: video.image,
-          mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
-          mediaType: 2,
-          showAdAttribution: true,
-          renderLargerThumbnail: true
-        }
+        isForwarded: true
       }
     }, { quoted: m });
 
-    await m.react("✨");
+    await m.react("✅");
   } catch (error) {
     console.error(error);
     m.reply(`❌ Ocurrió un error:\n${error.message}`);
