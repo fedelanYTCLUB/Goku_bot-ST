@@ -8,28 +8,60 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 
   const url = args[0];
+  await conn.reply(m.chat, `${emoji} *Espera un momento mientras descargo el audio...*`, m);
 
-  try {
-    await conn.reply(m.chat, `${emoji} *Espérame tantito... estoy convirtiendo el video en mp3 para ti...*`, m);
+  const apis = [
+    `https://api.lolhuman.xyz/api/ytmp3?url=${url}`, // sin key, puede tardar
+    `https://aemt.me/download/ytmp3?url=${url}`,
+    `https://api.akuari.my.id/downloader/yta2?link=${url}`,
+    `https://vihangayt.me/download/ytmp3?url=${url}`,
+    `https://dl.shadoway.xyz/api/ytmp3?url=${url}`
+  ];
 
-    const res = await fetch(`https://dark-core-api.vercel.app/api/download/YTMP3?key=api&url=${encodeURIComponent(url)}`);
-    const data = await res.json();
+  let success = false;
 
-    if (!data || data.status !== 200 || !data.result || !data.result.audio) {
-      return conn.reply(m.chat, `${emoji} *No se pudo obtener el audio del video. Puede que el enlace no sea válido o la API esté fallando.*`, m);
+  for (let api of apis) {
+    try {
+      let res = await fetch(api);
+      let json = await res.json();
+
+      let audio, title;
+
+      if (json.result?.link || json.result?.url) {
+        audio = json.result.link || json.result.url;
+        title = json.result.title || 'audio';
+      } else if (json.result?.audio) {
+        audio = json.result.audio;
+        title = json.result.title || 'audio';
+      } else if (json.url?.audio) {
+        audio = json.url.audio;
+        title = json.title || 'audio';
+      } else {
+        continue;
+      }
+
+      await conn.sendFile(
+        m.chat,
+        audio,
+        `${title}.mp3`,
+        `${emoji} *Aquí está tu canción:* *${title}*`,
+        m,
+        null,
+        {
+          mimetype: 'audio/mpeg',
+          fileName: `${title}.mp3`
+        }
+      );
+
+      success = true;
+      break;
+    } catch (err) {
+      console.log(`[FALLÓ API]: ${api}\n${err.message}`);
     }
+  }
 
-    const audioURL = data.result.audio;
-    const title = data.result.title || 'audio';
-
-    await conn.sendFile(m.chat, audioURL, `${title}.mp3`, `${emoji} *Aquí tienes tu canción:* *${title}*`, m, null, {
-      mimetype: 'audio/mpeg',
-      fileName: `${title}.mp3`
-    });
-
-  } catch (error) {
-    console.error(error);
-    return conn.reply(m.chat, `⚠️ *Ocurrió un error inesperado:*\n${error.message}`, m);
+  if (!success) {
+    conn.reply(m.chat, `❌ *No se pudo descargar el mp3. Intenta con otro enlace o más tarde.*`, m);
   }
 };
 
@@ -38,6 +70,6 @@ handler.tags = ['descargas'];
 handler.command = ['ytmp3', 'ytaudio', 'ytmp3dl'];
 handler.register = true;
 handler.limit = true;
-handler.coin = 1;
+handler.coin = 2;
 
 export default handler;
