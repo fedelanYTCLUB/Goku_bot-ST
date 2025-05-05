@@ -1,76 +1,46 @@
+import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 var handler = async (m, { conn, args, usedPrefix, command }) => {
   const emoji = '🎵';
-  const fail = `❌ *No se pudo obtener el audio. Intenta con otro enlace.*`;
-
   if (!args[0] || !args[0].startsWith('http')) {
-    return conn.reply(m.chat, `${emoji} *Por favor ingresa un enlace válido de YouTube.*\n\nEjemplo: *${usedPrefix + command} https://youtu.be/dQw4w9WgXcQ*`, m);
+    return conn.reply(m.chat, `${emoji} *Ingresa un enlace válido de YouTube.*\nEjemplo: ${usedPrefix + command} https://youtu.be/ryVgEcaJhwM`, m);
   }
 
   const url = args[0];
-  await conn.reply(m.chat, `${emoji} *Procesando tu audio... espera un momento.*`, m);
+  const id = Math.floor(Math.random() * 999999);
+  const output = path.join(__dirname, `tmp-audio-${id}.mp3`);
 
-  let success = false;
+  conn.reply(m.chat, `${emoji} *Descargando audio... espera unos segundos.*`, m);
 
-  // Método 1: API de Vreden
-  try {
-    let res = await fetch(`https://api.vreden.pw/ytmp3?url=${url}`);
-    let json = await res.json();
+  const ytdlp = spawn('yt-dlp', [
+    '-x', '--audio-format', 'mp3',
+    '-o', output,
+    url
+  ]);
 
-    if (json.status && json.result && json.result.audio) {
-      let audioURL = json.result.audio;
-      let title = json.result.title || 'audio';
-
-      await conn.sendFile(
-        m.chat,
-        audioURL,
-        `${title}.mp3`,
-        `${emoji} *Aquí tienes tu canción:* *${title}*`,
-        m,
-        null,
-        { mimetype: 'audio/mpeg', fileName: `${title}.mp3` }
-      );
-
-      success = true;
+  ytdlp.stderr.on('data', data => console.log('[yt-dlp]', data.toString()));
+  ytdlp.on('close', async code => {
+    if (code !== 0) {
+      return conn.reply(m.chat, '❌ *Error al convertir el video a audio.*', m);
     }
-  } catch (e) {
-    console.log('[Vreden Error]', e.message);
-  }
 
-  // Método 2: YTDLP como respaldo
-  if (!success) {
-    try {
-      let res = await fetch(`https://ytdl.shadoway.xyz/api/audio?url=${url}`);
-      let json = await res.json();
+    let title = `audio-${id}.mp3`;
+    await conn.sendFile(m.chat, output, title, `${emoji} *Aquí está tu audio convertido.*`, m, null, {
+      mimetype: 'audio/mpeg',
+      fileName: title
+    });
 
-      if (json.status && json.audio) {
-        let audioURL = json.audio;
-        let title = json.title || 'audio';
-
-        await conn.sendFile(
-          m.chat,
-          audioURL,
-          `${title}.mp3`,
-          `${emoji} *Aquí está tu canción:* *${title}*`,
-          m,
-          null,
-          { mimetype: 'audio/mpeg', fileName: `${title}.mp3` }
-        );
-
-        success = true;
-      }
-    } catch (e) {
-      console.log('[YTDLP Error]', e.message);
-    }
-  }
-
-  if (!success) {
-    conn.reply(m.chat, fail, m);
-  }
+    fs.unlinkSync(output); // Limpieza del archivo
+  });
 };
 
-handler.help = ['ytmp3']
+handler.help = ['ytmp3'].map(v => v + ' <enlace>');
 handler.tags = ['descargas'];
 handler.command = ['ytmp3', 'ytaudio'];
 handler.register = true;
