@@ -1,4 +1,3 @@
-//☕ cafe? XD
 import fetch from "node-fetch"
 import yts from 'yt-search'
 import axios from "axios"
@@ -10,39 +9,53 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
     }
   
-let videoIdToFind = text.match(youtubeRegexID) || null
-let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
+    let videoIdToFind = text.match(youtubeRegexID) || null
+    let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
 
-if (videoIdToFind) {
-const videoId = videoIdToFind[1]  
-ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
-} 
-ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
+    if (videoIdToFind) {
+      const videoId = videoIdToFind[1]  
+      ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+    } 
+    ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
 
-if (!ytplay2 || ytplay2.length == 0) {
-return m.reply('✧ No se encontraron resultados para tu búsqueda.')
-}
-let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
+    if (!ytplay2 || ytplay2.length == 0) {
+      return m.reply('✧ No se encontraron resultados para tu búsqueda.')
+    }
+    
+    let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
 
-title = title || 'no encontrado'
-thumbnail = thumbnail || 'no encontrado'
-timestamp = timestamp || 'no encontrado'
-views = views || 'no encontrado'
-ago = ago || 'no encontrado'
-url = url || 'no encontrado'
-author = author || 'no encontrado'
+    title = title || 'no encontrado'
+    thumbnail = thumbnail || 'no encontrado'
+    timestamp = timestamp || 'no encontrado'
+    views = views || 'no encontrado'
+    ago = ago || 'no encontrado'
+    url = url || 'no encontrado'
+    author = author || 'no encontrado'
 
     const vistas = formatViews(views)
     const canal = author.name ? author.name : 'Desconocido'
-    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✦ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicado » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
+    const infoMessage = `
+╭───♡༉───✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╮
+    ʚ🌸ɞ 𝓜𝓪𝓲 𝓑𝓸𝓽𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌 🌴
+╰───♡༉───✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╯
+
+*🍡 Título:* ${title}
+*🍥 Canal:* ${canal}
+*🌟 Vistas:* ${vistas}
+*⏰ Duración:* ${timestamp}
+*🗓️ Publicado:* ${ago}
+*🔗 Enlace:* ${url}
+
+⌜ ♡ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐... ♡ ⌟
+`
 
     const thumb = (await conn.getFile(thumbnail))?.data
 
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: botname,
-          body: dev,
+          title: 'Mai Bot',
+          body: 'Tu asistente personal',
           mediaType: 1,
           previewType: 0,
           mediaUrl: url,
