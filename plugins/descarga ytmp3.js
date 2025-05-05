@@ -34,9 +34,11 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const vistas = formatViews(views)
     const canal = author.name ? author.name : 'Desconocido'
+
+    // Crear el mensaje con la información del video de manera ordenada
     const infoMessage = `
 ╭♡༉✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╮
- ʚ🌸ɞ 𝓜𝓪𝓲 𝓑𝓸𝓽𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌 🌴
+ ʚ🌸ɞ URL 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌 🌴
 ╰♡༉✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╯
 
 *🍡 Título:* ${title}
@@ -54,8 +56,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: 'Mai Bot',
-          body: 'Tu asistente personal',
+          title: 'Mai Bot ☕',
+          body: 'By Wirk 👻',
           mediaType: 1,
           previewType: 0,
           mediaUrl: url,
