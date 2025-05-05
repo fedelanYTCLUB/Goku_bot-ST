@@ -82,7 +82,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
       } catch (e) {
         return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
-    } else if (command === 'play2' || command === 'ytv' || command === 'ytmp4' || command === 'mp4') {
+    } else if (command === 'playvid' || command === 'ytv' || command === 'ytmp4' || command === 'mp4') {
       try {
         const response = await fetch(`https://api.vreden.my.id/api/ytmp4?url=${url}`)
         const json = await response.json()
