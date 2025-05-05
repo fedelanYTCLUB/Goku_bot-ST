@@ -1,104 +1,43 @@
-import fetch from "node-fetch"
-import yts from 'yt-search'
-import axios from "axios"
+import fetch from 'node-fetch';
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
+var handler = async (m, { conn, args, usedPrefix, command }) => {
+  const emoji = '🎵';
+
+  if (!args[0] || !args[0].startsWith('http')) {
+    return conn.reply(m.chat, `${emoji} *Por favor, ingresa un enlace válido de YouTube.*\n\nEjemplo: *${usedPrefix + command} https://youtu.be/ryVgEcaJhwM*`, m);
+  }
+
+  const url = args[0];
+
   try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Ingrese el nombre de la música que quieres descargar.`, m)
+    await conn.reply(m.chat, `${emoji} *Espérame tantito... estoy convirtiendo el video en mp3 para ti...*`, m);
+
+    const res = await fetch(`https://dark-core-api.vercel.app/api/download/YTMP3?key=api&url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+
+    if (!data || data.status !== 200 || !data.result || !data.result.audio) {
+      return conn.reply(m.chat, `${emoji} *No se pudo obtener el audio del video. Puede que el enlace no sea válido o la API esté fallando.*`, m);
     }
 
-    const search = await yts(text)
-    if (!search.all || search.all.length === 0) {
-      return m.reply('✧ No se encontraron resultados para tu búsqueda.')
-    }
+    const audioURL = data.result.audio;
+    const title = data.result.title || 'audio';
 
-    const videoInfo = search.all[0]
-    if (!videoInfo) {
-      return m.reply('✧ No se pudo obtener información del video.')
-    }
-
-    const { title, thumbnail, timestamp, views, ago, url, author } = videoInfo
-
-    if (!title || !thumbnail || !timestamp || !views || !ago || !url || !author) {
-      return m.reply('✧ Información incompleta del video.')
-    }
-
-    const vistas = formatViews(views)
-    const canal = author.name ? author.name : 'Desconocido'
-    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✦ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicación » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
-
-    const thumb = (await conn.getFile(thumbnail))?.data
-  m.react('🪴') 
-  
-  const JT = {
-      contextInfo: {
-        externalAdReply: {
-          title: botname,
-          body: dev,
-          mediaType: 1,
-          previewType: 0,
-          mediaUrl: url,
-          sourceUrl: url,
-          thumbnail: thumb,
-          renderLargerThumbnail: true,
-        },
-      },
-    }
-
-    //await conn.reply(m.chat, infoMessage, m, JT)
-
-    if (command === 'play' || command === 'yta' || command === 'ytmp3') {
-      try {
-        const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
-        const resulta = api.result
-        const result = resulta.download.url
-
-        if (!result) throw new Error('⚠ El enlace de audio no se generó correctamente.')
-
-        await conn.sendMessage(m.chat, { audio: { url: result }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
-      } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
-      }
-    } else if (command === 'play2' || command === 'ytv' || command === 'ytmp4') {
-      try {
-        const response = await fetch(`https://api.vreden.my.id/api/ytmp4?url=${url}`)
-        const json = await response.json()
-        const resultad = json.result
-        const resultado = resultad.download.url
-
-        if (!resultad || !resultado) throw new Error('⚠ El enlace de video no se generó correctamente.')
-
-        await conn.sendMessage(m.chat, { video: { url: resultado }, fileName: resultad.title, mimetype: 'video/mp4', caption: title }, { quoted: m })
-      } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
-      }
-    } else {
-      return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
-    }
+    await conn.sendFile(m.chat, audioURL, `${title}.mp3`, `${emoji} *Aquí tienes tu canción:* *${title}*`, m, null, {
+      mimetype: 'audio/mpeg',
+      fileName: `${title}.mp3`
+    });
 
   } catch (error) {
-    return m.reply(`⚠︎ Ocurrió un error: ${error}`)
+    console.error(error);
+    return conn.reply(m.chat, `⚠️ *Ocurrió un error inesperado:*\n${error.message}`, m);
   }
-}
+};
 
-handler.command = handler.help = ['yta', 'ytmp3',]
-handler.tags = ['descargas']
-handler.group = true
+handler.help = ['ytmp3']
+handler.tags = ['descargas'];
+handler.command = ['ytmp3', 'ytaudio', 'ytmp3dl'];
+handler.register = true;
+handler.limit = true;
+handler.coin = 1;
 
-export default handler
-
-function formatViews(views) {
-  if (views === undefined) {
-    return "No disponible"
-  }
-
-  if (views >= 1_000_000_000) {
-    return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`
-  } else if (views >= 1_000_000) {
-    return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`
-  } else if (views >= 1_000) {
-    return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`
-  }
-  return views.toString()
-}
+export default handler;
