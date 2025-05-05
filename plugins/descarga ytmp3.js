@@ -37,9 +37,9 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
 
     // Crear el mensaje con la información del video de manera ordenada
     const infoMessage = `
-╭♡༉✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╮
+╭♡༉✧˚ ༘⋆˚❀｡──♡───╮
  ʚ🌸ɞ URL 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌 🌴
-╰♡༉✧˚ ༘⋆｡˚❀˚｡⋆｡༘✧───♡───╯
+╰♡༉✧˚ ༘⋆｡˚❀──♡───╯
 
 *🍡 Título:* ${title}
 *🍥 Canal:* ${canal}
@@ -105,7 +105,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-handler.command = handler.help = ['yta', 'ytmp3']
+handler.command = handler.help = ['yta', 'ytmp3', 'playvid']
 handler.tags = ['descargas']
 handler.group = true
 
