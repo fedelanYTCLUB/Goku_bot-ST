@@ -1,6 +1,6 @@
 <h1 align="center">୨୧┈┈ 𝑴𝒂𝒊 𝑩𝒐𝒕 ┈┈୨୧</h1>
 <p align="center"><img src="https://files.catbox.moe/elx34q.jpg" alt="Imagen del Bot Mai" width="300px"></p>
-<p align="center">🌸 Tu compañera kawaii para grupos de WhatsApp 🌸</p>
+<p align="center">🌸 Tu compañerita siempre 🌸</p>
 
 ---
 
@@ -89,7 +89,7 @@
 </a>
 
 <details>
-  <summary><b> 💾 Comandos de instalación</b></summary>
+  <summary><b> 💾 Comandos de instalación y demás info ☕</b></summary>
 
 <details> 
   
