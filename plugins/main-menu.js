@@ -19,7 +19,7 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 
 *₊˚⊹ ꒰ 𝘚𝘰𝘣𝘳𝘦 𝘔𝘪 ꒱ ‧₊˚*
 🐰 *Tú eres:* @${userId.split('@')[0]} ✨
-💭 *Modo:* \`Público para todos 🌎\`
+💭 *Modo:* \`Público para todos\`
 🍓 *Soy:* ${(conn.user.jid == global.conn.user.jid ? '🎍 𝗠𝗮𝗶 𝗢𝗙𝗖 𝗕𝗼𝘁𝘀𝗶𝘁𝗮 𝗣𝗿𝗶𝗻𝗰𝗶𝗽𝗮𝗹 🪴' : '🌵 𝗠𝗮𝗶 𝗦𝘂𝗯 𝗕𝗼𝘁 🌸')}
 🫧 *Versión:* _Multi Dispositivo 📱💻_
 
@@ -298,8 +298,9 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 💖 *#pvp • #suit* + <mencion> ➢ ¡Un duelo amistoso! ⚔️🎮
 ✨ *#ttt* ➢ ¡Crea una sala de Tres en Raya! ❌⭕GameBoard
 
-💖 ¡Gracias por ser mi amigo! Si necesitas algo, solo pregúntame. UwU 💖
+💖 Si necesitas algo, solo pregúntame. UwU 💖
 
+> Powered By Wirk 🫆 
 `.trim()
 
   await conn.sendMessage(m.chat, {
