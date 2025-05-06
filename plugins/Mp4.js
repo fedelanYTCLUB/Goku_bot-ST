@@ -78,8 +78,6 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
 `${emoji} *Aqui tienes tu video*
 
 🌻 *Título:* ${title}
-👤 *Autor:* ${author}
-📆 *Publicado:* ${date}
 🎞️ *Calidad:* ${quality}p`,
         mimetype: 'video/mp4',
         fileName: `${title}.mp4`
