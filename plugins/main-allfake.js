@@ -95,7 +95,7 @@ global.packsticker = `┊ ૮₍｡•́︿•̀｡₎ა *Mai Stickers*
 ┊ ℹ️ *Info:*  
 ╰┈➤ 𖥻 Mai By Wirk 🪴`;
 
-global.packsticker2 = `┊🌸 Bot: ${botname}
+global.packsticker2 = `\n┊🌸 Bot: ${botname}
 ┊🌷 Usuario: ${nombre}
 ┊🕰️ Fecha: ${fecha}
 ╰┈➤ Hora: ${tiempo} ⏰`;
