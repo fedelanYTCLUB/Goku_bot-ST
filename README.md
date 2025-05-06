@@ -66,8 +66,7 @@
   ✦ *Economía y RPG*  
   - `.reg` / `.perfil`  
   - `.trabajar` / `.aventura`  
-  - `.comprar mascota`  
-  - `.alimentar mascota` / `.tienda` / `.top`  
+  - `.work` / `.crime`
 
   ✦ *Stickers y Media*  
   - `.sticker`  
@@ -95,7 +94,7 @@
   
   <summary><b> ✎ Haz clic para ver los comandos </b></summary>
 
-### **🌸 Instalación manual por termux :D**
+### **🌸 Instalación por termux :D**
 > Nota: Copie y pegue los comandos en termux uno por uno.
 ```bash
 termux-setup-storage
