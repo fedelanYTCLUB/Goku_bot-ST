@@ -19,7 +19,7 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     externalAdReply: {
       title: packname,
       body: dev,
-      thumbnail: "https://files.catbox.moe/tlhpnc.jpg",
+      thumbnail: banner,
       sourceUrl: redes,
       mediaType: 1,
       renderLargerThumbnail: false
