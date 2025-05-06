@@ -98,9 +98,9 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 };
 
-handler.help = ['ytmp4'].map(v => v + ' *<link de YouTube>*');
+handler.help = ['ytvideo'].map(v => v + ' *<link de YouTube>*');
 handler.tags = ['descargas'];
-handler.command = ['ytmp4', 'ytvideo', 'ytmp4dl'];
+handler.command = ['ytvideo', 'ytmp4dl'];
 handler.register = true;
 handler.limit = true;
 handler.coin = 3;
