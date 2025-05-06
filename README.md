@@ -1,103 +1,95 @@
-<h1 align="center">✦ Mai - Bot ✦</h1>
+<h1 align="center">୨୧┈┈ 𝑴𝒂𝒊 𝑩𝒐𝒕 ┈┈୨୧</h1>
 <p align="center"><img src="https://files.catbox.moe/elx34q.jpg" alt="Imagen del Bot Mai" width="300px"></p>
+<p align="center">🌸 Tu compañera kawaii para grupos de WhatsApp 🌸</p>
 
-❕️ **Información**
+---
+
+❀ **Información General**
 
 <details>
-  <summary><b> ➮ Info Importante</b></summary>
-  Este proyecto no está afiliado de ninguna manera con WhatsApp, Inc. WhatsApp es una marca registrada de WhatsApp LLC, y este bot es un desarrollo independiente que no tiene ninguna relación oficial con la compañía.
+  <summary><b> ⚠️ Info Importante</b></summary>
+  Este bot es un desarrollo independiente y NO está afiliado con WhatsApp Inc.  
+  WhatsApp es una marca registrada de WhatsApp LLC.
 </details>
 
 <details>
-  <summary><b> ➮ Funciones</b></summary>
+  <summary><b> ✨ Funciones de Mai</b></summary>
   
-  Bot en desarrollo, si presenta alguna falla, reportar al creador para darle una solución óptima.
-  
-  ✦ *Funcionalidades Principales*:
-  - [ ] Interacción con voz y texto  
-  - [x] Bienvenida personalizada y mensajes de salida  
-  - [x] Antidelete, antilink, antifake, etc.  
-  - [x] SubBots (Jadibots multiusuario)  
-  - [x] Juegos integrados (RPG, verdad o reto, adivinanzas)  
-  - [x] Conversación estilo Chatbot (Simsimi, GPT, etc.)  
-  - [x] Sistema de economía y tienda  
-  - [x] Personalización de menú y perfil  
-  - [x] Herramientas para grupos y admins  
-  - [x] Convertidor de stickers (imagen/video/audio a sticker)  
+  *Mai* está en constante evolución. Si encuentras errores, avisa al creador para mejorarlo.
+
+  ✿ *Funciones destacadas*:
+  - [x] Mensajes de bienvenida y despedida personalizados  
+  - [x] Protección de grupo: antilink, antidelete, antifake  
+  - [x] SubBots multiusuario  
+  - [x] Juegos divertidos (RPG, verdad o reto, adivinanzas)  
+  - [x] Chatbot estilo IA (Simsimi, GPT)  
+  - [x] Sistema de economía con tienda  
+  - [x] Menús personalizables y perfiles bonitos  
+  - [x] Herramientas para admins  
+  - [x] Conversión de stickers, audio, imágenes  
   - [x] Descargas de YouTube, Spotify, TikTok y más  
   - [x] Comandos +18 (activables)  
-  - [ ] Comandos con botones y listas interactivas  
+  - [ ] Comandos con botones interactivos  
+
 </details>
 
 <details>
-  <summary><b> ➮ Lista de algunos Comandos</b></summary>
+  <summary><b> ⌘ Comandos Útiles</b></summary>
 
-  ✦ *Información General*  
-  - .ping  
-  - .infobot  
-  - .estado 
+  ✦ *Info básica*  
+  - `.ping`  
+  - `.infobot`  
+  - `.estado`  
 
   ✦ *Descargas*  
-  - .play (nombre)  
-  - .ytmp3 (usa link)  
-  - .ytmp4 (usa link)
-  - .spotify  
-  - .tiktok  
-  - .pinterest  
+  - `.play`  
+  - `.ytmp3` / `.ytmp4`  
+  - `.spotify` / `.tiktok` / `.pinterest`  
 
-  ✦ *Grupo*  
-  - .welcome on/off  
-  - .antilink on/off  
-  - .kick @user  
-  - .promote / .demote  
-  - .linkgc  
-  - .invocar  
+  ✦ *Grupos*  
+  - `.welcome on/off`  
+  - `.antilink on/off`  
+  - `.kick @user`  
+  - `.linkgc`  
+  - `.invocar`  
 
-  ✦ *Juegos y Diversión*  
-  - .ppt (piedra papel o tijera)  
-  - .verdad / .reto  
-  - .mates  
-  - .tictactoe  
-  - .adivinanza  
+  ✦ *Diversión y Juegos*  
+  - `.ppt`  
+  - `.verdad` / `.reto`  
+  - `.tictactoe` / `.mates` / `.adivinanza`  
 
-  ✦ *Chatbot y AI*  
-  - .simi on/off  
-  - .ia (texto)  
-  - .dalle (imagen IA)  
+  ✦ *IA y Chatbot*  
+  - `.simi on/off`  
+  - `.ia`  
+  - `.dalle`  
 
   ✦ *Economía y RPG*  
-  - .reg  
-  - .perfil  
-  - .trabajar  
-  - .tienda  
-  - .comprar mascota  
-  - .alimentar mascota  
-  - .aventura  
-  - .top  
+  - `.reg` / `.perfil`  
+  - `.trabajar` / `.aventura`  
+  - `.comprar mascota`  
+  - `.alimentar mascota` / `.tienda` / `.top`  
 
-  ✦ *Stickers y Multimedia*  
-  - .sticker (de imagen/video/gif)  
-  - .toimg (de sticker a imagen)  
-  - .tomp3 (de video a audio)  
-  - .robar (cambiar autor de sticker)  
+  ✦ *Stickers y Media*  
+  - `.sticker`  
+  - `.toimg` / `.tomp3`  
+  - `.robar`  
 
   ✦ *Propietario*  
-  - .reiniciar  
-  - .actualizar  
-  - .bcgc  
-  - .addowner  
-
+  - `.reiniciar`  
+  - `.actualizar`  
+  - `.bcgc` / `.addowner`  
 </details>
 
 ---
 
-✨ **Haz clic en la imagen para descargar Termux:**
+<h3 align="center">✨ Instala Termux Solo Toca La Imagen✨</h3>
 
 <a href="https://www.mediafire.com/file/llugt4zgj7g3n3u/com.termux_1020.apk/file">
-  <img src="https://qu.ax/finc.jpg" height="125px">
+  <p align="center"><img src="https://qu.ax/finc.jpg" height="125px"></p>
 </a>
 
-➮ **Instalación por Termux**
+<details>
+  <summary><b> 💾 Comandos de instalación</b></summary>
 
 <details> 
   
