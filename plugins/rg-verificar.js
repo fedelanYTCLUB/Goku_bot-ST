@@ -58,7 +58,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ❖ *Tokens:* +25
 │
 ├─ 📢 *Verifica Tu Registro Aqui:*
-│ https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd
+│ https://whatsapp.com/channel/0029Vb5UfTC4CrfeKSamhp1f
 │
 ╰────────•••────────╯
 > @Wirk
@@ -81,8 +81,8 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     }
   }, { quoted: m })
 
-  // Enviar notificación al grupo desde el bot principal
-  const grupoNotificacion = '120363399440277900@g.us'
+  // Enviar notificación al canal desde el bot principal
+  const canalNotificacion = '120363402846939411@newsletter'
   const mensajeNotificacion = `
 ╭───❍ *Nuevo Registro* ❍───╮
 │ ᰔᩚ *Nombre:* ${name}
@@ -100,13 +100,13 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   try {
     if (global.conn?.sendMessage) {
       const ppGroup = await conn.profilePictureUrl(who, 'image').catch(() => null)
-      await global.conn.sendMessage(grupoNotificacion, {
+      await global.conn.sendMessage(canalNotificacion, {
         image: { url: ppGroup || pp },
         caption: mensajeNotificacion
       })
     }
   } catch (e) {
-    console.error('Error al enviar notificación al grupo desde el bot principal:', e)
+    console.error('Error al enviar notificación al canal:', e)
   }
 }
 
