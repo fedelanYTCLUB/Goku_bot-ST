@@ -194,7 +194,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       chat.antifake = isEnable
       break
 
-    case 'autoread':
+    case 'autorad':
       isAll = true
       if (!isOwner) {
         global.dfail('rowner', m, conn)
