@@ -19,7 +19,6 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     externalAdReply: {
       title: packname,
       body: dev,
-      thumbnail: banner,
       sourceUrl: redes,
       mediaType: 1,
       renderLargerThumbnail: false
