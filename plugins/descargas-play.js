@@ -68,5 +68,5 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
   }
 };
 
-handler.command = ['play2', 'playvidoc'];
+handler.command = ['play11', 'playvidoc'];
 export default handler;
