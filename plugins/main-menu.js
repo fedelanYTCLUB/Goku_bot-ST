@@ -13,7 +13,7 @@ let handler = async (m, { conn, args }) => {
 ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮
 
 ︶•︶°︶•︶°︶•︶°︶•︶°︶•︶°︶
-> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *${conn.user.name.split(' ')[0] || 'Mai'}*, Aquí tienes la lista de comandos. *(˶ᵔ ᵕ ᵔ˶)*
+> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *Mai*, Aquí tienes la lista de comandos. *(˶ᵔ ᵕ ᵔ˶)*
 
 ╭┈ࠢ͜┅ࠦ͜͜╾݊͜─ؕ͜─ׄ͜─֬͜─֟͜─֫͜─ׄ͜─ؕ͜─݊͜┈ࠦ͜┅ࠡ͜͜┈࠭͜͜۰۰͜۰
 │✧ Modo » ${conn.user.jid == global.conn.user.jid ? 'Bot Principal' : 'Sub-Bot'}
@@ -67,7 +67,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Ayuda a ordenar mensajes. ➜
 ✦ *#editautoresponder*
 > ⸙ Enseñar a responder. ✍️
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *SEARCHS* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos para realizar búsquedas en distintas plataformas.*
@@ -103,7 +103,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Buscador de videos de Pornhub. (Solo +18! 🔞)
 ✦ *#npmjs*
 > ⸙ Buscandor de npmjs. 📦
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜✧ *DOWNLOAD* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de descargas para varios archivos.*
@@ -145,38 +145,38 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Descarga paquetes de NPMJs. 📦↓
 ✦ *#animelinks • #animedl*
 > ⸙ Links para descargar anime! 🎬↓
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *ECONOMY* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de economía y rpg para ganar dinero y otros recursos.*
 ✦ *#w • #work • #trabajar*
-> ⸙ Trabaja para ganar ${moneda}$. 💪$
+> ⸙ Trabaja para ganar ${moneda}. 💪
 ✦ *#slut • #protituirse*
-> ⸙ Trabaja como prostituta y gana ${moneda}$. (Diferente) 🤫
+> ⸙ Trabaja como prostituta y gana ${moneda}. (Diferente) 🤫
 ✦ *#cf • #suerte*
-> ⸙ Apuesta tus ${moneda}$ a cara o cruz. 🍀 moneda
+> ⸙ Apuesta tus ${moneda} a cara o cruz. 🍀 moneda
 ✦ *#crime • #crimen*
-> ⸙ Trabaja como ladrón para ganar ${moneda}$. 😈$
+> ⸙ Trabaja como ladrón para ganar ${moneda}. 😈
 ✦ *#ruleta • #roulette • #rt*
-> ⸙ Apuesta ${moneda}$ al color rojo o negro. 🔴⚫🎡
+> ⸙ Apuesta ${moneda} al color rojo o negro. 🔴⚫🎡
 ✦ *#casino • #apostar*
-> ⸙ Apuesta tus ${moneda}$ en el casino. 🎰★
+> ⸙ Apuesta tus ${moneda} en el casino. 🎰★
 ✦ *#slot*
-> ⸙ Apuesta tus ${moneda}$ en la ruleta y prueba tu suerte. 🎰♦️
+> ⸙ Apuesta tus ${moneda} en la ruleta y prueba tu suerte. 🎰♦️
 ✦ *#cartera • #wallet*
-> ⸙ Ver tus ${moneda}$ en la cartera. 💸
+> ⸙ Ver tus ${moneda} en la cartera. 💸
 ✦ *#bal • #bank*
-> ⸙ Ver tus ${moneda}$ en el banco. 🏦♥️
+> ⸙ Ver tus ${moneda} en el banco. 🏦♥️
 ✦ *#deposit • #depositar • #d*
-> ⸙ Deposita tus ${moneda}$ al banco. →🏦
+> ⸙ Deposita tus ${moneda} al banco. →🏦
 ✦ *#with • #retirar • #withdraw*
-> ⸙ Retira tus ${moneda}$ del banco. 🏦→
+> ⸙ Retira tus ${moneda} del banco. 🏦→
 ✦ *#transfer • #pay*
-> ⸙ Transfiere ${moneda}$ o XP a otros usuarios. ♥️
+> ⸙ Transfiere ${moneda} o XP a otros usuarios. ♥️
 ✦ *#miming • #minar • #mine*
 > ⸙ Trabaja como minero y recolecta recursos. ⛏️💎
 ✦ *#buyall • #buy*
-> ⸙ Compra ${moneda}$ con tu XP. ★$
+> ⸙ Compra ${moneda} con tu XP. ★
 ✦ *#daily • #diario*
 > ⸙ Reclama tu recompensa diaria. 🎁☀
 ✦ *#cofre*
@@ -186,11 +186,11 @@ let handler = async (m, { conn, args }) => {
 ✦ *#monthly • #mensual*
 > ⸙ Reclama tu recompensa mensual. 🥳📅
 ✦ *#steal • #robar • #rob*
-> ⸙ Intenta robarle ${moneda}$ a alguien. (cuidado)! 🏃‍♀️💨$
+> ⸙ Intenta robarle ${moneda} a alguien. (cuidado)! 🏃‍♀️💨
 ✦ *#robarxp • #robxp*
 > ⸙ Intenta robar XP a un usuario. 🤫★
 ✦ *#eboard • #baltop*
-> ⸙ Ver el ranking de usuarios con más ${moneda}$. 🏆$
+> ⸙ Ver el ranking de usuarios con más ${moneda}. 🏆
 ✦ *#aventura • #adventure*
 > ⸙ Explora nuevos mundos conmigo! 🗺️★
 ✦ *#curar • #heal*
@@ -205,7 +205,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Reclama tu dulce o truco (Solo en Halloween). 🎃👻
 ✦ *#christmas • #navidad*
 > ⸙ Reclama tu regalo navideño (Solo en Navidad). 🎄🎁
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *GACHA* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de gacha para reclamar y colecciónar personajes.*
@@ -225,7 +225,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Votar por un personaje para subir su valor. 👍★
 ✦ *#waifusboard • #waifustop • #topwaifus*
 > ⸙ Ver el top de personajes con mayor valor. ⭐🏆
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *STICKERS* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos para creaciones de stickers etc.*
@@ -247,7 +247,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Fuciona 2 emojis para crear un sticker. 🤩+🥰=♥️
 ✦ *#wm*
 > ⸙ Cambia el nombre de los stickers. ✏️♦️
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *TOOLS* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de herramientas con muchas funciones.*
@@ -285,7 +285,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Investigar cualquier tema a través de Wikipedia. 📖🤓
 ✦ *#dalle • #flux*
 > ⸙ Crea imágenes con texto mediante IA. 🖼️✍️
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *PROFILE* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de perfil para ver, configurar y comprobar estados de tu perfil.*
@@ -319,7 +319,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Ser un usuario super especial! ⭐♥️
 ✦ *#confesiones • #confesar*
 > ⸙ Cuéntame tus secretos en anónimo! 🤫💌
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *GROUPS* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de grupos para una mejor gestión de ellos.*
@@ -387,7 +387,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Cambia el emoji que se usa en la invitación de usuarios. ★♦️
 ✦ *#listnum • #kicknum*
 > ⸙ Elimine a usuario por el prefijo de país.
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *ANIME REACTIONS* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de reacciones de anime.*
@@ -459,7 +459,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Fumar 🚬💨
 ✦ *#think* + <mencion>
 > ⸙ Pensar en algo 🤔💡
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *NSFW* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos NSFW (Contenido para adultos).*
@@ -505,7 +505,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Desnudar a alguien 😉
 ✦ *#yuri • #tijeras* + <mencion>
 > ⸙ Hacer tijeras. 😉
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 ╭┈ࠢ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴✧ *GAMES* ✧╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜
 > ❀ *Comandos de juegos para jugar con tus amigos.*
@@ -575,7 +575,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Juega un pvp contra otro usuario. ⚔️🎮
 ✦ *#ttt*
 > ⸙ Crea una sala de juego. ✗○Game
-╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟͜═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
+╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
 > *© ⍴᥆ᥕᥱrᥱძ ᑲᥡ ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜*
 `.trim()
@@ -592,7 +592,7 @@ let handler = async (m, { conn, args }) => {
     },
     forwardingScore: 16,
     externalAdReply: {
-      title: "♦ Mai ♦ World Of Bot", // Título del reply con símbolos
+      title: "♦ Mai ♦ World Of Cute", // Título del reply con símbolos
       body: "➤ Powered By Wirk ★", // Cuerpo del reply con símbolos
       thumbnailUrl: banner, // Asegúrate de que banner esté definido (URL o ruta a la imagen)
       sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Asegúrate de que la URL sea correcta
