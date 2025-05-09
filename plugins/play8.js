@@ -1,7 +1,7 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 import yts from 'yt-search';
 
-const limit = 10;
+const limit = 50;
 const handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply("🌴 Ingresa el nombre de un video o una URL de YouTube.");
   try {
