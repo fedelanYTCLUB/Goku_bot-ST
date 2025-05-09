@@ -3,54 +3,31 @@ import fetch from 'node-fetch';
 // Manteniendo estos nombres como "Mai"
 const newsletterJid  = '120363402846939411@newsletter'; // ID de canal actual
 const newsletterName = 'Mai';
-const packname       = 'Mai';
+const packname       = 'Mai'; // Aunque el snippet usa "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁" para el title, packname podría usarse en otro lado, pero ajustaré el title en externalAdReply.
 
 // Nombre de la bot
 const botName = 'Mai';
 
 var handler = async (m, { conn, args, usedPrefix, command }) => {
   const emoji = '🔎';
-  const contextInfo = {
-    mentionedJid: [m.sender],
-    isForwarded: true,
-    forwardingScore: 999,
-    forwardedNewsletterMessageInfo: {
-      newsletterJid,
-      newsletterName,
-      serverMessageId: -1
-    },
-    externalAdReply: {
-      title: packname, // Aquí aparece "Mai"
-      body: dev, // Aquí aparece el texto de la variable 'dev' (como "Mai Wirk Dev")
-      // Miniatura quitada
-      // thumbnail: 'https://files.catbox.moe/vrcl7s.jpg',
-
-      // Editado: Usamos sourceUrl para el enlace de invitación
-      sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
-
-      // Quitamos mediaUrl para evitar conflictos si solo queremos que sourceUrl sea el enlace al tocar
-      // mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
-
-      mediaType: 1, // Mantenemos mediaType 1, que suele funcionar con sourceUrl
-      renderLargerThumbnail: false
-    }
-  };
 
   if (!args[0]) {
+    // Este mensaje no tiene externalAdReply, así que no necesita la miniatura de la búsqueda aún.
     return conn.reply(
       m.chat,
       `🌸 Holii! Soy ${botName} 🎀 ¿Qué musiquita quieres buscar en YouTube? Dime dime~ ✨\n\n💖 Ejemplo:\n\`${usedPrefix + command} Goku conoce a Bills\``,
       m,
-      { contextInfo, quoted: m }
+      { quoted: m } // Quité contextInfo aquí ya que no hay preview en este mensaje
     );
   }
 
   try {
+    // Este mensaje de "Buscando" tampoco necesita la miniatura específica aún.
     await conn.reply(
       m.chat,
       `💖 ${botName} está buscando tu cancioncita "${args.join(' ')}"... ¡Un momentito, por favor! 🎧✨`,
       m,
-      { contextInfo, quoted: m }
+      { quoted: m } // Quité contextInfo aquí
     );
 
     const query   = encodeURIComponent(args.join(' '));
@@ -59,11 +36,12 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     const json    = await res.json();
 
     if (json.status !== 200 || !json.result?.download?.url) {
+      // Este mensaje de error tampoco necesita la miniatura específica.
       return conn.reply(
         m.chat,
         `😿 Oh, nooo... ${botName} no pudo encontrar ni descargar eso. Gomen ne~`,
         m,
-        { contextInfo, quoted: m }
+        { quoted: m } // Quité contextInfo aquí
       );
     }
 
@@ -75,9 +53,35 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     const views       = meta.views.toLocaleString();
     const ago         = meta.ago;
     const authorName  = meta.author?.name || 'Desconocido';
+    // Asumimos que meta.image contiene la URL de la miniatura
+    const thumbnailUrlValue = meta.image; // Usamos meta.image
     const downloadURL = json.result.download.url;
     const quality     = json.result.download.quality;
     const filename    = json.result.download.filename;
+
+    // Creamos el contextInfo JUSTO ANTES de enviar el audio
+    const contextInfo = {
+      mentionedJid: [m.sender],
+      isForwarded: true,
+      forwardingScore: 999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid,
+        newsletterName,
+        serverMessageId: -1
+      },
+      externalAdReply: {
+        // Guiándonos por el snippet proporcionado:
+        title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁", // Usamos el título del snippet
+        body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵", // Usamos el cuerpo del snippet
+        thumbnailUrl: thumbnailUrlValue, // Usamos la miniatura de la búsqueda
+        mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // El enlace de invitación
+        mediaType: 2, // Tipo de media 2
+        showAdAttribution: true, // Mostrar atribución
+        renderLargerThumbnail: true // Renderizar miniatura más grande
+        // sourceUrl ya no es necesario aquí si mediaUrl se usa para el enlace
+      }
+    };
+
 
     const audioRes    = await fetch(downloadURL);
     const audioBuffer = await audioRes.buffer();
@@ -106,16 +110,17 @@ Espero que te guste muchooo! 🥰
         ptt: false,
         caption
       },
-      { contextInfo, quoted: m }
+      { contextInfo, quoted: m } // Enviamos el contextInfo con el audio
     );
 
   } catch (e) {
     console.error(e);
+     // Este mensaje de error tampoco necesita la miniatura específica.
     await conn.reply(
       m.chat,
       `😭 Ahh! Algo salió mal...... ${botName} encontró un error feo feo... 💔\n\`\`\`${e.message}\`\`\``,
       m,
-      { contextInfo, quoted: m }
+      { quoted: m } // Quité contextInfo aquí
     );
   }
 };
