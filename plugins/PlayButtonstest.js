@@ -22,10 +22,16 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     externalAdReply: {
       title: packname, // Aquí aparece "Mai"
       body: dev, // Aquí aparece el texto de la variable 'dev' (como "Mai Wirk Dev")
-      // Editado: Miniatura quitada
+      // Miniatura quitada
       // thumbnail: 'https://files.catbox.moe/vrcl7s.jpg',
-      mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Este es el enlace que se abre al tocar
-      mediaType: 1,
+
+      // Editado: Usamos sourceUrl para el enlace de invitación
+      sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+
+      // Quitamos mediaUrl para evitar conflictos si solo queremos que sourceUrl sea el enlace al tocar
+      // mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+
+      mediaType: 1, // Mantenemos mediaType 1, que suele funcionar con sourceUrl
       renderLargerThumbnail: false
     }
   };
