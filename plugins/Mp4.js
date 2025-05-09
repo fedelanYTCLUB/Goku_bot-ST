@@ -41,7 +41,7 @@ const handler = async (m, { conn, text, command }) => {
 
 handler.help = ["play", "play2"];
 handler.tags = ["dl"];
-handler.command = ["play", "play2", "playvid"];
+handler.command = ["play8", "play7", "playvid"];
 export default handler;
 
 function formatTime(sec) {
