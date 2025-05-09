@@ -7,7 +7,7 @@ const limit = 10;
 const handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply("🌴 Ingresa el nombre de un video o una URL de YouTube.");
   try {
-    m.react("🌱")
+    m.react("🪴")
     let res = await yts(text);
     let video = res.all[0];
     let total = Number(video.duration.seconds) || 0;
