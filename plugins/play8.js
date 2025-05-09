@@ -26,7 +26,7 @@ const handler = async (m, { conn, text, command }) => {
     if (command === "play8" || command === "play") {
       const api = await (await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`)).json();
       await conn.sendFile(m.chat, api.data.dl_url, api.data.title, '', m);
-    } else if (command === "play2" || command === "playvid" || command === "play7") {
+    } else if (command === "play9" || command === "playvid" || command === "play7") {
       const api = await (await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`)).json();
       const isBig = api.data.size_mb >= limit;
       await conn.sendFile(m.chat, api.data.dl_url, api.data.title, '', m, null, { asDocument: isBig });
@@ -41,6 +41,6 @@ const handler = async (m, { conn, text, command }) => {
 
 handler.help = ["play8", "play7", "playvid"];
 handler.tags = ["dl"];
-handler.command = ["play8", "play7", "playvid"];
+handler.command = ["play8", "play7", "playvid", "play9"];
 
 export default handler;
