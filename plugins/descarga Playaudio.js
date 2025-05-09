@@ -4,7 +4,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`🌟 Ingresa un nombre para buscar en YouTube.\n\n✨ *Ejemplo:* ${usedPrefix + command} Shakira`);
 
   try {
-    await m.react("⏱️"); // React to show processing started
+    await m.react("🕛"); // React to show processing started
 
     // --- PRIMER PASO: BUSCAR VIDEO ---
     const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
@@ -19,14 +19,14 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const video = searchData.data[0]; // Primer resultado
 
     // Nuevo waitMessage estilizado
-    const waitMessage = `┏━━━━━━༺❀༻━━━━━━┓
-┃ ✨ *Nombre:* ${video.title}
-┃ 🧚‍♀️ *Artista:* ${video.author.name}
-┃ ⌛ *Duración:* ${video.duration}
-┃ 👁 *Vistas:* ${video.views}
-┗━━━━━━༺❀༻━━━━━━┛
+    const waitMessage = `*┏━━━━━━༺❀༻━━━━━━┓*
+*┃* ✨ *Nombre:* ${video.title}
+*┃* 🧚‍♀️ *Artista:* ${video.author.name}
+*┃* ⌛ *Duración:* ${video.duration}
+*┃* 👁 *Vistas:* ${video.views}
+*┗━━━━━━༺❀༻━━━━━━┛*
 
-☁️ Estamos preparando tu audio, espera tantito...`;
+> ☁️ *Estamos preparando tu audio, espera tantito...*`;
 
     // Enviamos miniatura con mensaje
     const message = await conn.sendMessage(m.chat, {
