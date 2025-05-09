@@ -1,11 +1,12 @@
 import fetch from 'node-fetch';
 
-// Manteniendo estos nombres como "Mai" según la edición anterior
-const newsletterJid  = '120363335626706839@newsletter'; // Manteniendo JID
+// Editado: Nuevo ID de canal (newsletterJid)
+const newsletterJid  = '120363402846939411@newsletter';
+// Manteniendo estos nombres como "Mai"
 const newsletterName = 'Mai';
 const packname       = 'Mai';
 
-// Puedes añadir una variable para el nombre de la bot si quieres usarla en más lugares fácilmente
+// Nombre de la bot
 const botName = 'Mai';
 
 var handler = async (m, { conn, args, usedPrefix, command }) => {
@@ -15,14 +16,14 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     isForwarded: true,
     forwardingScore: 999,
     forwardedNewsletterMessageInfo: {
-      newsletterJid,
+      newsletterJid, // Usa el nuevo newsletterJid
       newsletterName,
       serverMessageId: -1
     },
     externalAdReply: {
       title: packname,
       body: dev, // Assuming 'dev' is defined elsewhere
-      thumbnail: icons, // Assuming 'icons' is defined elsewhere
+      thumbnail: 'https://files.catbox.moe/vrcl7s.jpg', // Miniatura actual
       sourceUrl: redes, // Assuming 'redes' is defined elsewhere
       mediaType: 1,
       renderLargerThumbnail: false
