@@ -13,16 +13,16 @@ let handler = async (m, { conn, args }) => {
 ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮
 
 ︶•︶°︶•︶°︶•︶°︶•︶°︶•︶°︶
-> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *Mai*, Aquí tienes la lista de comandos. *(˶ᵔ ᵕ ᵔ˶)*
+> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *Mai*, Aquí tienes la lista de comandos.\n*(˶ᵔ ᵕ ᵔ˶)*
 
 ╭┈ࠢ͜┅ࠦ͜͜╾݊͜─ؕ͜─ׄ͜─֬͜─֟͜─֫͜─ׄ͜─ؕ͜─݊͜┈ࠦ͜┅ࠡ͜͜┈࠭͜͜۰۰͜۰
-│✧ Modo » ${conn.user.jid == global.conn.user.jid ? 'Bot Principal' : 'Sub-Bot'}
-│✦ Bot » ${user.premium ? 'Prem Bot 🅑' : 'Free Bot'}
-│ⴵ Activada » ${uptime}
-│✰ Usuarios » ${totalreg}
-│✐︎ Plugins » ${totalCommands}
-│⚘ Versión » \`^2.3.0\`
-│🜸 Baileys » Multi Device
+│*✧ Modo »* ${conn.user.jid == global.conn.user.jid ? 'Bot Principal' : 'Sub-Bot'}
+│*✦ Bot »* ${user.premium ? 'Prem Bot 🅑' : 'Free Bot'}
+│*ⴵ Activada »* ${uptime}
+│*✰ Usuarios »* ${totalreg}
+│*✐︎ Plugins »* ${totalCommands}
+│*⚘ Versión »* \`^2.3.0\`
+│*🜸 Baileys »* Multi Device
 ╰ׅ┈ࠢ͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜╴ ⋱࣭ ᩴ  ⋮֔   ᩴ ⋰╶͜─ׄ͜─ׄ֟፝͜─ׄ͜─ׄ͜┈ࠢ͜╯ׅ
 > ✿ Crea un *Sub-Bot* con tu número utilizando *#qr* o *#code*
 ‧꒷︶꒷꒥꒷‧₊˚꒷︶꒷꒥꒷︶꒷˚₊‧꒷꒥꒷︶꒷‧
