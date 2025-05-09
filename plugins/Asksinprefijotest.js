@@ -3,8 +3,11 @@ import fetch from 'node-fetch';
 
 const handler = async (msg, { conn, text }) => {
   const chatId = msg.key.remoteJid;
-  
-  if (!text) return;
+
+  // Validar que el mensaje comience con "ai " (sin importar mayúscula)
+  const match = text?.match(/^ai\s+(.+)/i);
+  if (!match) return;
+  const question = match[1];
 
   try {
     await conn.sendMessage(chatId, { react: { text: '🫆', key: msg.key } });
@@ -14,12 +17,12 @@ const handler = async (msg, { conn, text }) => {
     let result = '';
 
     try {
-      result = await luminaiQuery(text, name, prompt);
+      result = await luminaiQuery(question, name, prompt);
       result = cleanResponse(result);
     } catch (e) {
       console.error('Error Luminai:', e);
       try {
-        result = await perplexityQuery(text, prompt);
+        result = await perplexityQuery(question, prompt);
       } catch (e) {
         console.error('Error Perplexity:', e);
         throw new Error('No se obtuvo respuesta de los servicios');
@@ -30,7 +33,7 @@ const handler = async (msg, { conn, text }) => {
       text: result
     }, { quoted: msg });
 
-    await conn.sendMessage(chatId, { react: { text: '🪴', key: msg.key } }); // Aquí estaba el error: comilla faltante
+    await conn.sendMessage(chatId, { react: { text: '🪴', key: msg.key } });
 
   } catch (error) {
     console.error(error);
@@ -81,8 +84,7 @@ async function perplexityQuery(q, prompt) {
 }
 
 // Configuración del handler
-handler.customPrefix = /^ai\s/i;
-handler.command = () => true; // acepta cualquier texto con el prefijo custom
+handler.command = /^ai\s+/i;
 handler.help = ['ai <pregunta>'];
 handler.tags = ['ai'];
 handler.register = true;
