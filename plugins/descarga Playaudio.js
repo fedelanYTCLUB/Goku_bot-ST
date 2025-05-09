@@ -6,7 +6,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   try {
     await m.react("⏱️"); // React to show processing started
 
-    // --- PRIMER PASO: BUSCAR VIDEO (Se mantiene como antes) ---
+    // --- PRIMER PASO: BUSCAR VIDEO ---
     const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
     const searchResponse = await fetch(searchApi);
     const searchData = await searchResponse.json();
@@ -16,15 +16,19 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return m.reply(`⚠️ No encontré resultados de video en YouTube para *"${text}"*...`);
     }
 
-    const video = searchData.data[0]; // Tomamos el primer resultado de la búsqueda
+    const video = searchData.data[0]; // Primer resultado
 
-    const waitMessage = `☁️ *︙${video.title}*\n\n` +
-      `🎧 *Artista:* ${video.author.name}\n` +
-      `⏳ *Duración:* ${video.duration}\n` +
-      `👀 *Vistas:* ${video.views}\n\n` +
-      `➺ 𝑬𝒔𝒑𝒆𝒓𝒂 𝒖𝒏 𝒑𝒐𝒒𝒖𝒊𝒕𝒐, 𝒆𝒔𝒕𝒂𝒎𝒐𝒔 𝒃𝒂𝒋𝒂𝒏𝒅𝒐 𝒕𝒖 𝒄𝒂𝒏𝒄𝒊ó𝒏...`;
+    // Nuevo waitMessage estilizado
+    const waitMessage = `┏━━━━━━༺❀༻━━━━━━┓
+┃ ✨ *Nombre:* ${video.title}
+┃ 🧚‍♀️ *Artista:* ${video.author.name}
+┃ ⌛ *Duración:* ${video.duration}
+┃ 👁 *Vistas:* ${video.views}
+┗━━━━━━༺❀༻━━━━━━┛
 
-    // Enviamos la miniatura y el mensaje de espera (Se mantiene como antes)
+☁️ Estamos preparando tu audio, espera tantito...`;
+
+    // Enviamos miniatura con mensaje
     const message = await conn.sendMessage(m.chat, {
       image: { url: video.image },
       caption: waitMessage.trim(),
@@ -43,42 +47,38 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       }
     }, { quoted: m });
 
-    // --- SEGUNDO PASO: DESCARGAR AUDIO (Aquí se usa la nueva URL con el título del video encontrado) ---
-    // Usamos el título del video encontrado como query para la nueva API de descarga/reproducción
+    // --- SEGUNDO PASO: DESCARGAR AUDIO ---
     const downloadApi = `https://api.vreden.my.id/api/ytplaymp3?query=${encodeURIComponent(video.title)}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
 
-    // Verificamos la respuesta de la nueva API
     if (!downloadData?.result?.download?.url) {
       await m.react("❌");
-      // Podría haber un mensaje de error específico de la API
-       if (downloadData && downloadData.result && downloadData.result.msg) {
-             return m.reply(`❌ No se pudo obtener el audio del video usando el título. Error de la API: ${downloadData.result.msg}`);
-       }
+      if (downloadData?.result?.msg) {
+        return m.reply(`❌ No se pudo obtener el audio del video usando el título. Error de la API: ${downloadData.result.msg}`);
+      }
       return m.reply("❌ No se pudo obtener el audio del video.");
     }
 
-    const audioUrl = downloadData.result.download.url; // Obtenemos la URL del audio
+    const audioUrl = downloadData.result.download.url;
 
-    // Enviamos el audio (Se mantiene similar, usando la URL obtenida)
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
       ptt: true,
-      fileName: `🎵 ${video.title}.mp3`, // Usamos el título del primer paso para el nombre del archivo
+      fileName: `🎵 ${video.title}.mp3`,
       contextInfo: {
         forwardingScore: 9,
         isForwarded: true
       }
     }, { quoted: m });
 
-    await m.react("✅"); // React with checkmark on success
+    await m.react("✅");
 
   } catch (error) {
     console.error(error);
     m.reply(`❌ Ocurrió un error al procesar tu solicitud:\n${error.message}`);
-    await m.react("❌"); // React with cross on error
+    await m.react("❌");
   }
 };
 
