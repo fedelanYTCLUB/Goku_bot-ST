@@ -14,7 +14,7 @@ let handler = async (m, { conn, args }) => {
 Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
 
 🎀 *Llevo despierta desde hace:* \`${uptime}\`
-🌷 Tengo *${totalreg}* amiguitos registrad@s!
+🌷 Tengo *${rtotalreg}* amiguitos registrad@s!
 \`💖 Y sé hacer ${totalCommands} cositas para ti\`
 
 *₊˚⊹ ꒰ 𝘚𝘰𝘣𝘳𝘦 𝘔𝘪 ꒱ ‧₊˚*
