@@ -10,7 +10,7 @@ let handler = async (m, { conn, args }) => {
     let moneda = global.db.data.settings[conn.user.jid].moneda || '¥enes $'; // Símbolo para moneda
 
     let txt = `
-- - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - -- - - - - -
 
 *.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*
 > ♥ ¡Hola! @${userId.split('@')[0]}, Soy *${conn.user.name.split(' ')[0] || 'Mai'}*, ¡Tu bot amiguita! Aquí tienes la lista de comandos. (*^-^*)
