@@ -1,8 +1,7 @@
 import fetch from 'node-fetch';
 
-// Editado: Nuevo ID de canal (newsletterJid)
-const newsletterJid  = '120363402846939411@newsletter';
 // Manteniendo estos nombres como "Mai"
+const newsletterJid  = '120363402846939411@newsletter'; // ID de canal actual
 const newsletterName = 'Mai';
 const packname       = 'Mai';
 
@@ -16,14 +15,15 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
     isForwarded: true,
     forwardingScore: 999,
     forwardedNewsletterMessageInfo: {
-      newsletterJid, // Usa el nuevo newsletterJid
+      newsletterJid,
       newsletterName,
       serverMessageId: -1
     },
     externalAdReply: {
       title: packname,
       body: dev, // Assuming 'dev' is defined elsewhere
-      thumbnail: 'https://files.catbox.moe/vrcl7s.jpg', // Miniatura actual
+      // Editado: Miniatura quitada
+      // thumbnail: 'https://files.catbox.moe/vrcl7s.jpg',
       sourceUrl: redes, // Assuming 'redes' is defined elsewhere
       mediaType: 1,
       renderLargerThumbnail: false
@@ -107,7 +107,7 @@ Espero que te guste muchooo! 🥰
     console.error(e);
     await conn.reply(
       m.chat,
-      `😭 Ahh! Algo salió mal... ${botName} encontró un error feo feo... 💔\n\`\`\`${e.message}\`\`\``,
+      `😭 Ahh! Algo salió mal...... ${botName} encontró un error feo feo... 💔\n\`\`\`${e.message}\`\`\``,
       m,
       { contextInfo, quoted: m }
     );
@@ -116,7 +116,7 @@ Espero que te guste muchooo! 🥰
 
 handler.help = ['play', 'ytplay'].map(v => v + ' <texto>');
 handler.tags = ['descargas'];
-handler.command = ['ytplay'];
+handler.command = ['play', 'ytplay', 'playaudio'];
 handler.register = true;
 handler.limit = true;
 handler.coin = 2;
