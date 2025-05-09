@@ -16,7 +16,6 @@ const STARTING_CARGO = 50; // Starting cargo capacity
 
 const FUEL_COST_PER_JUMP = 20;
 const REPAIR_COST_PER_HULL = 5; // Credits per hull point repaired
-const REFUEL_COST_PER_UNIT = 2; // Credits per fuel unit (cost in Fuel Cells, not credits)
 const FUEL_PER_FUEL_CELL = 10; // Fuel gained per Fuel Cell used
 
 const COOLDOWN_EXPLORE = 2 * 60 * 1000; // 2 minutes
@@ -145,14 +144,30 @@ const getCurrentCargoWeight = (cargo) => {
 
 // --- Space RPG Command Handler ---
 
+// This is the main function you will call from your bot's message handler
 const handler = async (m, { conn, args, usedPrefix, command }) => {
 
     const db = loadDatabase();
     const user = getSpaceUser(db, m.sender, conn.getName(m.sender) || 'Piloto'); // Get or create user data, provide default name
     const currentTime = Date.now(); // Get current timestamp
 
+    // --- Command Parsing ---
+    // Ensure the command matches the expected 'space' command with the correct prefix
+    // The 'command' variable from the bot framework should already be the command without the prefix
+    // So we check if the message starts with the usedPrefix + 'space'
+    const fullCommand = m.text.toLowerCase().split(' ')[0];
+    if (fullCommand !== usedPrefix + 'space') {
+        // If the command doesn't match, this handler should not process it further
+        // This is important if multiple handlers are registered
+        return;
+    }
+
+    // Get the subcommand (the word after "!space" or ".space")
+    let subCommand = args[0]?.toLowerCase(); // Use optional chaining in case args is empty
+
     // --- Help Message / Main Menu ---
-    if (!args[0] || args[0].toLowerCase() === 'help' || args[0].toLowerCase() === 'ayuda') {
+    // Show help if no subcommand is given, or if the subcommand is 'help' or 'ayuda'
+    if (!subCommand || subCommand === 'help' || subCommand === 'ayuda') {
         const helpText = `
 🚀 *Comandos del Space RPG* 🚀
 
@@ -185,24 +200,26 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
 ¡Embárca en tu búsqueda cósmica!
 `;
         await conn.reply(m.chat, helpText, m);
+        // Save database before returning, as getSpaceUser might have created a new user
+        saveDatabase(db);
         return;
     }
 
-    let subCommand = args[0].toLowerCase();
-
-    // --- Command Processing ---
+    // --- Command Processing (based on subCommand) ---
     switch (subCommand) {
         case 'start':
         case 'iniciar':
              // Check if user already has a profile
              if (db.spaceUsers[m.sender] && db.spaceUsers[m.sender].hull > 0) {
                  await conn.reply(m.chat, `😅 Ya tienes un perfil de piloto activo. Usa ${usedPrefix}space profile para ver tus estadísticas.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                  return;
              }
              // Create a new profile (getSpaceUser already does this if not exists, but this is for explicit start)
-             db.spaceUsers[m.sender] = getDefaultUserData(m.sender, conn.getName(m.sender) || 'Nuevo Piloto');
-             await conn.reply(m.chat, `🚀 ¡Bienvenido al espacio, ${db.spaceUsers[m.sender].name}! Tu nave, la '${db.spaceUsers[m.sender].shipName}', está lista para explorar. Usa ${usedPrefix}space profile para ver tus estadísticas iniciales.`, m);
-             break;
+             // The user is already created by getSpaceUser at the top, just need to confirm and reply
+             await conn.reply(m.chat, `🚀 ¡Bienvenido al espacio, ${user.name}! Tu nave, la '${user.shipName}', está lista para explorar. Usa ${usedPrefix}space profile para ver tus estadísticas iniciales.`, m);
+             break; // Break after successful start
 
         case 'profile':
         case 'perfil':
@@ -252,10 +269,14 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
             if (currentTime - user.lastExplore < COOLDOWN_EXPLORE) {
                 const timeLeft = COOLDOWN_EXPLORE - (currentTime - user.lastExplore);
                 await conn.reply(m.chat, `⏱️ Tu nave aún está escaneando el sector. Puedes explorar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
+                // Save database before returning
+                saveDatabase(db);
                 return;
             }
             if (user.fuel < 5) { // Small fuel cost for exploring
                  await conn.reply(m.chat, `⛽ Necesitas al menos 5 de combustible para explorar el sector.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                  return;
             }
 
@@ -337,19 +358,27 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
             if (currentTime - user.lastMine < COOLDOWN_MINE) {
                 const timeLeft = COOLDOWN_MINE - (currentTime - user.lastMine);
                 await conn.reply(m.chat, `⏱️ Tu láser de minería aún se está recargando. Puedes minar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
             if (user.miningLaserLevel < 1) {
                  await conn.reply(m.chat, `🛠️ Necesitas un Láser de Minería para extraer recursos.`, m); // Assuming starting with level 1
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
             }
              if (user.fuel < 2) { // Small fuel cost for mining
                  await conn.reply(m.chat, `⛽ Necesitas al menos 2 de combustible para operar el láser de minería.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
              const cargoWeight = getCurrentCargoWeight(user.cargo);
              if (cargoWeight >= user.cargoCapacity) {
                  await conn.reply(m.chat, `📦 Tu bodega de carga está llena. Vende o usa recursos antes de minar.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
 
@@ -375,6 +404,8 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
             if (currentTime - user.lastScan < COOLDOWN_SCAN) {
                 const timeLeft = COOLDOWN_SCAN - (currentTime - user.lastScan);
                 await conn.reply(m.chat, `⏱️ Tu escáner aún está procesando datos. Puedes escanear de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
              // Assuming players start with a basic scanner or it's part of the ship
@@ -401,11 +432,15 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
             const repairNeeded = user.maxHull - user.hull;
             if (repairNeeded <= 0) {
                 await conn.reply(m.chat, `🛠️ Tu casco está en perfecto estado (${user.hull}/${user.maxHull}). No necesitas reparaciones.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
             const repairCost = repairNeeded * REPAIR_COST_PER_HULL;
             if (user.credits < repairCost) {
                 await conn.reply(m.chat, `💰 Necesitas ${repairCost} créditos para reparar completamente tu nave. Solo tienes ${user.credits}.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
 
@@ -420,17 +455,23 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
             const fuelNeeded = user.maxFuel - user.fuel;
             if (fuelNeeded <= 0) {
                 await conn.reply(m.chat, `⛽ Tu tanque de combustible está lleno (${user.fuel}/${user.maxFuel}). No necesitas repostar.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
             // Use the Spanish key for fuel cells
             if (user.cargo.celulasdecombustible === undefined || user.cargo.celulasdecombustible < 1) {
                 await conn.reply(m.chat, `⛽ No tienes Células de Combustible en tu carga para repostar. Consigue algunas explorando o comerciando.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
 
             const fuelToUse = Math.min(user.cargo.celulasdecombustible, Math.floor(fuelNeeded / FUEL_PER_FUEL_CELL)); // Each fuel cell gives FUEL_PER_FUEL_CELL fuel
              if (fuelToUse < 1) {
                  await conn.reply(m.chat, `⛽ Necesitas al menos 1 Célula de Combustible para repostar.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
 
@@ -445,20 +486,25 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
         case 'mejorar':
             if (args.length < 2) {
                 await conn.reply(m.chat, `🛠️ Debes especificar qué sistema quieres mejorar: casco, carga, arma, escudo, mineria.\n\nEjemplo: ${usedPrefix}space upgrade casco`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
             const systemToUpgrade = args[1].toLowerCase();
             let upgradeCost = 0;
             let currentLevel = 0;
-            let upgradeMessage = "";
+            // upgradeMessage is not used after reply, can remove or keep for clarity
+            // let upgradeMessage = "";
 
             switch (systemToUpgrade) {
                 case 'casco':
                     currentLevel = user.maxHull; // Using maxHull as level indicator
                     upgradeCost = Math.floor(currentLevel * 10 + 1000); // Cost increases with current max hull
-                    upgradeMessage = `Mejorando casco. Costo: ${upgradeCost} créditos. Aumenta Max Casco en 20.`;
+                    // upgradeMessage = `Mejorando casco. Costo: ${upgradeCost} créditos. Aumenta Max Casco en 20.`;
                     if (user.credits < upgradeCost) {
                         await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el casco. Tienes ${user.credits}.`, m);
+                         // Save database before returning
+                         saveDatabase(db);
                         return;
                     }
                     user.credits -= upgradeCost;
@@ -469,9 +515,11 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 case 'carga':
                     currentLevel = user.cargoPodLevel;
                     upgradeCost = Math.floor((currentLevel + 1) * 800); // Cost increases with cargo pod level
-                    upgradeMessage = `Mejorando bodega de carga. Costo: ${upgradeCost} créditos. Aumenta Capacidad de Carga en 20.`;
+                    // upgradeMessage = `Mejorando bodega de carga. Costo: ${upgradeCost} créditos. Aumenta Capacidad de Carga en 20.`;
                      if (user.credits < upgradeCost) {
                         await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar la bodega de carga. Tienes ${user.credits}.`, m);
+                         // Save database before returning
+                         saveDatabase(db);
                         return;
                     }
                     user.credits -= upgradeCost;
@@ -482,9 +530,11 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 case 'arma':
                     currentLevel = user.weaponLevel;
                     upgradeCost = Math.floor((currentLevel + 1) * 1200);
-                    upgradeMessage = `Mejorando sistema de armas. Costo: ${upgradeCost} créditos. Aumenta Nivel de Arma en 1.`;
+                    // upgradeMessage = `Mejorando sistema de armas. Costo: ${upgradeCost} créditos. Aumenta Nivel de Arma en 1.`;
                      if (user.credits < upgradeCost) {
                         await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el sistema de armas. Tienes ${user.credits}.`, m);
+                         // Save database before returning
+                         saveDatabase(db);
                         return;
                     }
                     user.credits -= upgradeCost;
@@ -494,9 +544,11 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 case 'escudo':
                     currentLevel = user.shieldGeneratorLevel;
                     upgradeCost = Math.floor((currentLevel + 1) * 1500);
-                    upgradeMessage = `Instalando/Mejorando generador de escudos. Costo: ${upgradeCost} créditos. Aumenta Max Escudos en 50.`;
+                    // upgradeMessage = `Instalando/Mejorando generador de escudos. Costo: ${upgradeCost} créditos. Aumenta Max Escudos en 50.`;
                      if (user.credits < upgradeCost) {
                         await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el generador de escudos. Tienes ${user.credits}.`, m);
+                         // Save database before returning
+                         saveDatabase(db);
                         return;
                     }
                     user.credits -= upgradeCost;
@@ -508,9 +560,11 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 case 'mineria':
                     currentLevel = user.miningLaserLevel;
                     upgradeCost = Math.floor((currentLevel + 1) * 700);
-                    upgradeMessage = `Mejorando láser de minería. Costo: ${upgradeCost} créditos. Aumenta Nivel de Minería en 1.`;
+                    // upgradeMessage = `Mejorando láser de minería. Costo: ${upgradeCost} créditos. Aumenta Nivel de Minería en 1.`;
                      if (user.credits < upgradeCost) {
                         await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el láser de minería. Tienes ${user.credits}.`, m);
+                         // Save database before returning
+                         saveDatabase(db);
                         return;
                     }
                     user.credits -= upgradeCost;
@@ -519,6 +573,8 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                     break;
                 default:
                     await conn.reply(m.chat, `🛠️ Sistema no reconocido para mejorar. Opciones: casco, carga, arma, escudo, mineria.`, m);
+                     // Save database before returning
+                     saveDatabase(db);
                     return; // Don't save if command is invalid
             }
             break; // Break after successful upgrade
@@ -527,6 +583,8 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
         case 'comerciar':
             if (args.length < 4) {
                  await conn.reply(m.chat, `💰 Uso correcto: ${usedPrefix}space trade [comprar/vender] [articulo] [cantidad]\n\nEjemplo: ${usedPrefix}space trade vender minerales 50`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
             }
             const tradeAction = args[1].toLowerCase();
@@ -535,10 +593,14 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
 
             if (isNaN(tradeAmount) || tradeAmount < 1) {
                  await conn.reply(m.chat, `📊 La cantidad debe ser un número válido mayor o igual a 1.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
             }
             if (!RESOURCE_VALUES[tradeItem]) {
                  await conn.reply(m.chat, `🛒 Artículo '${tradeItem}' no válido para comerciar. Artículos comerciables: ${Object.keys(RESOURCE_VALUES).join(', ')}.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
             }
 
@@ -548,6 +610,8 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 // Use the Spanish key for cargo access
                 if (user.cargo[tradeItem] === undefined || user.cargo[tradeItem] < tradeAmount) {
                      await conn.reply(m.chat, `📊 No tienes suficiente ${tradeItem} para vender. Solo tienes ${user.cargo[tradeItem] || 0}.`, m);
+                      // Save database before returning
+                      saveDatabase(db);
                      return;
                 }
                 const goldEarned = itemValue * tradeAmount;
@@ -559,12 +623,16 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
                 const totalCost = itemValue * tradeAmount;
                  if (user.credits < totalCost) {
                      await conn.reply(m.chat, `💰 No tienes suficientes créditos para comprar ${tradeAmount} unidades de ${tradeItem}. Necesitas ${totalCost}. Tienes ${user.credits}.`, m);
+                      // Save database before returning
+                      saveDatabase(db);
                      return;
                  }
                  const cargoWeight = getCurrentCargoWeight(user.cargo);
                  if (cargoWeight + tradeAmount > user.cargoCapacity) {
                      const canBuy = user.cargoCapacity - cargoWeight;
                      await conn.reply(m.chat, `📦 No tienes suficiente espacio de carga para comprar ${tradeAmount} unidades de ${tradeItem}. Solo puedes llevar ${canBuy} unidades más.`, m);
+                      // Save database before returning
+                      saveDatabase(db);
                      return;
                  }
 
@@ -575,6 +643,8 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
 
             } else {
                  await conn.reply(m.chat, `💰 Acción de comercio no válida. Usa 'comprar' o 'vender'.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return; // Don't save if invalid action
             }
             break; // Break after successful trade
@@ -596,15 +666,21 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
         case 'saltar':
              if (user.fuel < FUEL_COST_PER_JUMP) {
                  await conn.reply(m.chat, `⛽ Necesitas ${FUEL_COST_PER_JUMP} de combustible para realizar un salto espacial. Tienes ${user.fuel}.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
              if (args.length < 2) {
                  await conn.reply(m.chat, `🌌 Debes especificar el sector al que quieres saltar.\n\nEjemplo: ${usedPrefix}space jump Sector 002\n(En esta simulación, puedes saltar a cualquier nombre de sector que elijas)`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
              const targetSector = args.slice(1).join(' ');
              if (targetSector === user.location) {
                  await conn.reply(m.chat, `😅 Ya estás en el sector ${targetSector}.`, m);
+                  // Save database before returning
+                  saveDatabase(db);
                  return;
              }
 
@@ -617,17 +693,23 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
          case 'atacar':
             if (!m.mentionedJid || m.mentionedJid.length === 0) {
                 await conn.reply(m.chat, `⚔️ Debes especificar a quién quieres atacar.\n\nEjemplo: ${usedPrefix}space attack @usuario`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
             if (currentTime - user.lastCombat < COOLDOWN_COMBAT) {
                 const timeLeft = COOLDOWN_COMBAT - (currentTime - user.lastCombat);
                 await conn.reply(m.chat, `⏱️ Tu nave necesita recargar armas y sistemas. Puedes atacar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
 
             const targetPilotJid = m.mentionedJid[0];
             if (targetPilotJid === m.sender) {
                 await conn.reply(m.chat, `😅 No puedes atacarte a ti mismo.`, m);
+                 // Save database before returning
+                 saveDatabase(db);
                 return;
             }
 
@@ -720,6 +802,7 @@ Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
 
         // --- Unrecognized Space Sub-command ---
         default:
+            // If a subcommand was provided but not recognized
             const defaultText = `Comando espacial '${subCommand}' no reconocido. Usa ${usedPrefix}space help para ver los comandos disponibles.`;
             await conn.reply(m.chat, defaultText, m);
     }
