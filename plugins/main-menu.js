@@ -7,300 +7,573 @@ let handler = async (m, { conn, args }) => {
     let totalreg = Object.keys(global.db.data.users).length
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
     // Asegúrate de que 'moneda' esté definido en tu configuración global si es necesario para la sección de economía
-    let moneda = global.db.data.settings[conn.user.jid].moneda || 'Coins 💰'; // Ejemplo, ajusta según tu bot
+    let moneda = global.db.data.settings[conn.user.jid].moneda || '¥enes $'; // Símbolo para moneda
 
     let txt = `
-૮₍´˶• . • ⑅ ₎ა ¡Holiii, ${name} 👋!
-Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
+- - - - - - - - - - - - - - - - - -
 
-🎀 *Llevo despierta desde hace:* \`${uptime}\`
-🌷 Tengo *${totalreg}* amiguitos registrad@s!
-\`💖 Y sé hacer ${totalCommands} cositas para ti\`
+*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*.*
+> ♥ ¡Hola! @${userId.split('@')[0]}, Soy *${conn.user.name.split(' ')[0] || 'Mai'}*, ¡Tu bot amiguita! Aquí tienes la lista de comandos. (*^-^*)
 
-*₊˚⊹ ꒰ 𝘚𝘰𝘣𝘳𝘦 𝘔𝘪 ꒱ ‧₊˚*
-🐰 *Tú eres:* @${userId.split('@')[0]} ✨
-💭 *Modo:* \`Público para todos\`
-🍓 *Soy:* ${(conn.user.jid == global.conn.user.jid ? '🎍 𝗠𝗮𝗶 𝗢𝗙𝗖 𝗕𝗼𝘁𝘀𝗶𝘁𝗮 𝗣𝗿𝗶𝗻𝗰𝗶𝗽𝗮𝗹 🪴' : '🌵 𝗠𝗮𝗶 𝗦𝘂𝗯 𝗕𝗼𝘁 🌸')}
-🫧 *Versión:* _Multi Dispositivo 📱💻_
+╭─── ◆ INFO BOT ◆ ───
+│ ➢ Estado: ${(conn.user.jid == global.conn.user.jid ? '○ Bot Principal' : '● Sub-Bot Activa')}
+│ ★ Versión: \`^2.3.0\` (Multi Device)
+│ ◆ Activa: \`${uptime}\`
+│ ▼ Usuarios: *${totalreg}* amiguitos!
+│ ✎ Comandos: *${totalCommands}* funciones!
+│ ✿ Modo: \`Público para todos\`
+│ ◎ Creador: Wirk 🫆
+╰─────────────────
+> ✓ Crea un *Sub-Bot* con tu número usando *#qr* o *#code*
+-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-*💌 Un secretito:* Puedes tener tu propio Sub-Bot con *#qr* o *#code*
+╭─── ◆ INFO ◆ ───
+> ❀ *Comandos de estado e información del Bot.*
+▶ *#help • #menu*
+> ➤ Ver la lista de comandos. ☆
+▶ *#uptime • #runtime*
+> ➤ Tiempo activo del Bot. ⏱
+▶ *#sc • #script*
+> ➤ Enlace del repositorio oficial. □
+▶ *#serbot • #serbot code*
+> ➤ Crear sesión como Sub-Bot. ♥
+▶ *#bots • #sockets*
+> ➤ Ver lista de Sub-Bots activos. ♦
+▶ *#creador*
+> ➤ Contacto del creador. ★
+▶ *#status • #estado*
+> ➤ Estado actual del Bot. ◎
+▶ *#links • #grupos*
+> ➤ Enlaces oficiales de grupos. ✿
+▶ *#sug • #newcommand*
+> ➤ Sugerir un nuevo comando. ✎
+▶ *#p • #ping*
+> ➤ Velocidad de respuesta. ◆
+▶ *#reporte • #reportar*
+> ➤ Reportar una falla o problema. ✓
+▶ *#sistema • #system*
+> ➤ Salud interna del Bot. ○
+▶ *#speed • #speedtest*
+> ➤ Velocidad de respuesta. ▶
+▶ *#views • #usuarios*
+> ➤ Ver cuántos amigos tengo. ★
+▶ *#funciones • #totalfunciones*
+> ➤ Todas las funciones. ◇
+▶ *#ds • #fixmsgespera*
+> ➤ Ayuda a ordenar mensajes. ➜
+▶ *#editautoresponder*
+> ➤ Enseñar a responder. ✍
+╰───────────────
 
-₊˚⊹ ꒰ Cositas para Saber Jsjs ꒱ ‧₊˚
-🧸 *#help • #menu* ➢ ¡Mi lista de magia y trucos! ✨
-🐇 *#uptime • #runtime* ➢ ¿Cuánto tiempo estoy jugando contigo?  playtime 🎮
-🌷 *#sc • #script* ➢ ¡Mi casita en GitHub! Ven a visitarme! 🏡
-🎀 *#serbot • #serbot code* ➢ ¡Haz que otra Mai cobre vida! 🥺👉👈
-🍓 *#bots • #sockets* ➢ ¿Cuántas Mais estamos jugando juntas? 👯‍♀️
-💖 *#creador* ➢ La manita mágica que me hizo! ✨
-✨ *#status • #estado* ➢ ¿Cómo me siento en este momento? Uwu
-🐰 *#links • #grupos* ➢ ¡Únete a nuestra linda familia! 👨‍👩‍👧‍👦
-💭 *#infobot* ➢ ¡Descubre más cositas de mí! 📖
-🧸 *#sug • #newcommand* ➢ ¿Una idea kawaii para un comando? ¡Cuéntame! 🥺
-🐇 *#p • #ping* ➢ ¡Veamos qué tan rápido late mi corazoncito! 💓
-🌷 *#reporte • #reportar* ➢ Si algo está mal, ¡avísame porfis! 🙏
-🎀 *#sistema • #system* ➢ Mi salud interna, ¡todo en orden! ✅
-🍓 *#speed • #speedtest* ➢ ¡Soy veloz como un conejito! 🐇💨
-💖 *#views • #usuarios* ➢ ¡Mira cuántos amigos tengo! Yay! 🎉
-✨ *#funciones • #totalfunciones* ➢ Todas las cositas que puedo hacer! ✨
-🐰 *#ds • #fixmsgespera* ➢ ¡Ayudo a ordenar un poquito! 🧹
-💭 *#editautoresponder* ➢ ¡Enséñame a responder de forma cute! ✍️
+╭─── ◆ SEARCHS ◆ ───
+> ❀ *Comandos para búsquedas en plataformas.*
+▶ *#tiktoksearch • #tiktoks*
+> ➤ Buscador de videos de tiktok. ♪
+▶ *#tweetposts*
+> ➤ ¿Qué dice Twitter/X? 🐦
+▶ *#ytsearch • #yts*
+> ➤ Búsquedas de Youtube. ▶
+▶ *#githubsearch*
+> ➤ Buscador de usuarios de GitHub. ⚙
+▶ *#cuevana • #cuevanasearch*
+> ➤ Buscador de películas/series por Cuevana. 🎬
+▶ *#google*
+> ➤ Búsquedas por Google. 🌐
+▶ *#pin • #pinterest*
+> ➤ Buscador de imagenes de Pinterest. ✿
+▶ *#image • #imagen*
+> ➤ Buscador de imagenes de Google. 🖼
+▶ *#animesearch • #animess*
+> ➤ Busca tu anime en Tioanime! 📺
+▶ *#animei • #animeinfo*
+> ➤ Info de capítulos de anime! 📚
+▶ *#infoanime*
+> ➤ Detalles de tu anime o manga! 📖
+▶ *#hentaisearch • #searchhentai*
+> ➤ Buscador de animes hentai. (Solo +18) 🤫
+▶ *#xnxxsearch • #xnxxs*
+> ➤ Buscador de vídeos de Xnxx. (Adultos, cuidado! 🔞)
+▶ *#xvsearch • #xvideossearch*
+> ➤ Buscador de vídeos de Xvideos. (Adultos! 🔞)
+▶ *#pornhub • #phub*
+> ➤ Buscador de videos de Pornhub. (Solo +18! 🔞)
+▶ *#npmjs*
+> ➤ Buscador de npmjs. 📦
+╰───────────────
 
-₊˚⊹ ꒰ Cositas para Buscar ꒱ ‧₊˚
-🧸 *#tiktoksearch • #tiktoks* ➢ ¡Encuentra videos de tiktok super divertidos! 🎶🎬
-🐇 *#tweetposts* ➢ ¿Qué anda diciendo la gente en Twitter/X? 🐦
-🌷 *#ytsearch • #yts* ➢ ¡Busca tus videos favoritos en YouTube! ▶️📺
-🎀 *#githubsearch* ➢ Busca personitas talentosas en GitHub! 👩‍💻👨‍💻
-🍓 *#cuevana • #cuevanasearch* ➢ ¿Peli o serie para hoy? 🍿🎬
-💖 *#google* ➢ ¡El señor que sabe todo! 🧠🌐
-✨ *#pin • #pinterest* ➢ ¡Ideas bonitas y cute en Pinterest! 🌸🎀
-🐰 *#imagen • #image* ➢ ¡Encuentra cualquier imagen que quieras! 🖼️✨
-💭 *#animesearch • #animess* ➢ ¡Busca tu anime en Tioanime! 📺💖
-🧸 *#animei • #animeinfo* ➢ Info de capítulos de anime! 📚✨
-🐇 *#infoanime* ➢ ¡Detalles de tu anime o manga favorito! 📖アニメ
-🌷 *#hentaisearch • #searchhentai* ➢ (Solo para mayores de 18, porfis! 🤫)
-🎀 *#xnxxsearch • #xnxxs* ➢ (Contenido para adultos, úsalo con cuidado! 🔞)
-🍓 *#xvsearch • #xvideossearch* ➢ (Contenido para adultos! 🔞)
-💖 *#pornhubsearch • #phsearch* ➢ (Solo para mayores de 18! 🔞)
-✨ *#npmjs* ➢ Busca paquetes para los amiguitos devs! 📦🤓
+╭─── ◆ DOWNLOAD ◆ ───
+> ❀ *Comandos para descargas de archivos.*
+▶ *#tiktok • #tt*
+> ➤ Descarga videos de TikTok. ↓♪
+▶ *#mediafire • #mf*
+> ➤ Descargar un archivo de MediaFire. 💾
+▶ *#mega • #mg* + [enlacé]
+> ➤ Descargar un archivo de MEGA. ↓💾
+▶ *#play • #play2 • #playvideo • #playmp3 • #playmp4*
+> ➤ Descarga música y videos de YouTube por Nombre! ▶↓
+▶ *#ytmp3 • #ytmp4 • #ytvideo • #ytmp4doc*
+> ➤ Descarga música y videos de YouTube mediante url. ↓★
+▶ *#fb • #facebook*
+> ➤ Descarga videos de Facebook. ↓📱
+▶ *#twitter • #x* + [Link]
+> ➤ Descargar un video de Twitter/X ↓🐦
+▶ *#ig • #instagram*
+> ➤ Descarga contenido de Instagram. ↓📸
+▶ *#tiktoksearch • #tiktoks* + [busqueda]
+> ➤ Buscar videos de tiktok para descargar. 🔎♪
+▶ *#terabox • #tb* + [enlace]
+> ➤ Archivos de Terabox! ↓💾
+▶ *#gdrive • #drive* + [enlace]
+> ➤ Archivos de Google Drive! ↓☁
+▶ *#ttimg • #ttmp3* + <url>
+> ➤ Descarga fotos y audios de tiktok. ↓🖼🎧
+▶ *#gitclone* + <url>
+> ➤ Descarga un repositorio de github. 💾⚙
+▶ *#xvideosdl*
+> ➤ Descarga videos porno de (Xvideos). (Solo +18! 🔞)
+▶ *#xnxxdl*
+> ➤ Descarga videos porno de (xnxx). (Solo +18! 🔞)
+▶ *#apk • #modapk*
+> ➤ Descarga un apk de Aptoide. 📱
+▶ *#tiktokrandom • #ttrandom*
+> ➤ Descarga un video aleatorio de tiktok. ★♪
+▶ *#npmdl • #npmdownloader*
+> ➤ Descarga paquetes de NPMJs. 📦↓
+▶ *#animelinks • #animedl*
+> ➤ Links para descargar anime! 🎬↓
+╰───────────────
 
-₊˚⊹ ꒰ Cositas para Descargar ꒱ ‧₊˚
-🧸 *#tiktok • #tt* ➢ ¡Baja tiktoks rapidito! 👇🎶
-🐇 *#mediafire • #mf* ➢ ¡Archivos de MediaFire listos! 📥💾
-🌷 *#pinvid • #pinvideo* + [enlacé] ➢ ¡Videos de Pinterest bonitos! ✨👇
-🎀 *#mega • #mg* + [enlacé] ➢ ¡Archivos de MEGA! 👇💾
-🍓 *#play • #play2 • #playvideo • #playmp3 • #playmp4* ➢ Música y videos de YouTube Por Nombre! ▶️📥
-💖 *#ytmp3 • #ytmp4 • #ytvideo • #ytmp4doc*➢ Descarga por URL de YouTube! 👇✨
-✨ *#fb • #facebook* ➢ ¡Videos de Facebook! 👇📱
-🐰 *#twitter • #x* + [Link] ➢ ¡Videos de Twitter/X! 👇🐦
-💭 *#ig • #instagram* ➢ ¡Todo de Instagram! 👇📸
-🧸 *#tts • #tiktoks* + [busqueda] ➢ ¡Busca tiktoks para bajar! 🔎🎬
-🐇 *#terabox • #tb* + [enlace] ➢ ¡Archivos de Terabox! 👇💾
-🌷 *#gdrive • #drive* + [enlace] ➢ ¡Archivos de Google Drive! 👇☁️
-🎀 *#ttimg • #ttmp3* + <url> ➢ ¡Fotos y audios de tiktok! 👇🖼️🎧
-🍓 *#gitclone* + <url> ➢ ¡Baja repos de GitHub! 💾🤓
-💖 *#xvideosdl* ➢ (Solo para mayores de 18! 🔞)
-✨ *#xnxxdl* ➢ (Solo para mayores de 18! 🔞)
-🐰 *#apk • #modapk* ➢ ¡Apps de Aptoide! 📱🎮
-💭 *#tiktokrandom • #ttrandom* ➢ ¡Un tiktok sorpresa solo para ti! 🎉🎶
-🧸 *#npmdl • #npmdownloader* ➢ ¡Paquetes de NPMJs! 📦👇
-🐇 *#animelinks • #animedl* ➢ ¡Links para descargar anime! 🎬📥
+╭─── ◆ ECONOMY ◆ ───
+> ❀ *Comandos de economía y rpg para ganar recursos.*
+▶ *#w • #work • #trabajar*
+> ➤ Trabaja para ganar ${moneda}. 💪$
+▶ *#slut • #protituirse*
+> ➤ Trabaja como prostituta y gana ${moneda}. (Diferente) 🤫
+▶ *#cf • #suerte*
+> ➤ Apuesta tus ${moneda} a cara o cruz. 🍀 moneda
+▶ *#crime • #crimen*
+> ➤ Trabaja como ladrón para ganar ${moneda}. 😈$
+▶ *#ruleta • #roulette • #rt*
+> ➤ Apuesta ${moneda} al color. 🔴⚫🎡
+▶ *#casino • #apostar*
+> ➤ Apuesta tus ${moneda} en el casino. 🎰★
+▶ *#slot*
+> ➤ Apuesta tus ${moneda} y prueba tu suerte. 🎰♦
+▶ *#cartera • #wallet*
+> ➤ Ver tus ${moneda} en la cartera. 💸
+▶ *#bal • #bank*
+> ➤ Ver tus ${moneda} en el banco. 🏦♥
+▶ *#deposit • #depositar • #d*
+> ➤ Deposita tus ${moneda} al banco. →🏦
+▶ *#with • #retirar • #withdraw*
+> ➤ Retira tus ${moneda} del banco. 🏦→
+▶ *#transfer • #pay*
+> ➤ Transfiere ${moneda} o XP a otros usuarios. ♥
+▶ *#miming • #minar • #mine*
+> ➤ Trabaja como minero y recolecta recursos. ⛏💎
+▶ *#buyall • #buy*
+> ➤ Compra ${moneda} con tu XP. ★$
+▶ *#daily • #diario*
+> ➤ Reclama tu recompensa diaria. 🎁☀
+▶ *#cofre*
+> ➤ Reclama un cofre diario. 💎📦
+▶ *#weekly • #semanal*
+> ➤ Reclama tu regalo semanal. 🎉🗓
+▶ *#monthly • #mensual*
+> ➤ Reclama tu recompensa mensual. 🥳📅
+▶ *#steal • #robar • #rob*
+> ➤ Intenta robar ${moneda} a alguien. (cuidado)! 🏃💨$
+▶ *#robarxp • #robxp*
+> ➤ Intenta robar XP a un usuario. 🤫★
+▶ *#eboard • #baltop*
+> ➤ Ranking de usuarios con más ${moneda}. 🏆$
+▶ *#aventura • #adventure*
+> ➤ Explora nuevos mundos conmigo! 🗺★
+▶ *#curar • #heal*
+> ➤ Recupera tu salud! ♥🩹
+▶ *#cazar • #hunt • #berburu*
+> ➤ Vamos a cazar! 🏹🐿
+▶ *#inv • #inventario*
+> ➤ ¿Qué tesoros tienes? 🎒💎
+▶ *#mazmorra • #explorar*
+> ➤ Lugares misteriosos! 🦇🗝
+▶ *#halloween*
+> ➤ Dulce o truco (Solo en Halloween). 🎃👻
+▶ *#christmas • #navidad*
+> ➤ Regalo navideño (Solo en Navidad). 🎄🎁
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Economía ꒱ ‧₊˚
-🌷 *#w • #work • #trabajar* ➢ ¡A ganar ${moneda} con esfuerzo! 💪💰
-🎀 *#slut • #protituirse* ➢ (Un trabajo... diferente 🤫)
-🍓 *#cf • #suerte* ➢ ¡Cara o cruz para probar tu suerte! 🍀 coin 🪙
-💖 *#crime • #crimen* ➢ ¡Un poquito de travesura! 😈💰
-✨ *#ruleta • #roulette • #rt* ➢ ¡Apuesta en la ruleta! 🔴⚫🎡
-🐰 *#casino • #apostar* ➢ ¡Prueba tu suerte en el casino virtual! 🎰✨
-💭 *#slot* ➢ ¡A ver si ganas el jackpot! 🎰🍓🍋🍓
-🧸 *#cartera • #wallet* ➢ ¿Cuántos ${moneda} tienes contigo? 💸🛍️
-🐇 *#banco • #bank* ➢ ¡Tu ahorro seguro y creciendo! 🏦💖
-🌷 *#deposit • #depositar • #d* ➢ ¡Guarda tus ${moneda} en el banco! ➡️🏦
-🎀 *#with • #retirar • #withdraw* ➢ ¡Saca tus ${moneda} cuando los necesites! 🏦➡️
-🍓 *#transfer • #pay* ➢ ¡Comparte ${moneda} o XP con tus amiguitos! 🤗💖
-💖 *#miming • #minar • #mine* ➢ ¡A minar recursos preciosos! ⛏️💎
-✨ *#buyall • #buy* ➢ ¡Cambia tu XP por ${moneda}! ✨💰
-🐰 *#daily • #diario* ➢ ¡Tu regalito diario esperando! 🎁☀️
-💭 *#cofre* ➢ ¡Un cofre sorpresa cada día! 💎✨📦
-🧸 *#weekly • #semanal* ➢ ¡Tu regalo de la semana! 🎉🗓️
-🐇 *#monthly • #mensual* ➢ ¡Tu gran regalo del mes! 🥳📆
-🌷 *#steal • #robar • #rob* ➢ ¡Intenta robar (con cuidado)! 🏃💨💰
-🎀 *#robarxp • #robxp* ➢ ¡Intenta robar XP! 🤫✨
-🍓 *#eboard • #baltop* ➢ ¿Quién es el más rico? 🏆💰
-💖 *#aventura • #adventure* ➢ ¡Explora nuevos mundos conmigo! 🗺️✨
-✨ *#curar • #heal* ➢ ¡Recupera tu salud! ❤️‍🩹🩹
-🐰 *#cazar • #hunt • #berburu* ➢ ¡Vamos a cazar (virtualmente)! 🏹🐿️
-💭 *#inv • #inventario* ➢ ¿Qué tesoros tienes? 🎒💎
-🧸 *#mazmorra • #explorar* ➢ ¡Adéntrate en lugares misteriosos! 🦇🗝️
-🐇 *#halloween* ➢ ¡Dulce o truco! 🎃👻
-🌷 *#christmas • #navidad* ➢ ¡Tu regalito navideño! 🎄🎁
+╭─── ◆ GACHA ◆ ───
+> ❀ *Comandos para reclamar y coleccionar personajes.*
+▶ *#rollwaifu • #rw • #roll*
+> ➤ Waifu o husbando aleatorio. 🥰♥
+▶ *#claim • #c • #reclamar*
+> ➤ Reclamar un personaje. ★
+▶ *#harem • #waifus • #claims*
+> ➤ Ver tus personajes reclamados. ♥♦
+▶ *#charimage • #waifuimage • #wimage*
+> ➤ Ver imagen de un personaje. 🖼★
+▶ *#charinfo • #winfo • #waifuinfo*
+> ➤ Información de un personaje. 📖✎
+▶ *#givechar • #givewaifu • #regalar*
+> ➤ Regalar un personaje a otro usuario. 🤗🎁
+▶ *#vote • #votar*
+> ➤ Votar por un personaje. 👍★
+▶ *#waifusboard • #waifustop • #topwaifus*
+> ➤ Top de personajes con mayor valor. ⭐🏆
+╰───────────────
 
-₊˚⊹ ꒰ Cositas Gacha ꒱ ‧₊˚
-🎀 *#rollwaifu • #rw • #roll* ➢ ¡Una waifu o husbando sorpresa para ti! 🥰💖
-🍓 *#claim • #c • #reclamar* ➢ ¡Haz tuyo a tu personaje favorito! ✨
-💖 *#harem • #waifus • #claims* ➢ ¡Mira a todos tus compañeros! 💕👨‍👩‍👧‍👦
-✨ *#charimage • #waifuimage • #wimage* ➢ ¡Mira a tu lindo personaje! 🖼️✨
-🐰 *#charinfo • #winfo • #waifuinfo* ➢ Detalles de tu personaje! 📖🤓
-💭 *#givechar • #givewaifu • #regalar* ➢ ¡Comparte la felicidad con amigos! 🤗🎁
-🧸 *#vote • #votar* ➢ ¡Apoya a tu personaje favorito! 👍✨
-🐇 *#waifusboard • #waifustop • #topwaifus* ➢ ¡Los personajes más populares! ⭐🏆
+╭─── ◆ STICKERS ◆ ───
+> ❀ *Comandos para creaciones de stickers.*
+▶ *#sticker • #s*
+> ➤ Crea stickers de (imagen/video). ★♥
+▶ *#setmeta*
+> ➤ Establecer pack y autor para stickers. 🏷♦
+▶ *#delmeta*
+> ➤ Eliminar tu pack de stickers. 👋🗑
+▶ *#pfp • #getpic*
+> ➤ Obtén foto de perfil de un usuario. 📸👀
+▶ *#qc*
+> ➤ Crea stickers con texto o de un usuario. 💬★
+▶ *#toimg • #img*
+> ➤ Convierte stickers en imagen. 🔄🖼
+▶ *#brat • #ttp • #attp*︎
+> ➤ Crea stickers con texto. ★✎
+▶ *#emojimix*
+> ➤ Fusiona 2 emojis para crear sticker. 🤩+🥰=♥
+▶ *#wm*
+> ➤ Cambia nombre de los stickers. ✏♦
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Stickers ꒱ ‧₊˚
-🌷 *#sticker • #s* ➢ ¡Convierte tus fotos y videos en stickers kawaii! ✨💖
-🎀 *#setmeta* ➢ ¡Ponle nombre a tu pack de stickers! 🏷️🎀
-🍓 *#delmeta* ➢ ¿Ya no te gusta tu pack? ¡Adiós! 👋🗑️
-💖 *#pfp • #getpic* ➢ ¡Mira la foto de perfil de alguien! 📸👀
-✨ *#qc* ➢ ¡Stickers con texto o de tus amigos! 💬✨
-🐰 *#toimg • #img* ➢ ¡Haz que un sticker vuelva a ser imagen! 🔄🖼️
-💭 *#brat • #ttp • #attp*︎ ➢ ¡Stickers solo con letritas bonitas! ✨📝
-🧸 *#emojimix* ➢ ¡Mezcla 2 emojis y haz uno nuevo! 🤩+🥰=💖
-🐇 *#wm* ➢ ¡Cambia el nombre de tus stickers! ✏️🎀
+╭─── ◆ TOOLS ◆ ───
+> ❀ *Comandos de herramientas con funciones.*
+▶ *#calcular • #cal*
+> ➤ Calcular ecuaciones. ➕➖➗✖
+▶ *#tiempo • #clima*
+> ➤ Ver el clima de un pais. ☀☁🌧
+▶ *#horario*
+> ➤ Ver el horario global. ⏰🌎
+▶ *#fake • #fakereply*
+> ➤ Crea un mensaje falso. 😉😂
+▶ *#enhance • #remini • #hd*
+> ➤ Mejora calidad de imagen. ★♥
+▶ *#letra*
+> ➤ Cambia la fuente de las letras. 🅰🅱
+▶ *#read • #readviewonce • #ver*
+> ➤ Ver imágenes de una sola vista. 🤫📸
+▶ *#whatmusic • #shazam*
+> ➤ ¿Qué canción está sonando? ♪🔎
+▶ *#spamwa • #spam*
+> ➤ (¡Úsalo con responsabilidad! 😅)
+▶ *#ss • #ssweb*
+> ➤ Ver estado de una página web. 💻🌐
+▶ *#length • #tamaño*
+> ➤ Cambia tamaño de imágenes/videos. 📏🖼
+▶ *#say • #decir* + [texto]
+> ➤ Repetir un mensaje. 🗣★
+▶ *#translate • #traducir • #trad*
+> ➤ Traduce palabras. 🌍🗣
+▶ *#ia • #gemini*
+> ➤ Preguntar a la ia. 🤔💬
+▶ *#tourl • #catbox • #ibb*
+> ➤ Convierte imágen/video en urls. 🔗
+▶ *#wiki • #wikipedia*
+> ➤ Investigar cualquier tema. 📖🤓
+▶ *#dalle • #flux*
+> ➤ Crea imágenes con texto mediante IA. 🖼✍
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Herramientas ꒱ ‧₊˚
-🌷 *#calcular • #calcular • #cal* ➢ ¡Ayudo con tus tareas de mates! ➕➖➗✖️
-🎀 *#tiempo • #clima* ➢ ¿Cómo está el clima por ahí? ☀️☁️🌧️
-🍓 *#horario* ➢ La hora en cualquier lugar del mundo! ⏰🌎
-💖 *#fake • #fakereply* ➢ ¡Crea mensajes de broma super divertidos! 😉😂
-✨ *#enhance • #remini • #hd* ➢ ¡Haz tus fotos más hermosas! ✨💖
-🐰 *#letra* ➢ ¡Cambia el estilo de tus letras! 🅰️🅱️🆎
-💭 *#read • #readviewonce • #ver* ➢ ¡Mira esas fotos secretas! 🤫📸
-🧸 *#whatmusic • #shazam* ➢ ¿Qué canción está sonando? ¡Te ayudo! 🎶🔎
-🐇 *#spamwa • #spam* ➢ (¡Úsalo con mucha responsabilidad! 😅)
-🌷 *#ss • #ssweb* ➢ ¡Mira una página web! 💻🌐
-🎀 *#length • #tamaño* ➢ Cambia el tamaño de tus imágenes/videos! 📏🖼️
-🍓 *#say • #decir* + [texto] ➢ ¡Repito lo que tú digas! 🗣️✨
-💖 *#todoc • #toducument* ➢ ¡Convierte cosas en documentos! 📄📁
-✨ *#translate • #traducir • #trad* ➢ ¡Te ayudo a hablar otros idiomas! 🌍🗣️
+╭─── ◆ PROFILE ◆ ───
+> ❀ *Comandos para ver y configurar tu perfil.*
+▶ *#reg • #verificar • #register*
+> ➤ Registrarte para ser mi amigo oficial! ★🫂
+▶ *#unreg*
+> ➤ Si cambias de opinión... 😥💔
+▶ *#profile*
+> ➤ Muestra tu perfil de usuario. 😊♦
+▶ *#marry* [mension / etiquetar]
+> ➤ Proponer matrimonio a otro usuario. 💍♥
+▶ *#divorce*
+> ➤ Divorciarte de tu pareja. 💔
+▶ *#setgenre • #setgenero*
+> ➤ Establece tu género. 🏳️‍⚧️★
+▶ *#delgenre • #delgenero*
+> ➤ Eliminar tu género.
+▶ *#setbirth • #setnacimiento*
+> ➤ Establece tu fecha de nacimiento. 🎂🥳
+▶ *#delbirth • #delnacimiento*
+> ➤ Eliminar tu fecha de nacimiento.
+▶ *#setdescription • #setdesc*
+> ➤ Establece una descripción. 📝♥
+▶ *#deldescription • #deldesc*
+> ➤ Eliminar la descripción.
+▶ *#lb • #lboard* + <Paginá>
+> ➤ Top de usuarios con más (experiencia y nivel). 🏆★
+▶ *#level • #lvl* + <@Mencion>
+> ➤ Ver tu nivel y experiencia. ★📈
+▶ *#comprarpremium • #premium*
+> ➤ Ser un usuario super especial! ⭐♥
+▶ *#confesiones • #confesar*
+> ➤ Cuéntame tus secretos en anónimo! 🤫💌
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Perfil ꒱ ‧₊˚
-🐰 *#reg • #verificar • #register* ➢ ¡Regístrate para ser mi amigo oficial! ✨🫂
-💭 *#unreg* ➢ Si cambias de opinión... 😥💔
-🧸 *#profile* ➢ ¡Mira tu lindo perfil! 😊🎀
-🐇 *#marry* [mension / etiquetar] ➢ ¿Quieres ser mi... pareja? 💍💖
-🌷 *#divorce* ➢ Si las cosas no funcionan... es triste 💔
-🎀 *#setgenre • #setgenero* ➢ ¿Cómo te identificas? 🏳️‍⚧️✨
-🍓 *#delgenre • #delgenero* ➢ Elimina tu género si quieres.
-💖 *#setbirth • #setnacimiento* ➢ ¿Cuándo es tu cumple? ¡Para celebrar! 🎂🥳
-✨ *#delbirth • #delnacimiento* ➢ Elimina tu fecha de nacimiento.
-🐰 *#setdescription • #setdesc* ➢ ¡Cuéntame algo lindo de ti! 📝💖
-💭 *#deldescription • #deldesc* ➢ Borra tu descripción.
-🧸 *#lb • #lboard* + <Paginá> ➢ ¿Quién tiene más XP o Nivel? ¡Top! 🏆✨
-🐇 *#level • #lvl* + <@Mencion> ➢ ¡Mira tu nivel y cuánta experiencia tienes! ✨📈
-🌷 *#comprarpremium • #premium* ➢ ¡Sé un usuario super especial! ⭐💖
-🎀 *#confesiones • #confesar* ➢ ¡Cuéntame tus secretos en anónimo! 🤫💌
+╭─── ◆ GROUPS ◆ ───
+> ❀ *Comandos para gestión de grupos.*
+▶ *#config • #on*
+> ➤ ¡Mira las reglas de nuestro grupo! 📜♥
+▶ *#hidetag*
+> ➤ Mensaje mencionando a todos. 🤫★
+▶ *#gp • #infogrupo*
+> ➤ Información del grupo. ℹ□
+▶ *#linea • #listonline*
+> ➤ Ver lista de usuarios en linea. 👀★
+▶ *#setwelcome*
+> ➤ Mensaje de bienvenida. 👋🥰
+▶ *#setbye*
+> ➤ Mensaje de despedida. 👋😥
+▶ *#link*
+> ➤ Bot envia el link del grupo. 🔗♥
+▶ *#admins • #admin*
+> ➤ Mencionar a los admins. 👑⭐
+▶ *#restablecer • #revoke*
+> ➤ Restablecer enlace del grupo.
+▶ *#open • #abrir*
+> ➤ Grupo abierto para todos. 🔓🥳
+▶ *#close • #cerrar*
+> ➤ Grupo cerrado (solo admins). 🔒🌙
+▶ *#kick* [número / mension]
+> ➤ Eliminar un usuario. 🥺
+▶ *#add • #añadir • #agregar* [número]
+> ➤ Invitar a un usuario. 🤗♥
+▶ *#promote* [mension / etiquetar]
+> ➤ Dar admin al usuario. ⭐👑
+▶ *#demote* [mension / etiquetar]
+> ➤ Quitar admin al usuario.
+▶ *#gpbanner • #groupimg*
+> ➤ Cambiar imagen del grupo. 🏞🖼
+▶ *#gpname • #groupname*
+> ➤ Cambiar nombre del grupo. ✏★
+▶ *#gpdesc • #groupdesc*
+> ➤ Cambiar descripción del grupo. 📝♥
+▶ *#setprimary*
+> ➤ Establecer un bot primario.
+▶ *#advertir • #warn • #warning*
+> ➤ Dar una advertencia. ⚠️🥺
+▶ ︎#unwarn • #delwarn*
+> ➤ Quitar advertencias.
+▶ *#advlist • #listadv*
+> ➤ Ver lista de usuarios advertidos. 📋🤔
+▶ *#bot* [on / off]
+> ➤ Banear o desbanear el Bot. ★🌙
+▶ *#mute* [mension / etiquetar]
+> ➤ Bot elimina mensajes del usuario. 🤐😔
+▶ *#unmute* [mension / etiquetar]
+> ➤ Bot deja de eliminar mensajes. 😊🗣
+▶ *#encuesta • #poll*
+> ➤ Crea una encuesta. 📊★
+▶ *#delete • #del*
+> ➤ Eliminar mensaje de otros usuarios. 🗑👋
+▶ *#inactivos*
+> ➤ Ver lista de inactivos. 👻👀
+▶ *#kickinactivos*
+> ➤ Eliminar a los inactivos. 🚪😥
+▶ *#invocar • #tagall • #todos*
+> ➤ Invocar a todos los usuarios. 👋♥
+▶ *#setemoji • #setemo*
+> ➤ Cambiar emoji invitación. ★♦
+▶ *#listnum • #kicknum*
+> ➤ Eliminar por prefijo de país.
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Grupos ꒱ ‧₊˚
-🍓 *#config • #on* ➢ ¡Mira las reglas de nuestro lindo grupo! 📜💖
-💖 *#hidetag* ➢ ¡Menciona a todos sin que se note mucho! 🤫✨
-✨ *#gp • #infogrupo* ➢ ¡Toda la info de nuestro grupo! ℹ️🏡
-🐰 *#linea • #listonline* ➢ ¿Quiénes están despiertos y conectados? 👀✨
-💭 *#setwelcome* ➢ ¡El mensaje más lindo para los nuevos! 👋🥰
-🧸 *#setbye* ➢ Un mensajito triste cuando alguien se va... 👋😢
-🐇 *#link* ➢ ¡El enlace para que más amigos se unan! 🔗💖
-🌷 *#admins • #admin* ➢ ¡Los líderes de nuestro grupo! 👑🌟
-🎀 *#restablecer • #revoke* ➢ Cambia el link del grupo por si acaso.
-🍓 *#grupo • #group* [open / abrir] ➢ ¡Abrimos las puertas para todos! 🔓🥳
-💖 *#grupo • #gruop* [close / cerrar] ➢ ¡Cerramos las puertas un ratito! 🔒🌙
-✨ *#kick* [número / mension] ➢ Sacar a alguien... es un poco triste 🥺
-🐰 *#add • #añadir • #agregar* [número] ➢ ¡Invita a un nuevo amigo! 🤗💖
-💭 *#promote* [mension / etiquetar] ➢ ¡Haz a alguien un líder! ⭐👑
-🧸 *#demote* [mension / etiquetar] ➢ Quita el liderazgo.
-🐇 *#gpbanner • #groupimg* ➢ ¡Cambia la foto de nuestro grupo! 🏞️🖼️
-🌷 *#gpname • #groupname* ➢ ¡Cambia el nombre de nuestro grupo! ✏️✨
-🎀 *#gpdesc • #groupdesc* ➢ ¡Cambia la descripción de nuestro grupo! 📝💖
-🍓 *#advertir • #warn • #warning* ➢ ¡Una pequeña llamada de atención! ⚠️🥺
-💖 *#unwarn • #delwarn* ➢ Quita una advertencia.
-✨ *#advlist • #listadv* ➢ ¿Quién tiene advertencias? 📋🤔
-🐰 *#bot on* ➢ ¡Enciéndeme en el grupo! ✨🥳
-💭 *#bot off* ➢ ¡Apágame en el grupo! 🌙💤
-🧸 *#mute* [mension / etiquetar] ➢ No dejaré que esa personita hable por un rato... 🤐😔
-🐇 *#unmute* [mension / etiquetar] ➢ ¡Ya puede hablar de nuevo! 😊🗣️
-🌷 *#encuesta • #poll* ➢ ¡Hagan una votación entre todos! 📊✨
-🎀 *#delete • #del* ➢ Elimina mis mensajes o los de otros. 🗑️👋
-🍓 *#fantasmas* ➢ ¿Quién no habla mucho? 👻👀
-💖 *#kickfantasmas* ➢ Si es necesario, puedo sacarlos... 🚪😥
-✨ *#invocar • #tagall • #todos* ➢ ¡Holii a todos en el grupo! 👋💖
-🐰 *#setemoji • #setemo* ➢ ¡Cambia el emoji del link de invitación! ✨🎀
-💭 *#listnum • #kicknum* ➢ Saca a amigos por el número de su país.
+╭─── ◆ ANIME REACTIONS ◆ ───
+> ❀ *Comandos de reacciones de anime.*
+▶ *#angry • #enojado* + <mencion>
+> ➤ Estar enojado 😠
+▶ *#bite* + <mencion>
+> ➤ Muerde a alguien 😬🍏
+▶ *#bleh* + <mencion>
+> ➤ Sacar la lengua 😝★
+▶ *#blush* + <mencion>
+> ➤ Sonrojarte 😳♥
+▶ *#bored • #aburrido* + <mencion>
+> ➤ Estar aburrido 😴
+▶ *#cry* + <mencion>
+> ➤ Llorar por algo o alguien 😭💧
+▶ *#cuddle* + <mencion>
+> ➤ Acurrucarse 🤗♥
+▶ *#dance* + <mencion>
+> ➤ Sacate los pasitos prohíbidos 💃🕺✨
+▶ *#drunk* + <mencion>
+> ➤ Estar borracho 🥴
+▶ *#eat • #comer* + <mencion>
+> ➤ Comer algo delicioso 냠냠 🍔
+▶ *#facepalm* + <mencion>
+> ➤ Darte una palmada en la cara 🤦‍♀️🤦‍♂️
+▶ *#happy • #feliz* + <mencion>
+> ➤ Salta de felicidad 😄🥳
+▶ *#hug* + <mencion>
+> ➤ Dar un abrazo 🤗★
+▶ *#impregnate • #preg* + <mencion>
+> ➤ Embarazar a alguien (Juego) 🤭♥
+▶ *#kill* + <mencion>
+> ➤ Toma tu arma y mata a alguien (Juego, amigos!) 🔪☠
+▶ *#kiss • #besar* • #kiss2 + <mencion>
+> ➤ Dar un beso 😘💋
+▶ *#laugh* + <mencion>
+> ➤ Reírte de algo o alguien 😂
+▶ *#lick* + <mencion>
+> ➤ Lamer a alguien (Broma)! 😋😛
+▶ *#love • #amor* + <mencion>
+> ➤ Sentirse enamorado 🥰♥
+▶ *#pat* + <mencion>
+> ➤ Acaricia a alguien 👋😊
+▶ *#poke* + <mencion>
+> ➤ Picar a alguien 👉★
+▶ *#pout* + <mencion>
+> ➤ Hacer pucheros 😠🥺
+▶ *#punch* + <mencion>
+> ➤ Dar un puñetazo (Broma)! 👊💥
+▶ *#run* + <mencion>
+> ➤ Correr 🏃‍♀️💨
+▶ *#sad • #triste* + <mencion>
+> ➤ Expresar tristeza 😞💧
+▶ *#scared* + <mencion>
+> ➤ Estar asustado 😨😱
+▶ *#seduce* + <mencion>
+> ➤ Seducir a alguien 😉♥
+▶ *#shy • #timido* + <mencion>
+> ➤ Sentir timidez ☺️😳
+▶ *#slap* + <mencion>
+> ➤ Dar una bofetada (Broma)! 👋😂
+▶ *#dias • #days*
+> ➤ Dar los buenos días. ☀👋
+▶ *#noches • #nights*
+> ➤ Dar las buenas noches. 🌙😴
+▶ *#sleep* + <mencion>
+> ➤ Tumbarte a dormir 😴😇
+▶ *#smoke* + <mencion>
+> ➤ Fumar 🚬💨
+▶ *#think* + <mencion>
+> ➤ Pensar en algo 🤔💡
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Anime Reacciones ꒱ ‧₊˚
-🧸 *#angry • #enojado* + <mencion> ➢ ¡Estoy un poquito enojad@! 😠💢
-🐇 *#bite* + <mencion> ➢ ¡Te doy una mordidita! 😬🍎
-🌷 *#bleh* + <mencion> ➢ ¡Saco la lengua traviesa! 😝✨
-🎀 *#blush* + <mencion> ➢ ¡Me sonrojo! 😳💖
-🍓 *#bored • #aburrido* + <mencion> ➢ ¡Qué aburrido estoy! 😴💤
-💖 *#cry* + <mencion> ➢ ¡A llorar un poquito! 😭💧
-✨ *#cuddle* + <mencion> ➢ ¡Un abracito calentito y tierno! 🤗💖
-🐰 *#dance* + <mencion> ➢ ¡A bailar con alegría! 💃🕺🎉
-💭 *#drunk* + <mencion> ➢ ¡Un poco mareadit@! 🥴😵‍💫
-🧸 *#eat • #comer* + <mencion> ➢ ¡Hora de comer algo rico! 냠냠 🍔
-🐇 *#facepalm* + <mencion> ➢ ¡Oh no! 🤦‍♀️🤦‍♂️
-🌷 *#happy • #feliz* + <mencion> ➢ ¡Estoy super feliz! 😄🥳
-🎀 *#hug* + <mencion> ➢ ¡Te doy un fuerte abracito! 🤗✨
-🍓 *#impregnate • #preg* + <mencion> ➢ (Juego de rol 🤭💖)
-💖 *#kill* + <mencion> ➢ (Solo en juego, ¡somos amigos! 🔪❌)
-✨ *#kiss • #besar • #kiss2* + <mencion> ➢ ¡Un besito tierno! 😘💋
-🐰 *#laugh* + <mencion> ➢ ¡Jajajaja! 😂🤣
-💭 *#lick* + <mencion> ➢ ¡Te lamo (de broma)! 😋😛
-🧸 *#love • #amor* + <mencion> ➢ ¡Siento mucho amor! 🥰💖
-🐇 *#pat* + <mencion> ➢ ¡Palmadita suave en la cabeza! 👋😊
-🌷 *#poke* + <mencion> ➢ ¡Te hago cosquillas! 👉✨
-🎀 *#pout* + <mencion> ➢ ¡Hago pucheros! 😠🥺
-🍓 *#punch* + <mencion> ➢ ¡Un puñetazo (de broma)! 👊💥
-💖 *#run* + <mencion> ➢ ¡A correr rapidito! 🏃‍♀️💨
-✨ *#sad • #triste* + <mencion> ➢ ¡Me siento un poquito triste! 😞💧
-🐰 *#scared* + <mencion> ➢ ¡Tengo miedito! 😨😱
-💭 *#seduce* + <mencion> ➢ ¡Soy irresistible! 😉💖
-🧸 *#shy • #timido* + <mencion> ➢ ¡Qué penita! ☺️😳
-🐇 *#slap* + <mencion> ➢ ¡Una bofetada (de broma)! 👋😂
-🌷 *#dias • #days* ➢ ¡Buenos días! ☀️👋
-🎀 *#noches • #nights* ➢ ¡Buenas noches! 🌙😴
-🍓 *#sleep* + <mencion> ➢ ¡A dormir como un angelito! 😴😇
-💖 *#smoke* + <mencion> ➢ ¡Un cigarrito (virtual)! 🚬💨
-✨ *#think* + <mencion> ➢ ¡Estoy pensando mucho! 🤔💡
+╭─── ◆ NSFW ◆ ───
+> ❀ *Comandos NSFW (Contenido para adultos). Úsalo con discreción! 🔞*
+▶ *#anal* + <mencion>
+> ➤ Hacer un anal 😉
+▶ *#waifu*
+> ➤ Buscar una waifu aleatoria. 🔥♥
+▶ *#bath* + <mencion>
+> ➤ Bañarse 🛁💧
+▶ *#blowjob • #mamada • #bj* + <mencion>
+> ➤ Dar una mamada 😉
+▶ *#boobjob* + <mencion>
+> ➤ Hacer una rusa 😉
+▶ *#cum* + <mencion>
+> ➤ Venirse en alguien. 😉
+▶ *#fap* + <mencion>
+> ➤ Hacerse una paja 😉
+▶ *#ppcouple • #ppcp*
+> ➤ Genera imagenes para amistades o parejas. 💕★
+▶ *#footjob* + <mencion>
+> ➤ Hacer una paja con los pies 😉
+▶ *#fuck • #coger • #fuck2* + <mencion>
+> ➤ Follarte a alguien 😉
+▶ *#cafe • #coffe*
+> ➤ Tomar un cafecito con alguien ☕😊
+▶ *#violar • #perra* + <mencion>
+> ➤ Violar a alguien (Solo juego! 😈☠)
+▶ *#grabboobs* + <mencion>
+> ➤ Agarrrar tetas 😉
+▶ *#grop* + <mencion>
+> ➤ Manosear a alguien 😉
+▶ *#lickpussy* + <mencion>
+> ➤ Lamer un coño 😉
+▶ *#rule34 • #r34* + [Tags]
+> ➤ Buscar imagenes en Rule34 (+18! 🔞🖼)
+▶ *#sixnine • #69* + <mencion>
+> ➤ Haz un 69 con alguien 😉
+▶ *#spank • #nalgada* + <mencion>
+> ➤ Dar una nalgada 😉
+▶ *#suckboobs* + <mencion>
+> ➤ Chupar tetas 😉
+▶ *#undress • #encuerar* + <mencion>
+> ➤ Desnudar a alguien 😉
+▶ *#yuri • #tijeras* + <mencion>
+> ➤ Hacer tijeras. 😉
+╰───────────────
 
-🔞 Cositas para mayores de 18 🔞
-*(Estos comandos son solo para amiguitos que ya son mayores de edad. ¡Úsenlos con mucha discreción y responsabilidad, por favor! 🙏)*
-🐰 *#anal* + <mencion> ➢ (Solo para adultos 😉)
-💭 *#waifu* ➢ ¡Encuentra una waifu un poco atrevida! 🔥💖
-🧸 *#bath* + <mencion> ➢ ¡Hora del baño! 🛁💦
-🐇 *#blowjob • #mamada • #bj* + <mencion> ➢ (Solo para adultos 😉)
-🌷 *#boobjob* + <mencion> ➢ (Solo para adultos 😉)
-🎀 *#cum* + <mencion> ➢ (Solo para adultos 😉)
-🍓 *#fap* + <mencion> ➢ (Solo para adultos 😉)
-💖 *#ppcouple • #ppcp* ➢ ¡Fotos lindas para parejas o amigos! 💕✨
-✨ *#footjob* + <mencion> ➢ (Solo para adultos 😉)
-🐰 *#fuck • #coger • #fuck2* + <mencion> ➢ (Solo para adultos 😉)
-💭 *#cafe • #coffe* ➢ ¡Tomemos un cafecito juntos! ☕😊
-🧸 *#violar • #perra* + <mencion> ➢ (Solo en juego! 😈❌)
-🐇 *#grabboobs* + <mencion> ➢ (Solo para adultos 😉)
-🌷 *#grop* + <mencion> ➢ (Solo para adultos 😉)
-🎀 *#lickpussy* + <mencion> ➢ (Solo para adultos 😉)
-🍓 *#rule34 • #r34* + [Tags] ➢ Busca imágenes (Solo para adultos! 🔞🖼️)
-💖 *#sixnine • #69* + <mencion> ➢ (Solo para adultos 😉)
-✨ *#spank • #nalgada* + <mencion> ➢ (Solo para adultos 😉)
-🐰 *#suckboobs* + <mencion> ➢ (Solo para adultos 😉)
-💭 *#undress • #encuerar* + <mencion> ➢ (Solo para adultos 😉)
-🧸 *#yuri • #tijeras* + <mencion> ➢ (Solo para adultos 😉)
+╭─── ◆ GAMES ◆ ───
+> ❀ *Comandos para jugar con tus amigos.*
+▶ *#amistad • #amigorandom*
+> ➤ ¡Haz un nuevo amigo al azar! 🥰🫂
+▶ *#chaqueta • #jalamela*
+> ➤ Hacerte una chaqueta. (Juego divertido! 🤭😜)
+▶ *#chiste*
+> ➤ ¡Te cuento el chiste más gracioso! 😂🎤
+▶ *#consejo*
+> ➤ ¡Te doy un consejito para tu día! ★👍
+▶ *#doxeo • #doxear* + <mencion>
+> ➤ Simular un doxeo falso. (Broma pesada! 😉😂)
+▶ *#facto*
+> ➤ ¡Un dato curioso! 🤓💡
+▶ *#formarpareja*
+> ➤ ¡Encuentra tu pareja perfecta! ♥💑
+▶ *#formarpareja5*
+> ➤ Forma 5 parejas diferentes. 😂♥
+▶ *#frase*
+> ➤ ¡Una frase linda! ♥📝
+▶ *#huevo*
+> ➤ (Juego divertido! 🥚🤣)
+▶ *#chupalo* + <mencion>
+> ➤ (Juego divertido! 😜🤭)
+▶ *#aplauso* + <mencion>
+> ➤ ¡Un aplauso para ti! 👏★
+▶ *#marron* + <mencion>
+> ➤ (Broma de color 😉🎨)
+▶ *#suicidar*
+> ➤ (Solo en juego, ¡ánimo! 😥☠)
+▶ *#iq • #iqtest* + <mencion>
+> ➤ ¡Calcula qué tan inteligente! 🤔🧠
+▶ *#meme*
+> ➤ El bot te envía un meme aleatorio. 😂🖼
+▶ *#morse*
+> ➤ Escribir en código secreto. •-•• ---
+▶ *#nombreninja*
+> ➤ ¡Descubre tu nombre ninja! 🥷★
+▶ *#paja • #pajeame*
+> ➤ El bot te hace una paja. (Juego divertido! 🤭😜)
+▶ *#personalidad* + <mencion>
+> ➤ La bot busca tu personalidad. ★😊
+▶ *#piropo*
+> ➤ ¡Te digo algo bonito! 🥰♥
+▶ *#pregunta*
+> ➤ ¡Cualquier pregunta! ❓💡
+▶ *#ship • #pareja*
+> ➤ Probabilidad de enamorarte. 💕★
+▶ *#sorteo*
+> ➤ Empezar un sorteo. 🎉🎁
+▶ *#top*
+> ➤ Empezar un top de personas. 🏆★
+▶ *#formartrio* + <mencion>
+> ➤ Forma un trío! 😉♥
+▶ *#ahorcado*
+> ➤ Jugar el juego ahorcado. 😬✍
+▶ *#genio*
+> ➤ ¡Pregúntale al Genio misterioso! ★🔮
+▶ *#mates • #matematicas*
+> ➤ Jugar matemáticas. 🔢🤓
+▶ *#ppt*
+> ➤ Jugar piedra papel o tijeras. ✊✋✌
+▶ *#sopa • #buscarpalabra*
+> ➤ Palabras escondidas. 🔎📜
+▶ *#pvp • #suit* + <mencion>
+> ➤ Jugar un pvp contra otro usuario. ⚔🎮
+▶ *#ttt*
+> ➤ Crear una sala de juego. ✗○Game
+╰───────────────
 
-₊˚⊹ ꒰ Cositas de Juegos ꒱ ‧₊˚
-🐇 *#amistad • #amigorandom* ➢ ¡Haz un nuevo amigo al azar! 🥰🫂
-🌷 *#chaqueta • #jalamela* ➢ (Juego divertido! 🤭😜)
-🎀 *#chiste* ➢ ¡Te cuento el chiste más gracioso! 😂🎤
-🍓 *#consejo* ➢ ¡Te doy un consejito para tu día! ✨👍
-💖 *#doxeo • #doxear* + <mencion> ➢ (Una broma pesada! 😉😂)
-✨ *#facto* ➢ ¡Un dato curioso para ti! 🤓💡
-🐰 *#formarpareja* ➢ ¡Encuentra tu pareja perfecta! ❤️💑
-💭 *#formarpareja5* ➢ ¡5 parejas diferentes para reír! 😂💖
-🧸 *#frase* ➢ ¡Una frase linda para alegrarte el día! 💖📝
-🐇 *#huevo* ➢ (Juego divertido! 🥚🤣)
-🌷 *#chupalo* + <mencion> ➢ (Juego divertido! 😜🤭)
-🎀 *#aplauso* + <mencion> ➢ ¡Un aplauso para ti! 👏✨
-🍓 *#marron* + <mencion> ➢ (Broma de color 😉🎨)
-💖 *#suicidar* ➢ (Solo en juego, ¡ánimo! 😥❌)
-✨ *#iq • #iqtest* + <mencion> ➢ ¡Calcula qué tan inteligente eres! 🤔🧠
-🐰 *#meme* ➢ ¡El meme más gracioso! 😂🖼️
-💭 *#morse* ➢ ¡Escribe en código secreto! •-•• ---
-🧸 *#nombreninja* ➢ ¡Descubre tu nombre ninja! 🥷✨
-🐇 *#paja • #pajeame* ➢ (Juego divertido! 🤭😜)
-🌷 *#personalidad* + <mencion> ➢ ¿Cuál es tu linda personalidad? ✨😊
-🎀 *#piropo* ➢ ¡Te digo algo bonito! 🥰💖
-🍓 *#pregunta* ➢ ¡Hazme cualquier pregunta que quieras! ❓💡
-💖 *#ship • #pareja* ➢ ¿Qué tan compatibles son? 💕✨
-✨ *#sorteo* ➢ ¡Empecemos un sorteo divertido! 🎉🎁
-🐰 *#top* ➢ ¡Un top genial! 🏆✨
-💭 *#formartrio* + <mencion> ➢ ¡Forma un trío! 😉💖
-🧸 *#ahorcado* ➢ ¡Juega Ahorcado conmigo! 😬✍️
-🐇 *#genio* ➢ ¡Pregúntale al Genio misterioso! ✨🔮
-🌷 *#mates • #matematicas* ➢ ¡Juega matemáticas y aprende! 🔢🤓
-🎀 *#ppt* ➢ ¡Juega Piedra, Papel o Tijeras! ✊✋✌️
-🍓 *#sopa • #buscarpalabra* ➢ ¡Encuentra las palabras escondidas! 🔎📜
-💖 *#pvp • #suit* + <mencion> ➢ ¡Un duelo amistoso! ⚔️🎮
-✨ *#ttt* ➢ ¡Crea una sala de Tres en Raya! ❌⭕GameBoard
-
-💖 Si necesitas algo, solo pregúntame. UwU 💖
-
-> Powered By Wirk 🫆 
+> *© powered by Wirk 🫆*
 `.trim()
 
   await conn.sendMessage(m.chat, {
@@ -309,23 +582,23 @@ Soy *Mai*, tu amiguita bot que te desea un lindo dia 🥰
     mentionedJid: [m.sender, userId],
     isForwarded: true,
     forwardedNewsletterMessageInfo: {
-      newsletterJid: channelRD.id,
-      newsletterName: channelRD.name,
+      newsletterJid: channelRD.id, // Asegúrate de que channelRD esté definido
+      newsletterName: channelRD.name, // Asegúrate de que channelRD esté definido
       serverMessageId: -1,
     },
     forwardingScore: 16,
     externalAdReply: {
-      title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒🐤",
-      body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 💛",
-      thumbnailUrl: banner,
-      sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
-      mediaType: 1,
+      title: "♦ Mai ♦ World Of Bot", // Título del reply con símbolos
+      body: "➤ Powered By Wirk ★", // Cuerpo del reply con símbolos
+      thumbnailUrl: banner, // Asegúrate de que banner esté definido (URL o ruta a la imagen)
+      sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Asegúrate de que la URL sea correcta
+      mediaType: 1, // Tipo de media (1 para imagen)
       showAdAttribution: true,
       renderLargerThumbnail: true
     }
   }
 }, { quoted: m });
-    
+
 }
 
 handler.help = ['menu']
@@ -335,14 +608,13 @@ handler.command = ['menu', 'menú', 'help']
 export default handler
 
 function clockString(ms) {
-    let seconds = Math.floor((ms / 1000) % 60)
-    let minutes = Math.floor((ms / (1000 * 60)) % 60)
-    let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
-    // Formato un poco más suave, usando "h", "m", "s"
+    let h = Math.floor(ms / 3600000);
+    let m = Math.floor((ms % 3600000) / 60000);
+    let s = Math.floor((ms % 60000) / 1000);
     let parts = [];
-    if (hours > 0) parts.push(`${hours}h`);
-    if (minutes > 0) parts.push(`${minutes}m`);
-    if (seconds > 0 || parts.length === 0) parts.push(`${seconds}s`); // always show seconds, or if everything else is zero
+    if (h > 0) parts.push(`${h}h`);
+    if (m > 0) parts.push(`${m}m`);
+    if (s > 0 || parts.length === 0) parts.push(`${s}s`);
 
-    return parts.join(' '); // Joining with spaces
+    return parts.join(' ');
 }
