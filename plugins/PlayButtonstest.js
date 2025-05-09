@@ -24,7 +24,7 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
       body: dev, // Assuming 'dev' is defined elsewhere
       // Editado: Miniatura quitada
       // thumbnail: 'https://files.catbox.moe/vrcl7s.jpg',
-      sourceUrl: redes, // Assuming 'redes' is defined elsewhere
+      mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Assuming 'redes' is defined elsewhere
       mediaType: 1,
       renderLargerThumbnail: false
     }
