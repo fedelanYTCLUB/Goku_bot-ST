@@ -65,10 +65,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
-      ptt: false,
+      ptt: true,
       fileName: `🎵 ${video.title}.mp3`, // Usamos el título del primer paso para el nombre del archivo
       contextInfo: {
-        forwardingScore: 999,
+        forwardingScore: 9,
         isForwarded: true
       }
     }, { quoted: m });
