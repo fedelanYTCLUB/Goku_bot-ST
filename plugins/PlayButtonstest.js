@@ -20,11 +20,11 @@ var handler = async (m, { conn, args, usedPrefix, command }) => {
       serverMessageId: -1
     },
     externalAdReply: {
-      title: packname,
-      body: dev, // Assuming 'dev' is defined elsewhere
+      title: packname, // Aquí aparece "Mai"
+      body: dev, // Aquí aparece el texto de la variable 'dev' (como "Mai Wirk Dev")
       // Editado: Miniatura quitada
       // thumbnail: 'https://files.catbox.moe/vrcl7s.jpg',
-      mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Assuming 'redes' is defined elsewhere
+      mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Este es el enlace que se abre al tocar
       mediaType: 1,
       renderLargerThumbnail: false
     }
