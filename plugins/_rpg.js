@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-// Import necessary modules from your bot framework if needed for specific interactions
-// For example, if you need to send interactive messages or get profile pictures:
+// Import necessary modules from your bot framework if needed
 // import pkg from '@whiskeysockets/baileys';
 // const { generateWAMessageFromContent, proto } = pkg;
 // import fetch from 'node-fetch'; // If your environment supports it
@@ -9,16 +8,29 @@ import path from 'path';
 // --- Define the path to the database file ---
 const DATABASE_FILE = path.join('./src/database', 'database.json');
 
-// --- Constants (Matching your example) ---
-const COOLDOWN_MINING = 5 * 60 * 1000; // 5 minutos
-const COOLDOWN_FARMING = 3 * 60 * 1000; // 3 minutos
-const COOLDOWN_HUNTING = 4 * 60 * 1000; // 4 minutos
-const COOLDOWN_ADVENTURE = 10 * 60 * 1000; // 10 minutos
-const COOLDOWN_DUEL = 30 * 60 * 1000; // 30 minutos
-const COOLDOWN_ROBBERY = 60 * 60 * 1000; // 1 hora
-const COOLDOWN_MARRIAGE_ACTION = 60 * 1000; // Cooldown for proposing/accepting marriage (1 minute for simulation)
-const DAILY_COOLDOWN = 24 * 60 * 60 * 1000; // 24 horas for daily claim
-const SOCIAL_COOLDOWN = 1 * 60 * 1000; // 1 minute cooldown for social command
+// --- Constants ---
+const STARTING_CREDITS = 500;
+const STARTING_FUEL = 100;
+const STARTING_HULL = 100;
+const STARTING_CARGO = 50; // Starting cargo capacity
+
+const FUEL_COST_PER_JUMP = 20;
+const REPAIR_COST_PER_HULL = 5; // Credits per hull point repaired
+const REFUEL_COST_PER_UNIT = 2; // Credits per fuel unit (cost in Fuel Cells, not credits)
+const FUEL_PER_FUEL_CELL = 10; // Fuel gained per Fuel Cell used
+
+const COOLDOWN_EXPLORE = 2 * 60 * 1000; // 2 minutes
+const COOLDOWN_MINE = 1 * 60 * 1000; // 1 minute
+const COOLDOWN_SCAN = 30 * 1000; // 30 seconds
+const COOLDOWN_COMBAT = 5 * 60 * 1000; // 5 minutes
+
+// Resource values (for selling)
+const RESOURCE_VALUES = {
+    'minerales': 10,
+    'aleaciones': 25,
+    'celulasdecombustible': 50,
+    'chatarra': 5
+};
 
 // --- Database Handling ---
 
@@ -30,7 +42,7 @@ const ensureDatabase = () => {
         console.log(`Created database directory: ${dbDir}`);
     }
     if (!fs.existsSync(DATABASE_FILE)) {
-        fs.writeFileSync(DATABASE_FILE, JSON.stringify({ users: {}, groups: {}, clans: {} }, null, 4));
+        fs.writeFileSync(DATABASE_FILE, JSON.stringify({ spaceUsers: {} }, null, 4)); // Use spaceUsers key
         console.log(`Created empty database file: ${DATABASE_FILE}`);
     }
 };
@@ -41,15 +53,11 @@ const loadDatabase = () => {
     try {
         const data = fs.readFileSync(DATABASE_FILE, 'utf8');
         const db = JSON.parse(data);
-        // Ensure top-level keys exist even if the file was empty or incomplete
-        if (!db.users) db.users = {};
-        if (!db.groups) db.groups = {};
-        if (!db.clans) db.clans = {};
+        if (!db.spaceUsers) db.spaceUsers = {}; // Ensure spaceUsers key exists
         return db;
     } catch (e) {
         console.error(`Error loading database from ${DATABASE_FILE}:`, e);
-        // Return empty structure on error
-        return { users: {}, groups: {}, clans: {} };
+        return { spaceUsers: {} }; // Return empty structure on error
     }
 };
 
@@ -64,1598 +72,656 @@ const saveDatabase = (db) => {
     }
 };
 
-// --- Player Data Structure (Matching your example) ---
+// --- Player Data Structure ---
 
 const getDefaultUserData = (userId, userName) => {
     return {
-        // Basic data
-        exp: 0, limit: 10, lastclaim: 0, registered: true, name: userName, // Assume registered is true on first interaction
-        // RPG - Resources
-        health: 100, stamina: 100, mana: 20,
-        gold: 50, diamond: 0, emerald: 0, ruby: 0, iron: 0, stone: 0, wood: 0, leather: 0, string: 0,
-        herb: 0, food: 5, potion: 1, seeds: 0, crops: 0,
-        // RPG - Equipamiento (represented by quantity/level)
-        weapon: 0, armor: 0, pickaxe: 0, axe: 0, fishingrod: 0,
-        // RPG - Habilidades (basic stats)
-        strength: 5, agility: 5, intelligence: 5, charisma: 5, vitality: 5,
-        // RPG - Estadísticas (combat/social)
-        level: 1, kills: 0, deaths: 0, wins: 0, losses: 0,
-        // RPG - Social
-        reputation: 0, guild: '', clan: '', clanRank: '', family: '', marriage: '', children: [],
-        // RPG - Propiedad (level or quantity)
-        house: 0, farm: 0, barn: 0, workshop: 0, shop: 0,
-        // RPG - Temporizado (timestamps)
-        lastadventure: 0, lastmining: 0, lastfarming: 0, lasthunting: 0, lastduel: 0, lastrobbery: 0, lastmarriage: 0, // Using lastmarriage for cooldown
-        lastsocial: 0, // Cooldown for social command
-        // RPG - Mascotas
-        pet: 0, petExp: 0, petLevel: 1, petName: '',
-        lastpetfeed: 0,
-        lastpetadventure: 0,
-        // RPG - Misiones
-        activeQuest: null, // { type: 'hunt', name: 'Caza', target: 5, reward: { gold: 500, exp: 300 } }
-        questProgress: 0,
+        name: userName,
+        shipName: `Explorador de ${userName}`, // Default ship name in Spanish
+        credits: STARTING_CREDITS,
+        hull: STARTING_HULL,
+        maxHull: STARTING_HULL,
+        shields: 0, // Start with no shields
+        maxShields: 0,
+        fuel: STARTING_FUEL,
+        maxFuel: STARTING_FUEL,
+        cargoCapacity: STARTING_CARGO,
+        cargo: { // Resources carried - keys in Spanish for easier access with RESOURCE_VALUES
+            minerales: 0,
+            aleaciones: 0,
+            celulasdecombustible: 0,
+            chatarra: 0,
+            // Add other potential items here
+        },
+        location: 'Sector 001', // Starting sector
+        pilotRank: 1, // Starting rank
+        // Timestamps for cooldowns
+        lastExplore: 0,
+        lastMine: 0,
+        lastScan: 0,
+        lastCombat: 0,
+        // Equipment levels (simple representation)
+        miningLaserLevel: 1,
+        weaponLevel: 1,
+        shieldGeneratorLevel: 0,
+        cargoPodLevel: 0, // Increases cargo capacity
+        // Combat stats
+        kills: 0,
+        deaths: 0,
     };
 };
-
-// --- Clan Data Structure ---
-const getDefaultClanData = (clanName, leaderJid) => {
-    return {
-        name: clanName,
-        leader: leaderJid,
-        members: [leaderJid],
-        level: 1,
-        exp: 0,
-        territory: '',
-        treasury: 1000, // Initial clan gold
-        founded: Date.now(),
-        wars: {},
-        alliances: [],
-        lastTerritoryClaim: 0,
-        lastTerritoryUpgrade: 0,
-    };
-};
-
 
 // --- Helper Functions ---
 
-const getPlayer = (db, userId, userName) => {
-    if (!db.users[userId]) {
-        db.users[userId] = getDefaultUserData(userId, userName);
-        console.log(`Created new player data for: ${userName} (${userId})`);
+const getSpaceUser = (db, userId, userName) => {
+    if (!db.spaceUsers[userId]) {
+        db.spaceUsers[userId] = getDefaultUserData(userId, userName);
+        console.log(`Created new space user data for: ${userName} (${userId})`);
     }
-    return db.users[userId];
-};
-
-const addExperience = (player, amount) => {
-    player.exp += amount;
-    // Simple leveling formula (can be made more complex)
-    let xpNeededForLevel = player.level * 100 + (player.level - 1) * 50;
-    const levelUpMessages = [];
-    while (player.exp >= xpNeededForLevel) {
-        player.level += 1;
-        player.exp -= xpNeededForLevel;
-        xpNeededForLevel = player.level * 100 + (player.level - 1) * 50; // Update XP needed for next level
-        // Increase stats on level up
-        player.max_health = (player.max_health || 100) + 20;
-        player.health = player.max_health; // Heal on level up
-        player.attack = (player.attack || 10) + 5;
-        levelUpMessages.push(`🎉 ¡${player.name} subió al nivel ${player.level}!`);
-    }
-    return levelUpMessages; // Return messages to be sent by the bot
+    return db.spaceUsers[userId];
 };
 
 const formatCooldownTime = (msLeft) => {
     const seconds = Math.ceil(msLeft / 1000);
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+    const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
     const parts = [];
-    if (hours > 0) parts.push(`${hours} hora${hours > 1 ? 's' : ''}`);
     if (minutes > 0) parts.push(`${minutes} minuto${minutes > 1 ? 's' : ''}`);
     if (remainingSeconds > 0 || parts.length === 0) parts.push(`${remainingSeconds} segundo${remainingSeconds > 1 ? 's' : ''}`);
 
     return parts.join(' y ');
 };
 
+const getCurrentCargoWeight = (cargo) => {
+    let weight = 0;
+    for (const item in cargo) {
+        // Assuming each unit of resource/item takes 1 unit of cargo space
+        weight += cargo[item];
+    }
+    return weight;
+};
 
-// --- RPG Command Handler ---
 
-// This is the main function you will call from your bot's message handler
-const handler = async (m, { conn, args, usedPrefix, command, isPrems }) => {
+// --- Space RPG Command Handler ---
 
-    // Load the database at the start of each command processing
+const handler = async (m, { conn, args, usedPrefix, command }) => {
+
     const db = loadDatabase();
-    const user = getPlayer(db, m.sender, conn.getName(m.sender)); // Get or create user data
-
+    const user = getSpaceUser(db, m.sender, conn.getName(m.sender) || 'Piloto'); // Get or create user data, provide default name
     const currentTime = Date.now(); // Get current timestamp
 
     // --- Help Message / Main Menu ---
-    if (!args[0]) {
-        // You can use your bot framework's interactive message feature here
-        // For now, returning the help text as a string
+    if (!args[0] || args[0].toLowerCase() === 'help' || args[0].toLowerCase() === 'ayuda') {
         const helpText = `
-╔══════════════════════
-║ 🌟 𝐑𝐏𝐆-𝐔𝐥𝐭𝐫𝐚 𝐕𝟑 🌟
-╠══════════════════════
-║ ⚔️ *COMANDOS DE ACCIÓN* ⚔️
-║
-║ ➤ ${usedPrefix}rpg profile
-║ ➤ ${usedPrefix}rpg adventure
-║ ➤ ${usedPrefix}rpg mine
-║ ➤ ${usedPrefix}rpg hunt
-║ ➤ ${usedPrefix}rpg farm
-║ ➤ ${usedPrefix}rpg fish (No implementado)
-║ ➤ ${usedPrefix}rpg craft (No implementado)
-║ ➤ ${usedPrefix}rpg sell [recurso] [cantidad]
-║ ➤ ${usedPrefix}rpg buy [articulo] [cantidad]
-║ ➤ ${usedPrefix}rpg shop
-║
-╠══════════════════════
-║ 🏆 *SISTEMA SOCIAL* 🏆
-║
-║ ➤ ${usedPrefix}rpg duel @usuario (Simulado)
-║ ➤ ${usedPrefix}rpg rob @usuario
-║ ➤ ${usedPrefix}rpg marry @usuario (Simulado)
-║ ➤ ${usedPrefix}rpg divorce
-║ ➤ ${usedPrefix}rpg family (No implementado)
-║ ➤ ${usedPrefix}rpg adopt @usuario (No implementado)
-║ ➤ ${usedPrefix}rpg guild (No implementado)
-║ ➤ ${usedPrefix}rpg clan
-║ ➤ ${usedPrefix}rpg love (Buscar pareja)
-║ ➤ ${usedPrefix}rpg social (Interacción social aleatoria)
-║
-╠══════════════════════
-║ 🏠 *PROPIEDADES* 🏠
-║
-║ ➤ ${usedPrefix}rpg buyhouse
-║ ➤ ${usedPrefix}rpg buyfarm
-║ ➤ ${usedPrefix}rpg workshop (No implementado)
-║ ➤ ${usedPrefix}rpg buildshop (No implementado)
-║
-╠══════════════════════
-║ 🐶 *MASCOTAS* 🐱
-║
-║ ➤ ${usedPrefix}rpg pet
-║ ➤ ${usedPrefix}rpg petadopt [tipo]
-║ ➤ ${usedPrefix}rpg petfeed
-║ ➤ ${usedPrefix}rpg petstats (Igual que pet)
-║ ➤ ${usedPrefix}rpg petadventure
-║
-╠══════════════════════
-║ 🌐 *MULTIJUGADOR* 🌐
-║
-║ ➤ ${usedPrefix}rpg createclan [nombre]
-║ ➤ ${usedPrefix}rpg joinclan [nombre] (No implementado)
-║ ➤ ${usedPrefix}rpg leaveclan (No implementado)
-║ ➤ ${usedPrefix}rpg clanwar (No implementado)
-║ ➤ ${usedPrefix}rpg territory [action]
-║ ➤ ${usedPrefix}rpg alliance (No implementado)
-║
-╠══════════════════════
-║ 📜 *HISTORIA Y MISIONES* 📜
-║
-║ ➤ ${usedPrefix}rpg quest [claim]
-║ ➤ ${usedPrefix}rpg daily
-║ ➤ ${usedPrefix}rpg weekly (No implementado)
-║ ➤ ${usedPrefix}rpg story (No implementado)
-║ ➤ ${usedPrefix}rpg dungeon (No implementado)
-║
-╠══════════════════════
-║ ℹ️ *SOPORTE* ℹ️
-║
-║ ➤ ${usedPrefix}rpg soporte
-╚══════════════════════
+🚀 *Comandos del Space RPG* 🚀
+
+¡Bienvenido, Piloto! Tu aventura en el cosmos te espera.
+
+*Nave y Piloto:*
+➤ ${usedPrefix}space start - Comienza tu viaje (crea un nuevo perfil).
+➤ ${usedPrefix}space profile - Ve las estadísticas de tu nave y piloto.
+➤ ${usedPrefix}space inventory - Revisa tu carga y recursos.
+➤ ${usedPrefix}space repair - Repara el casco de tu nave (cuesta créditos).
+➤ ${usedPrefix}space refuel - Usa Células de Combustible para repostar tu nave.
+➤ ${usedPrefix}space upgrade [sistema] - Mejora los sistemas de la nave (ej: casco, carga, arma, escudo, mineria).
+
+*Exploración y Recolección:*
+➤ ${usedPrefix}space explore - Aventúrate en lo desconocido (cuesta combustible, encuentra recursos/eventos).
+➤ ${usedPrefix}space jump [sector] - Salta a un sector diferente (cuesta combustible).
+➤ ${usedPrefix}space mine - Mina asteroides en tu sector actual (requiere Láser de Minería).
+➤ ${usedPrefix}space scan - Escanea el área en busca de recursos o anomalías.
+
+*Economía:*
+➤ ${usedPrefix}space trade [comprar/vender] [articulo] [cantidad] - Compra o vende recursos/artículos.
+➤ ${usedPrefix}space prices - Ve los precios actuales del mercado (simulados).
+
+*Combate:*
+➤ ${usedPrefix}space attack [@usuario] - Desafía a otro piloto a un combate simulado.
+
+*Info:*
+➤ ${usedPrefix}space help - Muestra este mensaje de ayuda.
+
+¡Embárca en tu búsqueda cósmica!
 `;
-        // If using baileys interactive messages:
-        /*
-        try {
-             const interactiveMessage = { // ... your interactive message object from JS example ... };
-             const message = generateWAMessageFromContent(m.chat, { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 }, interactiveMessage: interactiveMessage }}}, { quoted: m });
-             await conn.relayMessage(m.chat, message.message, { messageId: message.key.id });
-             return; // Stop processing after sending menu
-        } catch (error) {
-             console.error('Error al generar menu RPG:', error);
-             // Fallback to sending plain text help if interactive message fails
-             await conn.reply(m.chat, helpText, m);
-             return;
-        }
-        */
-        // For basic implementation, just reply with help text
         await conn.reply(m.chat, helpText, m);
         return;
     }
 
-    let type = (args[0] || '').toLowerCase();
-    const levelUpMessages = []; // To collect level up messages
+    let subCommand = args[0].toLowerCase();
 
     // --- Command Processing ---
-    switch (type) {
-        case 'profile':
-        case 'rpgprofile':
-            // Get profile picture (requires fetch or similar)
-            let pp;
-            try {
-                 // This part depends on your bot framework's function to get profile picture
-                 // Example using a hypothetical conn.profilePictureUrl:
-                 // pp = await conn.profilePictureUrl(m.sender, 'image');
-                 // If the above fails or you don't have it:
-                 pp = './src/avatar_contact.png'; // Fallback image
-            } catch {
-                 pp = './src/avatar_contact.png'; // Fallback image
-            }
+    switch (subCommand) {
+        case 'start':
+        case 'iniciar':
+             // Check if user already has a profile
+             if (db.spaceUsers[m.sender] && db.spaceUsers[m.sender].hull > 0) {
+                 await conn.reply(m.chat, `😅 Ya tienes un perfil de piloto activo. Usa ${usedPrefix}space profile para ver tus estadísticas.`, m);
+                 return;
+             }
+             // Create a new profile (getSpaceUser already does this if not exists, but this is for explicit start)
+             db.spaceUsers[m.sender] = getDefaultUserData(m.sender, conn.getName(m.sender) || 'Nuevo Piloto');
+             await conn.reply(m.chat, `🚀 ¡Bienvenido al espacio, ${db.spaceUsers[m.sender].name}! Tu nave, la '${db.spaceUsers[m.sender].shipName}', está lista para explorar. Usa ${usedPrefix}space profile para ver tus estadísticas iniciales.`, m);
+             break;
 
+        case 'profile':
+        case 'perfil':
             const profileText = `
-╔═══════════════════
-║ 📊 𝐏𝐄𝐑𝐅𝐈𝐋 𝐃𝐄 𝐉𝐔𝐆𝐀𝐃𝐎𝐑 📊
-╠═══════════════════
-║ 👤 *Nombre:* ${user.name}
-║ 🏅 *Nivel:* ${user.level}
-║ ✨ *Experiencia:* ${user.exp}
-║ ❤️ *Salud:* ${user.health}/${user.max_health || 100}
-║ ⚡ *Energía:* ${user.stamina}/100
-║ 🔮 *Maná:* ${user.mana}/20
-╠═══════════════════
-║ 💰 *Oro:* ${user.gold}
-║ 💎 *Diamantes:* ${user.diamond}
-║ 🟢 *Esmeraldas:* ${user.emerald}
-║ ❤️ *Rubíes:* ${user.ruby}
-╠═══════════════════
-║ ⚔️ *Fuerza:* ${user.strength}
-║ 🏃 *Agilidad:* ${user.agility}
-║ 🧠 *Inteligencia:* ${user.intelligence}
-║ 🗣️ *Carisma:* ${user.charisma}
-║ 💪 *Vitalidad:* ${user.vitality}
-╠═══════════════════
-║ 🏠 *Casa:* ${user.house ? 'Nivel ' + user.house : 'No tiene'}
-║ 🌾 *Granja:* ${user.farm ? 'Nivel ' + user.farm : 'No tiene'}
-║ 🛡️ *Clan:* ${user.clan || 'No pertenece'}
-║ 👑 *Rango en Clan:* ${user.clanRank || 'N/A'}
-║ 👨‍👩‍👧‍👦 *Familia:* ${user.family || 'No tiene'}
-║ 💍 *Matrimonio:* ${user.marriage ? (db.users[user.marriage]?.name || 'Desconocido') : 'Soltero/a'}
-╠═══════════════════
-║ 🐾 *Mascota:* ${user.pet ? (user.petName || 'Sin nombre') + ' (Nivel ' + user.petLevel + ')' : 'No tiene'}
-╚═══════════════════
+👤 *Piloto:* ${user.name}
+🚀 *Nave:* '${user.shipName}' (Rango Piloto ${user.pilotRank})
+
+*Estado de la Nave:*
+❤️ Casco: ${user.hull}/${user.maxHull}
+🛡️ Escudos: ${user.shields}/${user.maxShields}
+⛽ Combustible: ${user.fuel}/${user.maxFuel}
+📦 Carga: ${getCurrentCargoWeight(user.cargo)}/${user.cargoCapacity}
+
+*Recursos:*
+💰 Créditos: ${user.credits}
+⚙️ Láser de Minería: Nivel ${user.miningLaserLevel}
+🗡️ Arma: Nivel ${user.weaponLevel}
+🛡️ Generador de Escudos: Nivel ${user.shieldGeneratorLevel}
+📦 Cápsulas de Carga: Nivel ${user.cargoPodLevel}
+
+*Ubicación:*
+📍 Sector Actual: ${user.location}
+
+*Estadísticas de Combate (Simulado):*
+Eliminaciones: ${user.kills}, Muertes: ${user.deaths}
 `;
-            // Send the profile picture and text (requires your bot framework's method)
-            await conn.sendFile(m.chat, pp, 'profile.jpg', profileText, m);
+            await conn.reply(m.chat, profileText, m);
             break;
 
-        case 'adventure':
-        case 'aventura':
-            if (currentTime - user.lastadventure < COOLDOWN_ADVENTURE) {
-                const timeLeft = COOLDOWN_ADVENTURE - (currentTime - user.lastadventure);
-                await conn.reply(m.chat, `⏱️ Debes esperar ${formatCooldownTime(timeLeft)} antes de otra aventura.`, m);
-                return;
-            }
-            if (user.stamina < 20) {
-                await conn.reply(m.chat, `😫 Estás demasiado cansado para aventurarte. Necesitas recuperar energía.`, m);
-                return;
-            }
+        case 'inventory':
+        case 'inventario':
+            let inventoryText = `📦 *Carga de la Nave '${user.shipName}':*\n\n`;
+            const cargoItems = Object.entries(user.cargo).filter(([item, amount]) => amount > 0);
 
-            const adventureRewards = { exp: 0, gold: 0, items: [] };
-            let adventureText = '';
-
-            const encounter = Math.random();
-
-            if (encounter < 0.1) {
-                adventureText = `🐉 *¡Te has encontrado con un Dragón Ancestral!*\n\n`;
-                const successChance = (user.strength + user.agility + user.intelligence) / 60;
-                const success = Math.random() < successChance;
-
-                if (success) {
-                    adventureText += `Con gran valentía y estrategia, has logrado derrotar al Dragón. Entre sus tesoros encuentras:`;
-                    adventureRewards.exp = 1000;
-                    adventureRewards.gold = 800;
-                    adventureRewards.items.push('💎 5 Diamantes');
-                    adventureRewards.items.push('❤️ 3 Rubíes');
-                    user.diamond += 5;
-                    user.ruby += 3;
-                } else {
-                    adventureText += `El Dragón era demasiado fuerte. Has logrado escapar, pero con graves heridas.`;
-                    user.health -= 50;
-                    if (user.health < 1) user.health = 1;
-                    adventureRewards.exp = Math.floor(random.int(100, 500) / 3); // Base EXP from common encounter / 3
-                    adventureRewards.gold = Math.floor(random.int(50, 200) / 4); // Base Gold from common encounter / 4
-                }
-            } else if (encounter < 0.3) {
-                adventureText = `🧙‍♂️ *Te encuentras con un mercader místico*\n\n`;
-                adventureText += `Te ofrece un intercambio justo por tus habilidades. A cambio de ayudarlo a cruzar el bosque peligroso, te recompensa con:`;
-                adventureRewards.exp = 200;
-                adventureRewards.items.push('🧪 2 Pociones');
-                user.potion += 2;
-            } else if (encounter < 0.6) {
-                adventureText = `🏆 *¡Has encontrado un antiguo cofre del tesoro!*\n\n`;
-                adventureText += `Al abrirlo descubres un botín espléndido:`;
-                adventureRewards.gold = 300;
-                adventureRewards.items.push('🟢 2 Esmeraldas');
-                adventureRewards.items.push('🧩 Fragmento de mapa'); // Placeholder item
-                user.emerald += 2;
+            if (cargoItems.length === 0) {
+                inventoryText += "Tu bodega de carga está vacía.";
             } else {
-                adventureText = `👾 *Te has adentrado en un nido de monstruos*\n\n`;
-                adventureText += `Después de una ardua batalla, logras salir victorioso. Recolectas:`;
-                adventureRewards.exp = random.int(100, 500);
-                adventureRewards.gold = random.int(50, 200);
-                adventureRewards.items.push('🧶 5 Cuerdas');
-                adventureRewards.items.push('🧱 3 Piedras');
-                adventureRewards.items.push('🥩 2 Carnes');
-                user.string += 5;
-                user.stone += 3;
-                user.food += 2;
+                inventoryText += cargoItems.map(([item, amount]) => `• ${item.charAt(0).toUpperCase() + item.slice(1)}: ${amount}`).join('\n');
+            }
+            inventoryText += `\n\nCapacidad: ${getCurrentCargoWeight(user.cargo)}/${user.cargoCapacity}`;
+
+            await conn.reply(m.chat, inventoryText, m);
+            break;
+
+        case 'explore':
+        case 'explorar':
+            if (currentTime - user.lastExplore < COOLDOWN_EXPLORE) {
+                const timeLeft = COOLDOWN_EXPLORE - (currentTime - user.lastExplore);
+                await conn.reply(m.chat, `⏱️ Tu nave aún está escaneando el sector. Puedes explorar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
+                return;
+            }
+            if (user.fuel < 5) { // Small fuel cost for exploring
+                 await conn.reply(m.chat, `⛽ Necesitas al menos 5 de combustible para explorar el sector.`, m);
+                 return;
             }
 
-            // Update user data
-            levelUpMessages.push(...addExperience(user, adventureRewards.exp));
-            user.gold += adventureRewards.gold;
-            user.lastadventure = currentTime;
-            user.stamina -= 20;
-            if (user.stamina < 0) user.stamina = 0;
+            user.fuel -= 5;
+            user.lastExplore = currentTime;
 
-            const finalAdventureText = `
-${adventureText}
+            const explorationEvent = Math.random();
+            let exploreResult = `🚀 Explorando el sector ${user.location}...\n\n`;
+            const cargoWeight = getCurrentCargoWeight(user.cargo);
 
-*🎁 Recompensas obtenidas:*
-✨ ${adventureRewards.exp} EXP
-💰 ${adventureRewards.gold} Oro
-${adventureRewards.items.map(item => `• ${item}`).join('\n') || 'Ninguno'}
+            if (explorationEvent < 0.1) {
+                // Find valuable resources
+                exploreResult += `✨ ¡Has descubierto un rico campo de asteroides!`;
+                const mineralsFound = Math.floor(Math.random() * 20) + 10;
+                const alloysFound = Math.floor(Math.random() * 10) + 5;
+                const totalFound = mineralsFound + alloysFound;
 
-❤️ Salud actual: ${user.health}/${user.max_health || 100}
-🔋 Energía: ${user.stamina}/100
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + finalAdventureText, m);
+                if (cargoWeight + totalFound <= user.cargoCapacity) {
+                    user.cargo.minerales += mineralsFound;
+                    user.cargo.aleaciones += alloysFound;
+                    exploreResult += `\nRecogiste ${mineralsFound} Minerales y ${alloysFound} Aleaciones.`;
+                } else {
+                    const canTake = user.cargoCapacity - cargoWeight;
+                    if (canTake > 0) {
+                        // Simple distribution if cargo is limited
+                        const takeMinerals = Math.min(mineralsFound, Math.floor(canTake / 2));
+                        const takeAlloys = Math.min(alloysFound, canTake - takeMinerals);
+                        user.cargo.minerales += takeMinerals;
+                        user.cargo.aleaciones += takeAlloys;
+                        exploreResult += `\nTu carga está casi llena. Solo pudiste recoger ${takeMinerals} Minerales y ${takeAlloys} Aleaciones.`;
+                    } else {
+                        exploreResult += `\nTu bodega de carga está llena. No pudiste recoger nada.`;
+                    }
+                }
+
+            } else if (explorationEvent < 0.3) {
+                // Encounter derelict ship
+                exploreResult += ` salvageable.`;
+                const scrapFound = Math.floor(Math.random() * 15) + 5;
+                const fuelCellsFound = Math.floor(Math.random() * 3) + 1;
+                 const totalFound = scrapFound + fuelCellsFound;
+
+                 if (cargoWeight + totalFound <= user.cargoCapacity) {
+                     user.cargo.chatarra += scrapFound;
+                     user.cargo.celulasdecombustible += fuelCellsFound;
+                     exploreResult += `\nRecogiste ${scrapFound} Chatarra y ${fuelCellsFound} Células de Combustible.`;
+                 } else {
+                     const canTake = user.cargoCapacity - cargoWeight;
+                     if (canTake > 0) {
+                         const takeScrap = Math.min(scrapFound, Math.floor(canTake / 2));
+                         const takeFuelCells = Math.min(fuelCellsFound, canTake - takeScrap);
+                         user.cargo.chatarra += takeScrap;
+                         user.cargo.celulasdecombustible += takeFuelCells;
+                         exploreResult += `\nTu carga está casi llena. Solo pudiste recoger ${takeScrap} Chatarra y ${takeFuelCells} Células de Combustible.`;
+                     } else {
+                         exploreResult += `\nTu bodega de carga está llena. No pudiste recoger nada.`;
+                     }
+                 }
+
+            } else if (explorationEvent < 0.6) {
+                // Minor hazard
+                exploreResult += `💥 ¡Peligro menor! Navegaste a través de un campo de escombros y sufriste daños leves.`;
+                const damage = Math.floor(Math.random() * 10) + 5;
+                user.hull -= damage;
+                if (user.hull < 0) user.hull = 0;
+                exploreResult += `\nTu casco actual es ${user.hull}/${user.maxHull}.`;
+                 if (user.hull === 0) exploreResult += `\n⚠️ ¡Tu nave está críticamente dañada! Repara inmediatamente.`;
+
+            } else {
+                // Uneventful exploration
+                exploreResult += `🌌 El sector parece tranquilo. No encontraste nada de interés.`;
+            }
+
+            await conn.reply(m.chat, exploreResult, m);
             break;
 
         case 'mine':
         case 'minar':
-            if (currentTime - user.lastmining < COOLDOWN_MINING) {
-                const timeLeft = COOLDOWN_MINING - (currentTime - user.lastmining);
-                await conn.reply(m.chat, `⛏️ Tus herramientas aún se están enfriando. Espera ${formatCooldownTime(timeLeft)} antes de volver a minar.`, m);
+            if (currentTime - user.lastMine < COOLDOWN_MINE) {
+                const timeLeft = COOLDOWN_MINE - (currentTime - user.lastMine);
+                await conn.reply(m.chat, `⏱️ Tu láser de minería aún se está recargando. Puedes minar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
                 return;
             }
-            if (user.pickaxe < 1) {
-                await conn.reply(m.chat, `🛠️ Necesitas un pico para minar. Compra uno en la tienda con ${usedPrefix}rpg shop`, m);
-                return;
+            if (user.miningLaserLevel < 1) {
+                 await conn.reply(m.chat, `🛠️ Necesitas un Láser de Minería para extraer recursos.`, m); // Assuming starting with level 1
+                 return;
             }
-            if (user.stamina < 20) {
-                await conn.reply(m.chat, `😫 Estás demasiado cansado para minar. Necesitas recuperar energía.`, m);
-                return;
-            }
+             if (user.fuel < 2) { // Small fuel cost for mining
+                 await conn.reply(m.chat, `⛽ Necesitas al menos 2 de combustible para operar el láser de minería.`, m);
+                 return;
+             }
+             const cargoWeight = getCurrentCargoWeight(user.cargo);
+             if (cargoWeight >= user.cargoCapacity) {
+                 await conn.reply(m.chat, `📦 Tu bodega de carga está llena. Vende o usa recursos antes de minar.`, m);
+                 return;
+             }
 
-            let miningText = `⛏️ *Te adentras en las profundidades de la mina...*\n\n`;
-            const miningRewards = [];
-            const miningSuccess = Math.random();
-            const pickaxeBonus = user.pickaxe * 0.05; // Simple bonus based on pickaxe level/quantity
 
-            if (miningSuccess < 0.1 + pickaxeBonus) {
-                miningText += `💎 *¡VETA EXCEPCIONAL!* Has encontrado un filón rico en minerales preciosos.`;
-                const diamonds = Math.floor(Math.random() * 3) + 1;
-                const emeralds = Math.floor(Math.random() * 4) + 2;
-                const rubies = Math.floor(Math.random() * 2) + 1;
-                const expGained = 450;
+            user.fuel -= 2;
+            user.lastMine = currentTime;
 
-                user.diamond += diamonds;
-                user.emerald += emeralds;
-                user.ruby += rubies;
+            const miningYield = Math.floor(Math.random() * 10 * user.miningLaserLevel) + 5; // Yield based on laser level
+            const resourceType = Math.random() > 0.3 ? 'minerales' : (Math.random() > 0.5 ? 'aleaciones' : 'chatarra'); // More minerals, less alloys/scrap - using Spanish keys
 
-                miningRewards.push(`💎 ${diamonds} Diamantes`);
-                miningRewards.push(`🟢 ${emeralds} Esmeraldas`);
-                miningRewards.push(`❤️ ${rubies} Rubíes`);
-                miningRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
+            const amountMined = Math.min(miningYield, user.cargoCapacity - cargoWeight); // Don't exceed cargo capacity
 
-            } else if (miningSuccess < 0.4 + pickaxeBonus) {
-                miningText += `⚒️ *¡Buen hallazgo!* Has encontrado una veta rica en minerales.`;
-                const iron = Math.floor(Math.random() * 8) + 5;
-                const stone = Math.floor(Math.random() * 15) + 10;
-                const goldNuggets = Math.floor(Math.random() * 6) + 3;
-                const expGained = 200;
-
-                user.iron += iron;
-                user.stone += stone;
-                user.gold += goldNuggets;
-
-                miningRewards.push(`⚙️ ${iron} Hierro`);
-                miningRewards.push(`🧱 ${stone} Piedra`);
-                miningRewards.push(`💰 ${goldNuggets} Pepitas de oro`);
-                miningRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-
+            if (amountMined > 0) {
+                 user.cargo[resourceType] += amountMined;
+                 await conn.reply(m.chat, `⛏️ Minaste ${amountMined} unidades de ${resourceType} en el sector ${user.location}.`, m);
             } else {
-                miningText += `🪨 Has encontrado algunos minerales comunes.`;
-                const stone = Math.floor(Math.random() * 10) + 5;
-                const iron = Math.floor(Math.random() * 5) + 1;
-                const expGained = 100;
-
-                user.stone += stone;
-                user.iron += iron;
-
-                miningRewards.push(`🧱 ${stone} Piedra`);
-                miningRewards.push(`⚙️ ${iron} Hierro`);
-                miningRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
+                 await conn.reply(m.chat, `⛏️ Minaste en el sector ${user.location}, pero no encontraste recursos o tu bodega está llena.`, m);
             }
-
-            if (Math.random() < 0.2) { // Probability of pickaxe wear
-                miningText += `\n\n🛠️ ¡Tu pico se ha desgastado un poco durante la minería!`;
-                // You could add logic here to decrease pickaxe durability if you implement it
-            }
-
-            user.stamina -= 20;
-            if (user.stamina < 0) user.stamina = 0;
-            user.lastmining = currentTime;
-
-            const finalMiningText = `
-${miningText}
-
-*🎁 Recursos obtenidos:*
-${miningRewards.map(item => `• ${item}`).join('\n') || 'Ninguno'}
-
-🔋 Energía restante: ${user.stamina}/100
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + finalMiningText, m);
             break;
 
-        case 'hunt':
-        case 'cazar':
-            if (currentTime - user.lasthunting < COOLDOWN_HUNTING) {
-                const timeLeft = COOLDOWN_HUNTING - (currentTime - user.lasthunting);
-                await conn.reply(m.chat, `🏹 Debes esperar ${formatCooldownTime(timeLeft)} antes de volver a cazar.`, m);
+        case 'scan':
+        case 'escanear':
+            if (currentTime - user.lastScan < COOLDOWN_SCAN) {
+                const timeLeft = COOLDOWN_SCAN - (currentTime - user.lastScan);
+                await conn.reply(m.chat, `⏱️ Tu escáner aún está procesando datos. Puedes escanear de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
                 return;
             }
-             if (user.stamina < 15) {
-                await conn.reply(m.chat, `😫 Estás demasiado cansado para cazar. Necesitas recuperar energía.`, m);
-                return;
-            }
+             // Assuming players start with a basic scanner or it's part of the ship
+            user.lastScan = currentTime;
 
-            let huntText = `🏹 *Te adentras en el bosque para cazar...*\n\n`;
-            const huntRewards = [];
-            const huntSuccess = Math.random();
+            const scanResult = Math.random();
+            let scanText = `📡 Escaneando el sector ${user.location}...\n\n`;
 
-            if (huntSuccess < 0.15) {
-                huntText += `🦌 *¡CAZA EXCEPCIONAL!* Has encontrado una criatura legendaria.`;
-                const leather = Math.floor(Math.random() * 5) + 5;
-                const food = Math.floor(Math.random() * 8) + 8;
-                const expGained = 400;
-
-                user.leather += leather;
-                user.food += food;
-
-                huntRewards.push(`🥩 ${food} Alimentos`);
-                huntRewards.push(`🧣 ${leather} Cuero`);
-                huntRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-
-            } else if (huntSuccess < 0.5) {
-                huntText += `🦊 *¡Buena caza!* Has cazado varios animales.`;
-                const leather = Math.floor(Math.random() * 3) + 2;
-                const food = Math.floor(Math.random() * 5) + 3;
-                const expGained = 200;
-
-                user.leather += leather;
-                user.food += food;
-
-                huntRewards.push(`🥩 ${food} Alimentos`);
-                huntRewards.push(`🧣 ${leather} Cuero`);
-                huntRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-
+            if (scanResult < 0.2) {
+                scanText += `✨ Detectado un campo de recursos rico en minerales y aleaciones.`;
+            } else if (scanResult < 0.4) {
+                scanText += `💥 Señales de actividad hostil detectadas. Procede con precaución.`;
+            } else if (scanResult < 0.6) {
+                scanText += `📦 Señal de una nave abandonada cercana. Posible chatarra o combustible.`;
             } else {
-                huntText += `🐇 Has cazado algunas presas menores.`;
-                const food = Math.floor(Math.random() * 3) + 1;
-                const expGained = 100;
-
-                user.food += food;
-
-                huntRewards.push(`🥩 ${food} Alimentos`);
-                huntRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
+                scanText += `🌌 El escaneo no detecta nada fuera de lo común en este momento.`;
             }
 
-            user.stamina -= 15;
-            if (user.stamina < 0) user.stamina = 0;
-            user.lasthunting = currentTime;
-
-            const finalHuntText = `
-${huntText}
-
-*🎁 Recursos obtenidos:*
-${huntRewards.map(item => `• ${item}`).join('\n') || 'Ninguno'}
-
-🔋 Energía restante: ${user.stamina}/100
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + finalHuntText, m);
+            await conn.reply(m.chat, scanText, m);
             break;
 
-        case 'farm':
-        case 'farming':
-        case 'cultivar':
-            if (currentTime - user.lastfarming < COOLDOWN_FARMING) {
-                const timeLeft = COOLDOWN_FARMING - (currentTime - user.lastfarming);
-                await conn.reply(m.chat, `🌱 Debes esperar ${formatCooldownTime(timeLeft)} antes de volver a cultivar.`, m);
+        case 'repair':
+        case 'reparar':
+            const repairNeeded = user.maxHull - user.hull;
+            if (repairNeeded <= 0) {
+                await conn.reply(m.chat, `🛠️ Tu casco está en perfecto estado (${user.hull}/${user.maxHull}). No necesitas reparaciones.`, m);
                 return;
             }
-            if (user.farm < 1) {
-                await conn.reply(m.chat, `🏡 Necesitas una granja para cultivar. Compra una con ${usedPrefix}rpg buyfarm`, m);
-                return;
-            }
-            if (user.stamina < 10) {
-                await conn.reply(m.chat, `😫 Estás demasiado cansado para trabajar la tierra. Necesitas recuperar energía.`, m);
-                return;
-            }
-            if (user.seeds < 1) {
-                await conn.reply(m.chat, `🌱 No tienes semillas para plantar. Cómpralas en ${usedPrefix}rpg shop`, m);
+            const repairCost = repairNeeded * REPAIR_COST_PER_HULL;
+            if (user.credits < repairCost) {
+                await conn.reply(m.chat, `💰 Necesitas ${repairCost} créditos para reparar completamente tu nave. Solo tienes ${user.credits}.`, m);
                 return;
             }
 
-            let farmText = `🌱 *Trabajas en tu granja...*\n\n`;
-            const farmRewards = [];
-            const farmSuccess = Math.random();
-            const farmBonus = user.farm * 0.05; // Bonus based on farm level
+            user.credits -= repairCost;
+            user.hull = user.maxHull;
 
-            if (farmSuccess < 0.1 + farmBonus) {
-                farmText += `🌽 *¡COSECHA EXCEPCIONAL!* Tus cultivos han prosperado extraordinariamente.`;
-                const crops = Math.floor(Math.random() * 15) + 10;
-                const herbs = Math.floor(Math.random() * 5) + 3;
-                const expGained = 350;
-
-                user.crops += crops;
-                user.herb += herbs;
-
-                farmRewards.push(`🌽 ${crops} Cultivos`);
-                farmRewards.push(`🌿 ${herbs} Hierbas`);
-                farmRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-
-            } else if (farmSuccess < 0.4 + farmBonus) {
-                farmText += `🥕 *¡Buena cosecha!* Tus cultivos han crecido bien.`;
-                const crops = Math.floor(Math.random() * 8) + 5;
-                const herbs = Math.floor(Math.random() * 3) + 1;
-                const expGained = 200;
-
-                user.crops += crops;
-                user.herb += herbs;
-
-                farmRewards.push(`🥕 ${crops} Cultivos`);
-                farmRewards.push(`🌿 ${herbs} Hierbas`);
-                farmRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-
-            } else {
-                farmText += `🥔 Has logrado una cosecha modesta.`;
-                const crops = Math.floor(Math.random() * 5) + 2;
-                const expGained = 100;
-
-                user.crops += crops;
-
-                farmRewards.push(`🥔 ${crops} Cultivos`);
-                farmRewards.push(`✨ ${expGained} EXP`);
-                levelUpMessages.push(...addExperience(user, expGained));
-            }
-
-            user.seeds -= 1;
-            user.stamina -= 10;
-            if (user.stamina < 0) user.stamina = 0;
-            user.lastfarming = currentTime;
-
-            const finalFarmText = `
-${farmText}
-
-*🎁 Recursos obtenidos:*
-${farmRewards.map(item => `• ${item}`).join('\n') || 'Ninguno'}
-
-🌱 Semillas restantes: ${user.seeds}
-🔋 Energía restante: ${user.stamina}/100
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + finalFarmText, m);
+            await conn.reply(m.chat, `🛠️ Tu nave ha sido reparada completamente por ${repairCost} créditos. Casco: ${user.hull}/${user.maxHull}.`, m);
             break;
 
-        case 'duel':
-        case 'duelo':
-            if (!m.mentionedJid || m.mentionedJid.length === 0) {
-                await conn.reply(m.chat, `👤 Debes especificar a quién quieres desafiar.\n\nEjemplo: ${usedPrefix}rpg duel @usuario`, m);
+        case 'refuel':
+        case 'repostar':
+            const fuelNeeded = user.maxFuel - user.fuel;
+            if (fuelNeeded <= 0) {
+                await conn.reply(m.chat, `⛽ Tu tanque de combustible está lleno (${user.fuel}/${user.maxFuel}). No necesitas repostar.`, m);
                 return;
             }
-            if (currentTime - user.lastduel < COOLDOWN_DUEL) {
-                const timeLeft = COOLDOWN_DUEL - (currentTime - user.lastduel);
-                await conn.reply(m.chat, `⚔️ Estás agotado de tu último combate. Podrás volver a desafiar en ${formatCooldownTime(timeLeft)}.`, m);
-                return;
-            }
-
-            const opponentJid = m.mentionedJid[0];
-            if (opponentJid === m.sender) {
-                await conn.reply(m.chat, `😅 No puedes desafiarte a ti mismo.`, m);
+            // Use the Spanish key for fuel cells
+            if (user.cargo.celulasdecombustible === undefined || user.cargo.celulasdecombustible < 1) {
+                await conn.reply(m.chat, `⛽ No tienes Células de Combustible en tu carga para repostar. Consigue algunas explorando o comerciando.`, m);
                 return;
             }
 
-            // Ensure opponent exists in DB (create if not)
-            if (!db.users[opponentJid]) {
-                 db.users[opponentJid] = getDefaultUserData(opponentJid, conn.getName(opponentJid) || `Usuario_${opponentJid.split('@')[0]}`);
-            }
-            const opponent = db.users[opponentJid];
+            const fuelToUse = Math.min(user.cargo.celulasdecombustible, Math.floor(fuelNeeded / FUEL_PER_FUEL_CELL)); // Each fuel cell gives FUEL_PER_FUEL_CELL fuel
+             if (fuelToUse < 1) {
+                 await conn.reply(m.chat, `⛽ Necesitas al menos 1 Célula de Combustible para repostar.`, m);
+                 return;
+             }
 
+            user.cargo.celulasdecombustible -= fuelToUse;
+            user.fuel += fuelToUse * FUEL_PER_FUEL_CELL; // Add fuel based on cells used
+             if (user.fuel > user.maxFuel) user.fuel = user.maxFuel; // Cap at max fuel
 
-            // Simulate sending a challenge message (actual acceptance logic would be more complex)
-            await conn.reply(m.chat, `⚔️ *¡DESAFÍO DE DUELO!* ⚔️\n\n@${m.sender.split('@')[0]} ha desafiado a @${opponentJid.split('@')[0]} a un duelo.\n\n@${opponentJid.split('@')[0]} tienes 60 segundos para aceptar el duelo escribiendo *"acepto"*.`, m, {
-                mentions: [m.sender, opponentJid]
-            });
-
-            // In a real bot, you would store this challenge (e.g., in a temporary object or DB field)
-            // and set up a listener for the opponent's "acepto" message within the timeout.
-            // For this simulation, we just apply the cooldown to the challenger.
-            user.lastduel = currentTime;
-
+            await conn.reply(m.chat, `⛽ Usaste ${fuelToUse} Células de Combustible para repostar. Tu combustible actual es ${user.fuel}/${user.maxFuel}.`, m);
             break;
 
-        case 'rob':
-        case 'robar':
-            if (!m.mentionedJid || m.mentionedJid.length === 0) {
-                await conn.reply(m.chat, `👤 Debes especificar a quién quieres robar.\n\nEjemplo: ${usedPrefix}rpg rob @usuario`, m);
-                return;
-            }
-            if (currentTime - user.lastrobbery < COOLDOWN_ROBBERY) {
-                const timeLeft = COOLDOWN_ROBBERY - (currentTime - user.lastrobbery);
-                await conn.reply(m.chat, `🕵️ Las autoridades te están vigilando. Podrás volver a robar en ${formatCooldownTime(timeLeft)}.`, m);
-                return;
-            }
-
-            const targetJid = m.mentionedJid[0];
-            if (targetJid === m.sender) {
-                await conn.reply(m.chat, `😅 No puedes robarte a ti mismo.`, m);
-                return;
-            }
-
-            // Ensure target exists in DB (create if not, though robbing non-existent user is weird)
-             if (!db.users[targetJid]) {
-                 db.users[targetJid] = getDefaultUserData(targetJid, conn.getName(targetJid) || `Usuario_${targetJid.split('@')[0]}`);
-            }
-            const target = db.users[targetJid];
-
-            if (target.gold < 50) {
-                await conn.reply(m.chat, `😔 @${targetJid.split('@')[0]} es demasiado pobre para robarle. Necesita al menos 50 de oro.`, m, {
-                    mentions: [targetJid]
-                });
-                return;
-            }
-
-            // Calculate success chance based on agility vs target's intelligence/agility
-            const successChance = 0.3 + (user.agility * 0.03) - (Math.random() * 0.2);
-            const guardedChance = (target.intelligence * 0.02) + (target.agility * 0.01);
-
-            user.lastrobbery = currentTime; // Apply cooldown
-
-            if (Math.random() < guardedChance) {
-                // Target had protection
-                user.health -= 15;
-                if (user.health < 1) user.health = 1;
-                await conn.reply(m.chat, `🚨 *¡ROBO FALLIDO!* 🚨\n\n@${targetJid.split('@')[0]} tenía protección. Has sido herido durante el intento de robo y perdiste 15 de salud.`, m, {
-                    mentions: [targetJid]
-                });
-            } else if (Math.random() < successChance) {
-                // Successful robbery
-                let stolenAmount = Math.floor(target.gold * (Math.random() * 0.3 + 0.1)); // Between 10% and 40%
-                if (stolenAmount < 10) stolenAmount = 10; // Minimum stolen amount
-                 if (stolenAmount > target.gold) stolenAmount = target.gold; // Cannot steal more than they have
-
-                user.gold += stolenAmount;
-                target.gold -= stolenAmount;
-                user.reputation -= 5; // Lose reputation
-
-                await conn.reply(m.chat, `💰 *¡ROBO EXITOSO!* 💰\n\nHas robado ${stolenAmount} de oro a @${targetJid.split('@')[0]}.\n\n⚠️ Tu reputación ha disminuido por esta acción.`, m, {
-                    mentions: [targetJid]
-                });
-            } else {
-                // Failed robbery
-                const penaltyGold = Math.floor(user.gold * 0.05); // Lose 5% of own gold
-                user.gold -= penaltyGold;
-                 if (user.gold < 0) user.gold = 0;
-                user.health -= 10;
-                if (user.health < 1) user.health = 1;
-
-                await conn.reply(m.chat, `🚔 *¡ROBO FALLIDO!* 🚔\n\nHas sido sorprendido intentando robar a @${targetJid.split('@')[0]}. Pierdes ${penaltyGold} de oro y 10 de salud por el forcejeo.`, m, {
-                    mentions: [targetJid]
-                });
-            }
-            break;
-
-        case 'marry':
-        case 'casar':
-            if (!m.mentionedJid || m.mentionedJid.length === 0) {
-                await conn.reply(m.chat, `💍 Debes especificar a quién quieres proponer matrimonio.\n\nEjemplo: ${usedPrefix}rpg marry @usuario`, m);
-                return;
-            }
-            if (user.marriage) {
-                const partnerName = db.users[user.marriage]?.name || 'alguien';
-                await conn.reply(m.chat, `💔 Ya estás casado/a con ${partnerName}. Primero debes divorciarte con ${usedPrefix}rpg divorce.`, m);
-                return;
-            }
-             if (currentTime - user.lastmarriage < COOLDOWN_MARRIAGE_ACTION) {
-                const timeLeft = COOLDOWN_MARRIAGE_ACTION - (currentTime - user.lastmarriage);
-                await conn.reply(m.chat, `⏱️ Debes esperar ${formatCooldownTime(timeLeft)} antes de realizar otra acción de matrimonio.`, m);
-                return;
-            }
-
-
-            const proposedJid = m.mentionedJid[0];
-            if (proposedJid === m.sender) {
-                await conn.reply(m.chat, `😅 No puedes casarte contigo mismo.`, m);
-                return;
-            }
-
-             // Ensure proposed exists in DB (create if not)
-             if (!db.users[proposedJid]) {
-                 db.users[proposedJid] = getDefaultUserData(proposedJid, conn.getName(proposedJid) || `Usuario_${proposedJid.split('@')[0]}`);
-            }
-            const proposed = db.users[proposedJid];
-
-            if (proposed.marriage) {
-                const partnerName = db.users[proposed.marriage]?.name || 'alguien más';
-                await conn.reply(m.chat, `💔 @${proposedJid.split('@')[0]} ya está casado/a con ${partnerName}.`, m, {
-                    mentions: [proposedJid]
-                });
-                return;
-            }
-
-            // Simulate sending a proposal message (actual acceptance logic would be more complex)
-            await conn.reply(m.chat, `💍 *¡PROPUESTA DE MATRIMONIO!* 💍\n\n@${m.sender.split('@')[0]} ha propuesto matrimonio a @${proposedJid.split('@')[0]}.\n\n@${proposedJid.split('@')[0]} tienes 60 segundos para aceptar escribiendo *"acepto"*.`, m, {
-                mentions: [m.sender, proposedJid]
-            });
-
-            // In a real bot, you would store this proposal (e.g., in a temporary object or DB field)
-            // and set up a listener for the proposed's "acepto" message within the timeout.
-            // If accepted, you would update both users' 'marriage' field.
-            // For this simulation, we just apply the cooldown to the proposer.
-            user.lastmarriage = currentTime;
-
-            break;
-
-        case 'divorce':
-        case 'divorciar':
-            if (!user.marriage) {
-                await conn.reply(m.chat, `😐 No estás casado/a con nadie.`, m);
-                return;
-            }
-             if (currentTime - user.lastmarriage < COOLDOWN_MARRIAGE_ACTION) {
-                const timeLeft = COOLDOWN_MARRIAGE_ACTION - (currentTime - user.lastmarriage);
-                await conn.reply(m.chat, `⏱️ Debes esperar ${formatCooldownTime(timeLeft)} antes de realizar otra acción de matrimonio.`, m);
-                return;
-            }
-
-            const exPartnerJid = user.marriage;
-            if (db.users[exPartnerJid]) {
-                db.users[exPartnerJid].marriage = ''; // Clear partner's marriage status
-            }
-            user.marriage = ''; // Clear user's marriage status
-            user.lastmarriage = currentTime; // Apply cooldown
-
-            await conn.reply(m.chat, `💔 *¡DIVORCIO COMPLETADO!* 💔\n\nHas terminado tu matrimonio. Ahora eres oficialmente soltero/a de nuevo.`, m);
-            break;
-
-        case 'love':
-        case 'pareja':
-        case 'buscarpareja':
-            if (user.marriage) {
-                const partnerName = db.users[user.marriage]?.name || 'alguien';
-                await conn.reply(m.chat, `💞 Ya estás en una relación con ${partnerName} (@${user.marriage.split('@')[0]}).`, m, { mentions: [user.marriage] });
-                return;
-            }
-
-            // Find available users (not married, not self)
-            const availableUsers = Object.keys(db.users).filter(jid =>
-                db.users[jid] && !db.users[jid].marriage && jid !== m.sender
-            );
-
-            if (availableUsers.length === 0) {
-                await conn.reply(m.chat, `😢 No hay personas solteras disponibles en este momento... Inténtalo más tarde.`, m);
-                return;
-            }
-
-            // Choose a random partner
-            const partnerJid = availableUsers[Math.floor(Math.random() * availableUsers.length)];
-            user.marriage = partnerJid;
-            db.users[partnerJid].marriage = m.sender;
-
-            await conn.reply(m.chat, `
-💘 *¡FELICIDADES!* 💘
-
-@${m.sender.split('@')[0]} y @${partnerJid.split('@')[0]} ahora son pareja oficialmente.
-
-✨ El amor ha triunfado en el mundo RPG...
-`, m, {
-                mentions: [m.sender, partnerJid]
-            });
-            break;
-
-        case 'social':
-        case 'socializar':
-        case 'amigos':
-             if (currentTime - user.lastsocial < SOCIAL_COOLDOWN) {
-                const timeLeft = SOCIAL_COOLDOWN - (currentTime - user.lastsocial);
-                await conn.reply(m.chat, `⏱️ Necesitas un respiro social. Vuelve a interactuar en ${formatCooldownTime(timeLeft)}.`, m);
-                return;
-            }
-
-            const personas = [
-                { nombre: 'Carlos el Amargado', frase: '😒 Mira mira... *como tú papaaaaa...*', tipo: 'enemigo' },
-                { nombre: 'Lina la Dulce', frase: '🌸 ¡Hola! Me encanta hablar contigo. Eres genial.', tipo: 'amigo' },
-                { nombre: 'Ricky el Fiestero', frase: '🍻 ¡Vamos de fiesta! ¡Tú invitas! JAJA', tipo: 'amigo' },
-                { nombre: 'Karen la Chismosa', frase: '👀 Te vi con alguien ayer... ¿ehhh? *Cuentaaa*', tipo: 'neutra' },
-                { nombre: 'Doña Lucha', frase: '🥴 A mí no me hables si no traes pan.', tipo: 'enemigo' },
-                { nombre: 'Lucía la Romántica', frase: '💖 Me haces sentir mariposas... o hambre, no sé.', tipo: 'amigo' },
-                { nombre: 'Pedro el Traicionero', frase: '😈 *Te usé...* ahora ya no te necesito.', tipo: 'enemigo' },
-                { nombre: 'Julián el Loco', frase: '🤣 JAJA ¿Tú también escuchas voces o solo yo?', tipo: 'neutra' },
-                { nombre: 'Alexa la Sabia', frase: '📚 Hoy es un buen día para aprender algo nuevo.', tipo: 'amigo' },
-            ];
-            const persona = personas[Math.floor(Math.random() * personas.length)];
-            const reacciones = { amigo: '🤝', enemigo: '💢', neutra: '🤷' };
-
-            user.lastsocial = currentTime; // Apply cooldown
-
-            await conn.reply(m.chat, `
-🎭 *INTERACCIÓN SOCIAL* 🎭
-
-Has conversado con: *${persona.nombre}*
-${reacciones[persona.tipo]} _${persona.frase}_
-
-${persona.tipo === 'enemigo' ? '\n💔 Parece que esta persona no fue buena compañía...' : ''}
-`, m);
-            break;
-
-
-        case 'buyhouse':
-        case 'comprarcasa':
-            const housePrice = user.house ? (user.house * 5000) + 5000 : 5000; // Price increases, starts at 5k
-            if (user.gold < housePrice) {
-                await conn.reply(m.chat, `💰 No tienes suficiente oro. Necesitas ${housePrice} de oro para ${user.house ? 'mejorar tu casa al nivel ' + (user.house + 1) : 'comprar una casa'}.`, m);
-                return;
-            }
-
-            user.gold -= housePrice;
-            if (!user.house) {
-                user.house = 1;
-                await conn.reply(m.chat, `🏠 *¡CASA COMPRADA!* 🏠\n\nHas adquirido tu primera casa por ${housePrice} de oro. Ahora tienes un lugar para vivir y descansar.`, m);
-            } else {
-                user.house += 1;
-                await conn.reply(m.chat, `🏡 *¡CASA MEJORADA!* 🏡\n\nHas mejorado tu casa al nivel ${user.house} por ${housePrice} de oro. Tu hogar ahora es más grande y confortable.`, m);
-            }
-            break;
-
-        case 'buyfarm':
-        case 'comprargranja':
-            const farmPrice = user.farm ? (user.farm * 8000) + 10000 : 10000; // Price increases, starts at 10k
-            if (user.gold < farmPrice) {
-                await conn.reply(m.chat, `💰 No tienes suficiente oro. Necesitas ${farmPrice} de oro para ${user.farm ? 'mejorar tu granja al nivel ' + (user.farm + 1) : 'comprar una granja'}.`, m);
-                return;
-            }
-            if (user.house < 1) {
-                await conn.reply(m.chat, `🏠 Primero necesitas tener una casa antes de adquirir una granja. Compra una casa con ${usedPrefix}rpg buyhouse.`, m);
-                return;
-            }
-
-            user.gold -= farmPrice;
-            if (!user.farm) {
-                user.farm = 1;
-                await conn.reply(m.chat, `🌾 *¡GRANJA COMPRADA!* 🌾\n\nHas adquirido tu primera granja por ${farmPrice} de oro. Ahora puedes cultivar y cosechar recursos.`, m);
-            } else {
-                user.farm += 1;
-                await conn.reply(m.chat, `🚜 *¡GRANJA MEJORADA!* 🚜\n\nHas mejorado tu granja al nivel ${user.farm} por ${farmPrice} de oro. Podrás producir más cultivos y obtener mejores cosechas.`, m);
-            }
-            break;
-
-        case 'pet':
-        case 'mascota':
-        case 'petstats':
-            if (!user.pet) {
-                await conn.reply(m.chat, `🐾 No tienes ninguna mascota. Adopta una con ${usedPrefix}rpg petadopt [tipo].`, m);
-                return;
-            }
-
-            const petTypes = ['🐶 Perro', '🐱 Gato', '🦊 Zorro', '🐰 Conejo', '🦜 Loro', '🐉 Dragoncito'];
-            const petName = user.petName || petTypes[user.pet - 1];
-            const petStatsText = `
-╔═══════════════════
-║ 🐾 𝐒𝐔 𝐌𝐀𝐒𝐂𝐎𝐓𝐀 🐾
-╠═══════════════════
-║ 📛 *Nombre:* ${petName}
-║ 🏆 *Nivel:* ${user.petLevel}
-║ ✨ *Experiencia:* ${user.petExp}
-║ ❤️ *Cariño:* ${Math.min(100, Math.floor(user.petExp / 10))}%
-╠═══════════════════
-║ 💡 *Comandos de mascota:*
-║ • ${usedPrefix}rpg petfeed - Alimentar
-║ • ${usedPrefix}rpg petadventure - Aventura
-║ • ${usedPrefix}rpg petname [nombre] (No implementado)
-╚═══════════════════
-`;
-            await conn.reply(m.chat, petStatsText, m);
-            break;
-
-        case 'petadopt':
-        case 'adoptarmascota':
-            if (user.pet) {
-                await conn.reply(m.chat, `🐾 Ya tienes una mascota. Solo puedes tener una a la vez.`, m);
-                return;
-            }
-            if (!args[1]) {
-                const petTypesList = [
-                   '1. 🐶 Perro - Leal y enérgico',
-                   '2. 🐱 Gato - Independiente y astuto',
-                   '3. 🦊 Zorro - Inteligente y curioso',
-                   '4. 🐰 Conejo - Ágil y adorable',
-                   '5. 🦜 Loro - Parlanchín y colorido',
-                   '6. 🐉 Dragoncito - Exótico y poderoso'
-                ];
-                await conn.reply(m.chat, `🐾 *ADOPCIÓN DE MASCOTAS* 🐾\n\nElige qué tipo de mascota quieres adoptar:\n\n${petTypesList.map(item => `• ${item}`).join('\n')}\n\nUsa ${usedPrefix}rpg petadopt [número] para adoptar.`, m);
-                return;
-            }
-
-            const petChoice = parseInt(args[1]);
-            if (isNaN(petChoice) || petChoice < 1 || petChoice > 6) {
-                await conn.reply(m.chat, `🐾 Opción inválida. Elige un número entre 1 y 6.`, m);
-                return;
-            }
-
-            const petCosts = [2000, 2000, 3000, 1500, 4000, 10000];
-            const petCost = petCosts[petChoice - 1];
-
-            if (user.gold < petCost) {
-                await conn.reply(m.chat, `💰 No tienes suficiente oro. Necesitas ${petCost} de oro para adoptar esta mascota.`, m);
-                return;
-            }
-
-            user.gold -= petCost;
-            user.pet = petChoice;
-            user.petExp = 0;
-            user.petLevel = 1;
-            user.petName = ['Perrito', 'Gatito', 'Zorrito', 'Conejito', 'Lorito', 'Dragoncito'][petChoice - 1];
-
-            const petTypesDisplay = ['🐶 Perro', '🐱 Gato', '🦊 Zorro', '🐰 Conejo', '🦜 Loro', '🐉 Dragoncito'];
-            await conn.reply(m.chat, `🐾 *¡MASCOTA ADOPTADA!* 🐾\n\nHas adoptado un ${petTypesDisplay[petChoice - 1]} por ${petCost} de oro.\n\nPuedes ponerle un nombre usando ${usedPrefix}rpg petname [nombre] (No implementado).`, m);
-            break;
-
-        case 'petfeed':
-        case 'alimentarmascota':
-            if (!user.pet) {
-                await conn.reply(m.chat, `🐾 No tienes ninguna mascota. Adopta una con ${usedPrefix}rpg petadopt [tipo].`, m);
-                return;
-            }
-            if (user.food < 2) {
-                await conn.reply(m.chat, `🍖 No tienes suficiente comida para alimentar a tu mascota. Necesitas al menos 2 unidades de comida.`, m);
-                return;
-            }
-             if (currentTime - (user.lastpetfeed || 0) < COOLDOWN_FARMING) { // Using farming cooldown for pet feed as a placeholder
-                const timeLeft = COOLDOWN_FARMING - (currentTime - (user.lastpetfeed || 0));
-                await conn.reply(m.chat, `⏱️ Tu mascota no tiene hambre aún. Podrás alimentarla de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
-                return;
-            }
-
-
-            user.food -= 2;
-            user.petExp += 15;
-            user.lastpetfeed = currentTime; // Apply cooldown
-
-            // Level up pet
-            const xpNeededForPetLevel = user.petLevel * 100;
-            if (user.petExp >= xpNeededForPetLevel) {
-                user.petLevel += 1;
-                user.petExp = 0; // Reset exp on level up (matching JS example)
-                await conn.reply(m.chat, `🐾 *¡TU MASCOTA HA SUBIDO DE NIVEL!* 🐾\n\n${user.petName} ha alcanzado el nivel ${user.petLevel}. Se ve más fuerte y feliz.`, m);
-            } else {
-                await conn.reply(m.chat, `🍖 Has alimentado a ${user.petName}. Se ve más feliz y ha ganado 15 puntos de experiencia.`, m);
-            }
-            break;
-
-        case 'petadventure':
-        case 'aventuramascota':
-            if (!user.pet) {
-                await conn.reply(m.chat, `🐾 No tienes ninguna mascota. Adopta una con ${usedPrefix}rpg petadopt [tipo].`, m);
-                return;
-            }
-            if (user.petLevel < 3) {
-                await conn.reply(m.chat, `🐾 Tu mascota es demasiado pequeña para aventurarse. Necesita alcanzar al menos el nivel 3.`, m);
-                return;
-            }
-             if (currentTime - (user.lastpetadventure || 0) < COOLDOWN_ADVENTURE) { // Using adventure cooldown for pet adventure
-                const timeLeft = COOLDOWN_ADVENTURE - (currentTime - (user.lastpetadventure || 0));
-                await conn.reply(m.chat, `🐾 ${user.petName} está cansado de su última aventura. Podrá aventurarse de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
-                return;
-            }
-
-            const petAdventureSuccess = Math.random();
-            let petAdventureText = `🌳 *${user.petName} se aventura en el bosque...*\n\n`;
-            const petRewards = [];
-
-            if (petAdventureSuccess < 0.2) {
-                petAdventureText += `🌟 *¡HALLAZGO INCREÍBLE!* Tu mascota ha encontrado un tesoro escondido.`;
-                const goldFound = Math.floor(Math.random() * 300) + 200;
-                const expGained = 50;
-                const petExpGained = 50;
-
-                user.gold += goldFound;
-                user.exp += expGained;
-                user.petExp += petExpGained;
-
-                petRewards.push(`💰 ${goldFound} Oro`);
-                petRewards.push(`✨ ${expGained} EXP para ti`);
-                petRewards.push(`🐾 ${petExpGained} EXP para ${user.petName}`);
-
-                if (Math.random() < 0.3) {
-                    petRewards.push(`💎 1 Diamante`);
-                    user.diamond += 1;
-                }
-
-            } else if (petAdventureSuccess < 0.6) {
-                petAdventureText += `🍖 Tu mascota ha cazado algunas presas en el bosque.`;
-                const foodFound = Math.floor(Math.random() * 4) + 2;
-                const expGained = 30;
-                const petExpGained = 30;
-
-                user.food += foodFound;
-                user.exp += expGained;
-                user.petExp += petExpGained;
-
-                petRewards.push(`🍖 ${foodFound} Alimentos`);
-                petRewards.push(`✨ ${expGained} EXP para ti`);
-                petRewards.push(`🐾 ${petExpGained} EXP para ${user.petName}`);
-            } else {
-                petAdventureText += `🌿 Tu mascota ha explorado y jugado, pero no ha encontrado nada especial.`;
-                const expGained = 15;
-                const petExpGained = 20;
-
-                user.exp += expGained;
-                user.petExp += petExpGained;
-
-                petRewards.push(`✨ ${expGained} EXP para ti`);
-                petRewards.push(`🐾 ${petExpGained} EXP para ${user.petName}`);
-            }
-
-            levelUpMessages.push(...addExperience(user, expGained)); // Player also gets EXP
-            // Level up pet
-            const xpNeededForPetLevel = user.petLevel * 100;
-            if (user.petExp >= xpNeededForPetLevel) {
-                user.petLevel += 1;
-                user.petExp = 0; // Reset exp on level up
-                petAdventureText += `\n\n🎉 *¡${user.petName} ha subido al nivel ${user.petLevel}!*`;
-            }
-
-            user.lastpetadventure = currentTime; // Apply cooldown
-
-            const finalPetAdventureText = `
-${petAdventureText}
-
-*🎁 Recompensas obtenidas:*
-${petRewards.map(item => `• ${item}`).join('\n') || 'Ninguno'}
-
-🐾 Nivel de ${user.petName}: ${user.petLevel}
-✨ EXP de mascota: ${user.petExp}/${user.petLevel * 100}
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + finalPetAdventureText, m);
-            break;
-
-
-        case 'createclan':
-        case 'crearclan':
-            if (user.clan) {
-                await conn.reply(m.chat, `🛡️ Ya perteneces al clan "${user.clan}". Primero debes abandonarlo con ${usedPrefix}rpg leaveclan (No implementado).`, m);
-                return;
-            }
+        case 'upgrade':
+        case 'mejorar':
             if (args.length < 2) {
-                await conn.reply(m.chat, `🛡️ Debes especificar un nombre para tu clan.\n\nEjemplo: ${usedPrefix}rpg createclan Lobos Salvajes`, m);
+                await conn.reply(m.chat, `🛠️ Debes especificar qué sistema quieres mejorar: casco, carga, arma, escudo, mineria.\n\nEjemplo: ${usedPrefix}space upgrade casco`, m);
                 return;
             }
+            const systemToUpgrade = args[1].toLowerCase();
+            let upgradeCost = 0;
+            let currentLevel = 0;
+            let upgradeMessage = "";
 
-            const clanName = args.slice(1).join(' ');
-            if (clanName.length > 20) {
-                await conn.reply(m.chat, `🛡️ El nombre del clan es demasiado largo. Máximo 20 caracteres.`, m);
-                return;
+            switch (systemToUpgrade) {
+                case 'casco':
+                    currentLevel = user.maxHull; // Using maxHull as level indicator
+                    upgradeCost = Math.floor(currentLevel * 10 + 1000); // Cost increases with current max hull
+                    upgradeMessage = `Mejorando casco. Costo: ${upgradeCost} créditos. Aumenta Max Casco en 20.`;
+                    if (user.credits < upgradeCost) {
+                        await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el casco. Tienes ${user.credits}.`, m);
+                        return;
+                    }
+                    user.credits -= upgradeCost;
+                    user.maxHull += 20;
+                    user.hull += 20; // Also increase current hull
+                    await conn.reply(m.chat, `✅ Casco mejorado. Tu Max Casco ahora es ${user.maxHull}. Tu casco actual es ${user.hull}.`, m);
+                    break;
+                case 'carga':
+                    currentLevel = user.cargoPodLevel;
+                    upgradeCost = Math.floor((currentLevel + 1) * 800); // Cost increases with cargo pod level
+                    upgradeMessage = `Mejorando bodega de carga. Costo: ${upgradeCost} créditos. Aumenta Capacidad de Carga en 20.`;
+                     if (user.credits < upgradeCost) {
+                        await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar la bodega de carga. Tienes ${user.credits}.`, m);
+                        return;
+                    }
+                    user.credits -= upgradeCost;
+                    user.cargoPodLevel += 1;
+                    user.cargoCapacity += 20;
+                    await conn.reply(m.chat, `✅ Bodega de carga mejorada al Nivel ${user.cargoPodLevel}. Tu Capacidad de Carga ahora es ${user.cargoCapacity}.`, m);
+                    break;
+                case 'arma':
+                    currentLevel = user.weaponLevel;
+                    upgradeCost = Math.floor((currentLevel + 1) * 1200);
+                    upgradeMessage = `Mejorando sistema de armas. Costo: ${upgradeCost} créditos. Aumenta Nivel de Arma en 1.`;
+                     if (user.credits < upgradeCost) {
+                        await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el sistema de armas. Tienes ${user.credits}.`, m);
+                        return;
+                    }
+                    user.credits -= upgradeCost;
+                    user.weaponLevel += 1;
+                    await conn.reply(m.chat, `✅ Sistema de armas mejorado al Nivel ${user.weaponLevel}.`, m);
+                    break;
+                case 'escudo':
+                    currentLevel = user.shieldGeneratorLevel;
+                    upgradeCost = Math.floor((currentLevel + 1) * 1500);
+                    upgradeMessage = `Instalando/Mejorando generador de escudos. Costo: ${upgradeCost} créditos. Aumenta Max Escudos en 50.`;
+                     if (user.credits < upgradeCost) {
+                        await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el generador de escudos. Tienes ${user.credits}.`, m);
+                        return;
+                    }
+                    user.credits -= upgradeCost;
+                    user.shieldGeneratorLevel += 1;
+                    user.maxShields += 50;
+                    user.shields = user.maxShields; // Fully charge shields on upgrade
+                    await conn.reply(m.chat, `✅ Generador de escudos mejorado al Nivel ${user.shieldGeneratorLevel}. Tu Max Escudos ahora es ${user.maxShields}. Escudos cargados: ${user.shields}.`, m);
+                    break;
+                case 'mineria':
+                    currentLevel = user.miningLaserLevel;
+                    upgradeCost = Math.floor((currentLevel + 1) * 700);
+                    upgradeMessage = `Mejorando láser de minería. Costo: ${upgradeCost} créditos. Aumenta Nivel de Minería en 1.`;
+                     if (user.credits < upgradeCost) {
+                        await conn.reply(m.chat, `💰 Necesitas ${upgradeCost} créditos para mejorar el láser de minería. Tienes ${user.credits}.`, m);
+                        return;
+                    }
+                    user.credits -= upgradeCost;
+                    user.miningLaserLevel += 1;
+                    await conn.reply(m.chat, `✅ Láser de minería mejorado al Nivel ${user.miningLaserLevel}.`, m);
+                    break;
+                default:
+                    await conn.reply(m.chat, `🛠️ Sistema no reconocido para mejorar. Opciones: casco, carga, arma, escudo, mineria.`, m);
+                    return; // Don't save if command is invalid
             }
+            break; // Break after successful upgrade
 
-            const clanCost = 5000;
-            if (user.gold < clanCost) {
-                await conn.reply(m.chat, `💰 No tienes suficiente oro. Necesitas ${clanCost} de oro para crear un clan.`, m);
-                return;
+        case 'trade':
+        case 'comerciar':
+            if (args.length < 4) {
+                 await conn.reply(m.chat, `💰 Uso correcto: ${usedPrefix}space trade [comprar/vender] [articulo] [cantidad]\n\nEjemplo: ${usedPrefix}space trade vender minerales 50`, m);
+                 return;
             }
+            const tradeAction = args[1].toLowerCase();
+            const tradeItem = args[2].toLowerCase();
+            const tradeAmount = parseInt(args[3]);
 
-            // Check if clan name already exists
-            const clanExists = Object.values(db.clans).some(c => c.name.toLowerCase() === clanName.toLowerCase());
-            if (clanExists) {
-                await conn.reply(m.chat, `🛡️ Ya existe un clan con ese nombre. Elige otro nombre.`, m);
-                return;
+            if (isNaN(tradeAmount) || tradeAmount < 1) {
+                 await conn.reply(m.chat, `📊 La cantidad debe ser un número válido mayor o igual a 1.`, m);
+                 return;
             }
-
-            user.gold -= clanCost;
-            user.clan = clanName;
-            user.clanRank = 'líder';
-
-            // Create clan data
-            db.clans[clanName] = getDefaultClanData(clanName, m.sender);
-
-            await conn.reply(m.chat, `🛡️ *¡CLAN CREADO!* 🛡️\n\nHas fundado el clan "${clanName}" por ${clanCost} de oro.\n\nAhora puedes invitar a otros jugadores a unirse con ${usedPrefix}rpg claninvite @usuario (No implementado).`, m);
-            break;
-
-        case 'territory':
-        case 'territorio':
-            if (!user.clan) {
-                await conn.reply(m.chat, `🏞️ Necesitas pertenecer a un clan para interactuar con territorios. Únete a uno con ${usedPrefix}rpg joinclan [nombre] (No implementado) o crea el tuyo con ${usedPrefix}rpg createclan [nombre].`, m);
-                return;
-            }
-            if (!db.clans[user.clan]) {
-                 await conn.reply(m.chat, `⚠️ Ha ocurrido un error con los datos de tu clan. Por favor, contacta al administrador.`, m);
+            if (!RESOURCE_VALUES[tradeItem]) {
+                 await conn.reply(m.chat, `🛒 Artículo '${tradeItem}' no válido para comerciar. Artículos comerciables: ${Object.keys(RESOURCE_VALUES).join(', ')}.`, m);
                  return;
             }
 
-            const clan = db.clans[user.clan];
+            const itemValue = RESOURCE_VALUES[tradeItem];
 
-            if (!args[1]) {
-                // Display territory info
-                const territoryInfo = `
-╔══════════════════════
-║ 🏞️ 𝐓𝐄𝐑𝐑𝐈𝐓𝐎𝐑𝐈𝐎 𝐃𝐄𝐋 𝐂𝐋𝐀𝐍 🏞️
-╠══════════════════════
-║ 🛡️ *Clan:* ${clan.name}
-║ 👑 *Líder:* ${db.users[clan.leader]?.name || 'Desconocido'}
-║ 👥 *Miembros:* ${clan.members.length}
-╠══════════════════════
-║ 🗺️ *Territorio actual:* ${clan.territory || 'Ninguno'}
-${clan.territory ? `║ 💰 *Ingresos diarios:* ${Math.floor(clan.level * 200)} de oro` : ''}
-╠══════════════════════
-║ 💡 *Comandos disponibles:*
-║ • ${usedPrefix}rpg territory claim [nombre]
-║ • ${usedPrefix}rpg territory upgrade
-║ • ${usedPrefix}rpg territory info
-╚══════════════════════
-`;
-                await conn.reply(m.chat, territoryInfo, m);
-                return;
-            }
+            if (tradeAction === 'sell' || tradeAction === 'vender') {
+                // Use the Spanish key for cargo access
+                if (user.cargo[tradeItem] === undefined || user.cargo[tradeItem] < tradeAmount) {
+                     await conn.reply(m.chat, `📊 No tienes suficiente ${tradeItem} para vender. Solo tienes ${user.cargo[tradeItem] || 0}.`, m);
+                     return;
+                }
+                const goldEarned = itemValue * tradeAmount;
+                user.cargo[tradeItem] -= tradeAmount;
+                user.credits += goldEarned;
+                await conn.reply(m.chat, `💰 Vendiste ${tradeAmount} unidades de ${tradeItem} por ${goldEarned} créditos.`, m);
 
-            const territoryAction = args[1].toLowerCase();
+            } else if (tradeAction === 'buy' || tradeAction === 'comprar') {
+                const totalCost = itemValue * tradeAmount;
+                 if (user.credits < totalCost) {
+                     await conn.reply(m.chat, `💰 No tienes suficientes créditos para comprar ${tradeAmount} unidades de ${tradeItem}. Necesitas ${totalCost}. Tienes ${user.credits}.`, m);
+                     return;
+                 }
+                 const cargoWeight = getCurrentCargoWeight(user.cargo);
+                 if (cargoWeight + tradeAmount > user.cargoCapacity) {
+                     const canBuy = user.cargoCapacity - cargoWeight;
+                     await conn.reply(m.chat, `📦 No tienes suficiente espacio de carga para comprar ${tradeAmount} unidades de ${tradeItem}. Solo puedes llevar ${canBuy} unidades más.`, m);
+                     return;
+                 }
 
-            switch (territoryAction) {
-                case 'claim':
-                case 'reclamar':
-                    if (clan.territory) {
-                        await conn.reply(m.chat, `🏞️ Tu clan ya controla el territorio "${clan.territory}". Puedes mejorarlo con ${usedPrefix}rpg territory upgrade.`, m);
-                        return;
-                    }
-                    if (user.clanRank !== 'líder') {
-                        await conn.reply(m.chat, `👑 Solo el líder del clan puede reclamar territorios.`, m);
-                        return;
-                    }
-                    const territoryCost = 2000;
-                    if (clan.treasury < territoryCost) {
-                        await conn.reply(m.chat, `💰 El tesoro del clan no tiene suficiente oro. Necesitan ${territoryCost} de oro para reclamar un territorio.`, m);
-                        return;
-                    }
-                    if (args.length < 3) {
-                        await conn.reply(m.chat, `🏞️ Debes especificar un nombre para tu territorio.\n\nEjemplo: ${usedPrefix}rpg territory claim Valle Esmeralda`, m);
-                        return;
-                    }
-                    const territoryName = args.slice(2).join(' ');
-                    if (territoryName.length > 25) {
-                        await conn.reply(m.chat, `🏞️ El nombre del territorio es demasiado largo. Máximo 25 caracteres.`, m);
-                        return;
-                    }
-
-                    // Check if territory is already claimed
-                    const territoryTaken = Object.values(db.clans).some(c => c.territory?.toLowerCase() === territoryName.toLowerCase());
-                    if (territoryTaken) {
-                        await conn.reply(m.chat, `⚔️ Ese territorio ya está bajo el control de otro clan. Deberás desafiarlo para conquistarlo con ${usedPrefix}rpg clanwar [nombre del clan] (No implementado).`, m);
-                        return;
-                    }
-
-                    clan.treasury -= territoryCost;
-                    clan.territory = territoryName;
-                    clan.lastTerritoryClaim = currentTime; // Apply cooldown
-
-                    await conn.reply(m.chat, `🏞️ *¡TERRITORIO RECLAMADO!* 🏞️\n\nTu clan ha establecido control sobre "${territoryName}".\n\nAhora recibirán ingresos diarios de ${Math.floor(clan.level * 200)} de oro en el tesoro del clan.`, m);
-                    break;
-
-                case 'upgrade':
-                case 'mejorar':
-                    if (!clan.territory) {
-                        await conn.reply(m.chat, `🏞️ Tu clan no controla ningún territorio. Primero deben reclamar uno con ${usedPrefix}rpg territory claim [nombre].`, m);
-                        return;
-                    }
-                    if (user.clanRank !== 'líder' && user.clanRank !== 'oficial') {
-                        await conn.reply(m.chat, `👑 Solo el líder y oficiales del clan pueden mejorar el territorio.`, m);
-                        return;
-                    }
-                     if (currentTime - (clan.lastTerritoryUpgrade || 0) < DAILY_COOLDOWN) { // Using daily cooldown for upgrade as placeholder
-                        const timeLeft = DAILY_COOLDOWN - (currentTime - (clan.lastTerritoryUpgrade || 0));
-                        await conn.reply(m.chat, `⏱️ El territorio aún se está fortificando. Podrán mejorarlo de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
-                        return;
-                    }
-
-                    const upgradeCost = clan.level * 1500;
-                    if (clan.treasury < upgradeCost) {
-                        await conn.reply(m.chat, `💰 El tesoro del clan no tiene suficiente oro. Necesitan ${upgradeCost} de oro para mejorar el territorio.`, m);
-                        return;
-                    }
-
-                    clan.treasury -= upgradeCost;
-                    clan.level += 1;
-                    clan.lastTerritoryUpgrade = currentTime; // Apply cooldown
-
-                    await conn.reply(m.chat, `🏞️ *¡TERRITORIO MEJORADO!* 🏞️\n\nHan invertido en la mejora de "${clan.territory}".\n\nNivel del clan: ${clan.level}\nIngresos diarios actualizados: ${Math.floor(clan.level * 200)} de oro`, m);
-                    break;
-
-                case 'info':
-                case 'información':
-                    if (!clan.territory) {
-                        await conn.reply(m.chat, `🏞️ Tu clan no controla ningún territorio. Primero deben reclamar uno con ${usedPrefix}rpg territory claim [nombre].`, m);
-                        return;
-                    }
-                    const territoryInfoDetailed = `
-╔══════════════════════
-║ 🏞️ 𝐓𝐄𝐑𝐑𝐈𝐓𝐎𝐑𝐈𝐎 "${clan.territory}" 🏞️
-╠══════════════════════
-║ 🛡️ *Controlado por:* ${clan.name}
-║ 👑 *Administrado por:* ${db.users[clan.leader]?.name || 'Desconocido'}
-║ 🏆 *Nivel del clan:* ${clan.level}
-║ 💰 *Tesoro del clan:* ${clan.treasury} de oro
-╠══════════════════════
-║ 📊 *BENEFICIOS DIARIOS*
-║ 💰 *Ingresos:* ${Math.floor(clan.level * 200)} de oro
-║ 🧪 *Bonificaciones de recursos:* +${clan.level * 5}% (Note: Bonus not implemented in gathering commands yet)
-╠══════════════════════
-║ 🔄 *Próxima mejora:* ${clan.level * 1500} de oro
-╚══════════════════════
-`;
-                    await conn.reply(m.chat, territoryInfoDetailed, m);
-                    break;
-
-                default:
-                    await conn.reply(m.chat, `🏞️ Acción de territorio no reconocida. Opciones disponibles:\n• ${usedPrefix}rpg territory claim [nombre]\n• ${usedPrefix}rpg territory upgrade\n• ${usedPrefix}rpg territory info`, m);
-            }
-            break;
-
-        case 'quest':
-        case 'misión':
-        case 'mision':
-            if (!user.activeQuest) {
-                // Generate a new quest
-                const questTypes = [
-                    { type: 'hunt', name: 'Caza de Bestias', target: Math.floor(Math.random() * 3) + 3, reward: { gold: 500, exp: 300 } }, // Target 3-5
-                    { type: 'mine', name: 'Excavación Profunda', target: Math.floor(Math.random() * 4) + 5, reward: { gold: 400, exp: 350 } }, // Target 5-8
-                    { type: 'farm', name: 'Cosecha Abundante', target: Math.floor(Math.random() * 3) + 4, reward: { gold: 350, exp: 250 } }, // Target 4-6
-                    // Craft and adventure quests are more complex to track directly
-                    // { type: 'craft', name: 'Artesanía Fina', target: Math.floor(Math.random() * 2) + 2, reward: { gold: 600, exp: 400 } }, // Target 2-3
-                    // { type: 'adventure', name: 'Exploración Peligrosa', target: Math.floor(Math.random() * 3) + 1, reward: { gold: 700, exp: 500 } } // Target 1-3
-                ];
-
-                const randomQuest = questTypes[Math.floor(Math.random() * questTypes.length)];
-                user.activeQuest = randomQuest;
-                user.questProgress = 0;
-
-                const questText = `
-╔══════════════════════
-║ 📜 𝐍𝐔𝐄𝐕𝐀 𝐌𝐈𝐒𝐈Ó𝐍 📜
-╠══════════════════════
-║ 🔍 *Misión:* ${randomQuest.name}
-║ 📋 *Objetivo:* ${randomQuest.type === 'hunt' ? 'Cazar' :
-                   randomQuest.type === 'mine' ? 'Minar' :
-                   randomQuest.type === 'farm' ? 'Cultivar' : 'Completar'}
-            ${randomQuest.target} ${randomQuest.type === 'hunt' ? 'presas' :
-                                  randomQuest.type === 'mine' ? 'minerales' :
-                                  randomQuest.type === 'farm' ? 'cosechas' : 'acciones'}
-╠══════════════════════
-║ 🎁 *RECOMPENSAS:*
-║ 💰 ${randomQuest.reward.gold} Oro
-║ ✨ ${randomQuest.reward.exp} EXP
-╠══════════════════════
-║ 📊 *Progreso:* ${user.questProgress}/${randomQuest.target}
-╚══════════════════════
-`;
-                await conn.reply(m.chat, questText, m);
+                user.credits -= totalCost;
+                // Use the Spanish key for cargo access
+                user.cargo[tradeItem] = (user.cargo[tradeItem] || 0) + tradeAmount; // Add to cargo, initialize if needed
+                await conn.reply(m.chat, `🛍️ Compraste ${tradeAmount} unidades de ${tradeItem} por ${totalCost} créditos.`, m);
 
             } else {
-                // Show active quest progress
-                const quest = user.activeQuest;
-                const questText = `
-╔══════════════════════
-║ 📜 𝐌𝐈𝐒𝐈Ó𝐍 𝐀𝐂𝐓𝐈𝐕𝐀 📜
-╠══════════════════════
-║ 🔍 *Misión:* ${quest.name}
-║ 📋 *Objetivo:* ${quest.type === 'hunt' ? 'Cazar' :
-                   quest.type === 'mine' ? 'Minar' :
-                   quest.type === 'farm' ? 'Cultivar' : 'Completar'}
-            ${quest.target} ${quest.type === 'hunt' ? 'presas' :
-                                       quest.type === 'mine' ? 'minerales' :
-                                       quest.type === 'farm' ? 'cosechas' : 'acciones'}
-╠══════════════════════
-║ 🎁 *RECOMPENSAS:*
-║ 💰 ${quest.reward.gold} Oro
-║ ✨ ${quest.reward.exp} EXP
-╠══════════════════════
-║ 📊 *Progreso:* ${user.questProgress}/${quest.target}
-${user.questProgress >= quest.target ? '✅ *¡COMPLETADA! Reclama tu recompensa*' : ''}
-╚══════════════════════
-`;
-
-                if (user.questProgress >= quest.target && args[1]?.toLowerCase() === 'claim') {
-                    // Reclaim reward
-                    user.gold += quest.reward.gold;
-                    const expGained = quest.reward.exp;
-                    levelUpMessages.push(...addExperience(user, expGained));
-
-                    const rewardText = `
-╔══════════════════════
-║ 🎉 𝐌𝐈𝐒𝐈Ó𝐍 𝐂𝐎𝐌𝐏𝐋𝐄𝐓𝐀𝐃𝐀 🎉
-╠══════════════════════
-║ 🔍 *Misión:* ${quest.name}
-╠══════════════════════
-║ 🎁 *RECOMPENSAS RECIBIDAS:*
-║ 💰 ${quest.reward.gold} Oro
-║ ✨ ${expGained} EXP
-╚══════════════════════
-`;
-                    user.activeQuest = null;
-                    user.questProgress = 0;
-
-                    await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + rewardText, m);
-
-                } else if (user.questProgress >= quest.target) {
-                    await conn.reply(m.chat, `${questText}\n\nUsa ${usedPrefix}rpg quest claim para reclamar tu recompensa.`, m);
-                } else {
-                    await conn.reply(m.chat, questText, m);
-                }
+                 await conn.reply(m.chat, `💰 Acción de comercio no válida. Usa 'comprar' o 'vender'.`, m);
+                 return; // Don't save if invalid action
             }
-            break;
+            break; // Break after successful trade
 
-        case 'daily':
-        case 'diaria':
-            if (currentTime - user.lastclaim < DAILY_COOLDOWN) {
-                const timeLeft = DAILY_COOLDOWN - (currentTime - user.lastclaim);
-                 const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        case 'prices':
+        case 'precios':
+             let pricesText = "🛒 *Precios Actuales del Mercado (Compra/Venta):*\n\n";
+             // Iterate through RESOURCE_VALUES which has Spanish keys
+             for (const item in RESOURCE_VALUES) {
+                 const value = RESOURCE_VALUES[item];
+                 pricesText += `• ${item.charAt(0).toUpperCase() + item.slice(1)}: ${value} créditos\n`;
+             }
+             pricesText += "\n(Estos precios son fijos en esta simulación)";
+             await conn.reply(m.chat, pricesText, m);
+             break;
 
-                await conn.reply(m.chat, `⏱️ Ya has reclamado tu recompensa diaria. Vuelve en ${hours} horas y ${minutes} minutos.`, m);
+
+        case 'jump':
+        case 'saltar':
+             if (user.fuel < FUEL_COST_PER_JUMP) {
+                 await conn.reply(m.chat, `⛽ Necesitas ${FUEL_COST_PER_JUMP} de combustible para realizar un salto espacial. Tienes ${user.fuel}.`, m);
+                 return;
+             }
+             if (args.length < 2) {
+                 await conn.reply(m.chat, `🌌 Debes especificar el sector al que quieres saltar.\n\nEjemplo: ${usedPrefix}space jump Sector 002\n(En esta simulación, puedes saltar a cualquier nombre de sector que elijas)`, m);
+                 return;
+             }
+             const targetSector = args.slice(1).join(' ');
+             if (targetSector === user.location) {
+                 await conn.reply(m.chat, `😅 Ya estás en el sector ${targetSector}.`, m);
+                 return;
+             }
+
+             user.fuel -= FUEL_COST_PER_JUMP;
+             user.location = targetSector;
+             await conn.reply(m.chat, `🌌 Realizando salto espacial... ¡Llegaste al sector ${user.location}!`, m);
+             break;
+
+         case 'attack':
+         case 'atacar':
+            if (!m.mentionedJid || m.mentionedJid.length === 0) {
+                await conn.reply(m.chat, `⚔️ Debes especificar a quién quieres atacar.\n\nEjemplo: ${usedPrefix}space attack @usuario`, m);
+                return;
+            }
+            if (currentTime - user.lastCombat < COOLDOWN_COMBAT) {
+                const timeLeft = COOLDOWN_COMBAT - (currentTime - user.lastCombat);
+                await conn.reply(m.chat, `⏱️ Tu nave necesita recargar armas y sistemas. Puedes atacar de nuevo en ${formatCooldownTime(timeLeft)}.`, m);
                 return;
             }
 
-            // Daily rewards
-            const dailyRewards = {
-                gold: 500 + (user.level * 50),
-                exp: 300 + (user.level * 30),
-                potion: 2,
-                food: 3,
-                seeds: Math.floor(Math.random() * 5) + 1
-            };
-
-            // Update user data
-            user.gold += dailyRewards.gold;
-            const expGained = dailyRewards.exp;
-            levelUpMessages.push(...addExperience(user, expGained));
-            user.potion += dailyRewards.potion;
-            user.food += dailyRewards.food;
-            user.seeds += dailyRewards.seeds;
-            user.lastclaim = currentTime;
-
-            const dailyText = `
-╔══════════════════════
-║ 🎁 𝐑𝐄𝐂𝐎𝐌𝐏𝐄𝐍𝐒𝐀 𝐃𝐈𝐀𝐑𝐈𝐀 🎁
-╠══════════════════════
-║ 📆 *Fecha:* ${new Date().toLocaleDateString()}
-╠══════════════════════
-║ 💰 ${dailyRewards.gold} Oro
-║ ✨ ${expGained} EXP
-║ 🧪 ${dailyRewards.potion} Pociones
-║ 🍖 ${dailyRewards.food} Alimentos
-║ 🌱 ${dailyRewards.seeds} Semillas
-╠══════════════════════
-║ 📊 *Estadísticas actuales:*
-║ 💰 ${user.gold} Oro total
-║ 🏅 Nivel: ${user.level}
-╚══════════════════════
-`;
-            await conn.reply(m.chat, levelUpMessages.join('\n') + (levelUpMessages.length > 0 ? '\n\n' : '') + dailyText, m);
-            break;
-
-
-        case 'shop':
-        case 'tienda':
-            const shopText = `
-╔══════════════════════
-║ 🛒 𝐓𝐈𝐄𝐍𝐃𝐀 𝐑𝐏𝐆 🛒
-╠══════════════════════
-║ 📋 *ARTÍCULOS DISPONIBLES:*
-║
-║ 🧪 *Poción* - 150 Oro
-║ Recupera 25 de salud y 15 de energía
-║
-║ 🍖 *Alimento* - 100 Oro
-║ Necesario para alimentar mascotas
-║
-║ 🌱 *Semillas* - 50 Oro
-║ Para cultivar en tu granja
-║
-║ ⛏️ *Pico* - 800 Oro
-║ Herramienta necesaria para minar
-║
-║ 🪓 *Hacha* - 750 Oro
-║ Permite talar árboles eficientemente
-║
-║ 🎣 *Caña de pescar* - 650 Oro
-║ Para pescar en ríos y lagos
-║
-║ 🗡️ *Espada* - 1500 Oro
-║ Mejora tus habilidades de combate
-║
-║ 🛡️ *Armadura* - 2000 Oro
-║ Protección contra daños
-╠══════════════════════
-║ 💡 *COMANDOS:*
-║ • ${usedPrefix}rpg buy [artículo] [cantidad]
-║ • ${usedPrefix}rpg sell [recurso] [cantidad]
-╚══════════════════════
-`;
-            await conn.reply(m.chat, shopText, m);
-            break;
-
-        case 'buy':
-        case 'comprar':
-            if (args.length < 2) {
-                await conn.reply(m.chat, `🛒 Debes especificar qué quieres comprar.\n\nEjemplo: ${usedPrefix}rpg buy pocion 2`, m);
-                return;
-            }
-            const itemToBuy = args[1].toLowerCase();
-            const quantityToBuy = parseInt(args[2]) || 1;
-
-            if (quantityToBuy < 1) {
-                await conn.reply(m.chat, `📊 La cantidad debe ser al menos 1.`, m);
+            const targetPilotJid = m.mentionedJid[0];
+            if (targetPilotJid === m.sender) {
+                await conn.reply(m.chat, `😅 No puedes atacarte a ti mismo.`, m);
                 return;
             }
 
-            const prices = {
-                'pocion': 150, 'poción': 150,
-                'alimento': 100, 'comida': 100,
-                'semillas': 50, 'semilla': 50,
-                'pico': 800,
-                'hacha': 750,
-                'caña': 650, 'cañadepescar': 650,
-                'espada': 1500,
-                'armadura': 2000
-            };
+             // Ensure target exists in DB (create if not, though attacking non-existent user is weird)
+             if (!db.spaceUsers[targetPilotJid]) {
+                 db.spaceUsers[targetPilotJid] = getDefaultUserData(targetPilotJid, conn.getName(targetPilotJid) || `Piloto_${targetPilotJid.split('@')[0]}`);
+             }
+             const targetPilot = db.spaceUsers[targetPilotJid];
 
-            if (!prices[itemToBuy]) {
-                await conn.reply(m.chat, `🛒 Artículo '${itemToBuy}' no encontrado en la tienda. Usa ${usedPrefix}rpg shop para ver los disponibles.`, m);
-                return;
-            }
+             // Simple combat simulation
+             let combatLog = `⚔️ *¡Combate Espacial Iniciado!* ⚔️\n\n`;
+             combatLog += `🚀 '${user.shipName}' (Casco: ${user.hull}, Escudos: ${user.shields}) vs 🚀 '${targetPilot.shipName}' (Casco: ${targetPilot.hull}, Escudos: ${targetPilot.shields})\n\n`;
 
-            const totalCost = prices[itemToBuy] * quantityToBuy;
-            if (user.gold < totalCost) {
-                await conn.reply(m.chat, `💰 No tienes suficiente oro. Necesitas ${totalCost} oro para comprar ${quantityToBuy} ${itemToBuy}(s).`, m);
-                return;
-            }
+             const attackerDamage = Math.floor(Math.random() * (user.weaponLevel * 10)) + 10;
+             // Use a simple evasion based on a random factor
+             const targetEvasion = Math.random() * 20; // Max 20 evasion
 
-            // Process purchase
-            user.gold -= totalCost;
+             if (attackerDamage > targetEvasion) {
+                 let damageDealt = attackerDamage - Math.floor(targetPilot.shields * 0.5); // Shields absorb some damage
+                 if (damageDealt < 0) damageDealt = 0;
 
-            switch (itemToBuy) {
-                case 'pocion':
-                case 'poción':
-                    user.potion += quantityToBuy;
-                    break;
-                case 'alimento':
-                case 'comida':
-                    user.food += quantityToBuy;
-                    break;
-                case 'semillas':
-                case 'semilla':
-                    user.seeds += quantityToBuy;
-                    break;
-                case 'pico':
-                    user.pickaxe += quantityToBuy;
-                    break;
-                case 'hacha':
-                    user.axe += quantityToBuy;
-                    break;
-                case 'caña':
-                case 'cañadepescar':
-                    user.fishingrod += quantityToBuy;
-                    break;
-                case 'espada':
-                    user.weapon += quantityToBuy;
-                    break;
-                case 'armadura':
-                    user.armor += quantityToBuy;
-                    break;
-            }
+                 targetPilot.shields -= damageDealt;
+                 if (targetPilot.shields < 0) {
+                     const hullDamage = Math.abs(targetPilot.shields);
+                     targetPilot.shields = 0;
+                     targetPilot.hull -= hullDamage;
+                     combatLog += `💥 '${user.shipName}' impactó a '${targetPilot.shipName}' por ${damageDealt} daño, rompiendo sus escudos y dañando el casco en ${hullDamage}.`;
+                 } else {
+                     combatLog += `🛡️ '${user.shipName}' impactó los escudos de '${targetPilot.shipName}' por ${damageDealt} daño. Escudos restantes: ${targetPilot.shields}.`;
+                 }
+             } else {
+                 combatLog += `💨 '${user.shipName}' atacó, pero '${targetPilot.shipName}' evadió el disparo.`;
+             }
 
-            await conn.reply(m.chat, `🛍️ *¡COMPRA EXITOSA!*\n\nHas comprado ${quantityToBuy} ${itemToBuy}(s) por ${totalCost} oro.`, m);
-            break;
+             combatLog += `\n\n❤️ Casco de '${targetPilot.shipName}': ${targetPilot.hull}/${targetPilot.maxHull}`;
 
-        case 'sell':
-        case 'vender':
-            if (args.length < 2) {
-                await conn.reply(m.chat, `💰 Debes especificar qué quieres vender.\n\nEjemplo: ${usedPrefix}rpg sell piedra 10`, m);
-                return;
-            }
-            const resourceToSell = args[1].toLowerCase();
-            const amountToSell = parseInt(args[2]) || 1;
+             if (targetPilot.hull <= 0) {
+                 targetPilot.hull = 0;
+                 combatLog += `\n\n✅ ¡Victoria! Derrotaste a '${targetPilot.shipName}'.`;
+                 user.kills = (user.kills || 0) + 1;
+                 targetPilot.deaths = (targetPilot.deaths || 0) + 1;
+                 // Add potential rewards (scrap, credits)
+                 const scrapReward = Math.floor(Math.random() * 10) + 5;
+                 const creditReward = Math.floor(Math.random() * 100) + 50;
+                 user.cargo.chatarra = (user.cargo.chatarra || 0) + scrapReward; // Use Spanish key
+                 user.credits += creditReward;
+                 combatLog += `\nRecogiste ${scrapReward} Chatarra y ${creditReward} créditos de los restos.`;
 
-            if (amountToSell < 1) {
-                await conn.reply(m.chat, `📊 La cantidad debe ser al menos 1.`, m);
-                return;
-            }
+             } else {
+                 // Simple counter-attack simulation
+                 const targetDamage = Math.floor(Math.random() * (targetPilot.weaponLevel * 8)) + 8;
+                 const attackerEvasion = Math.random() * 20; // Max 20 evasion
 
-            const sellPrices = {
-                'piedra': 10, 'hierro': 25, 'madera': 15,
-                'cuero': 30, 'cuerda': 15,
-                'cultivo': 40, 'cultivos': 40,
-                'hierba': 20, 'hierbas': 20,
-                'diamante': 750, 'diamantes': 750,
-                'esmeralda': 500, 'esmeraldas': 500,
-                'rubi': 600, 'rubí': 600, 'rubies': 600, 'rubíes': 600
-            };
+                 if (targetDamage > attackerEvasion) {
+                      let damageDealt = targetDamage - Math.floor(user.shields * 0.5);
+                      if (damageDealt < 0) damageDealt = 0;
 
-            if (!sellPrices[resourceToSell]) {
-                await conn.reply(m.chat, `🛒 Recurso '${resourceToSell}' no válido para vender. Recursos vendibles: piedra, hierro, madera, cuero, cuerda, cultivos, hierbas, diamante, esmeralda, rubí.`, m);
-                return;
-            }
+                      user.shields -= damageDealt;
+                      if (user.shields < 0) {
+                          const hullDamage = Math.abs(user.shields);
+                          user.shields = 0;
+                          user.hull -= hullDamage;
+                          combatLog += `\n💥 '${targetPilot.shipName}' contraatacó a '${user.shipName}' por ${damageDealt} daño, rompiendo tus escudos y dañando el casco en ${hullDamage}.`;
+                      } else {
+                          combatLog += `\n🛡️ '${targetPilot.shipName}' contraatacó los escudos de '${user.shipName}' por ${damageDealt} daño. Escudos restantes: ${user.shields}.`;
+                      }
+                 } else {
+                     combatLog += `\n💨 '${targetPilot.shipName}' contraatacó, pero '${user.shipName}' evadió el disparo.`;
+                 }
+                 combatLog += `\n\n❤️ Tu Casco: ${user.hull}/${user.maxHull}`;
 
-            // Check if player has enough resources and deduct
-            let hasEnough = false;
-            let resourceKey = resourceToSell; // Assume singular key by default
-            if (resourceToSell === 'cultivos') resourceKey = 'crops';
-            else if (resourceToSell === 'hierbas') resourceKey = 'herb'; // JS used 'herb' for plural too?
-            else if (resourceToSell === 'diamantes') resourceKey = 'diamond';
-            else if (resourceToSell === 'esmeraldas') resourceKey = 'emerald';
-            else if (resourceToSell === 'rubies' || resourceToSell === 'rubíes') resourceKey = 'ruby';
+                 if (user.hull <= 0) {
+                     user.hull = 0;
+                     combatLog += `\n\n❌ ¡Derrotado! Tu nave ha sido destruida.`;
+                     user.deaths = (user.deaths || 0) + 1;
+                     targetPilot.kills = (targetPilot.kills || 0) + 1;
+                     // Add penalty (lose resources, credits, etc.)
+                     const penaltyCredits = Math.floor(user.credits * 0.1);
+                     user.credits -= penaltyCredits;
+                      if (user.credits < 0) user.credits = 0;
+                     combatLog += `\nPerdiste ${penaltyCredits} créditos.`;
+                 }
+             }
 
+             user.lastCombat = currentTime; // Apply cooldown
+             await conn.reply(m.chat, combatLog, m, { mentions: [m.sender, targetPilotJid] }); // Mention both users
 
-            if (user[resourceKey] !== undefined && user[resourceKey] >= amountToSell) {
-                 hasEnough = true;
-                 user[resourceKey] -= amountToSell;
-            } else if (resourceKey === 'herb' && user['herbs'] !== undefined && user['herbs'] >= amountToSell) {
-                 // Check for plural key if singular didn't work (based on JS example)
-                 hasEnough = true;
-                 user['herbs'] -= amountToSell;
-            } else if (resourceKey === 'crops' && user['cultivos'] !== undefined && user['cultivos'] >= amountToSell) {
-                 hasEnough = true;
-                 user['cultivos'] -= amountToSell;
-            }
-
-
-            if (!hasEnough) {
-                // Try to get the current amount for the message
-                const currentAmount = user[resourceKey] !== undefined ? user[resourceKey] : (user[`${resourceKey}s`] !== undefined ? user[`${resourceKey}s`] : 0);
-                await conn.reply(m.chat, `📊 No tienes suficiente ${resourceToSell}. Solo tienes ${currentAmount}.`, m);
-                return;
-            }
-
-            // Calculate gold received
-            const receivedGold = sellPrices[resourceToSell] * amountToSell;
-            user.gold += receivedGold;
-
-            await conn.reply(m.chat, `💰 *¡VENTA EXITOSA!*\n\nHas vendido ${amountToSell} ${resourceToSell}(s) por ${receivedGold} oro.`, m);
             break;
 
 
-        case 'soporte':
-        case 'contacto':
-            await conn.reply(m.chat, `
-╭━━━〔 *📞 SOPORTE TÉCNICO* 〕━━━⬣
-┃
-┃ *👤 Nombre:* SoyMaycol
-┃ *📱 WhatsApp:* wa.me/51921826291
-┃ *🌐 Disponibilidad:* 24/7 (consultas, ayuda, sugerencias)
-┃
-┃ *❓ ¿Problemas con el bot?*
-┃     No dudes en escribirme directamente.
-┃
-╰━━━━━━━━━━━━━━━━━━━━⬣
-
-📌 *RPG-Ultra V4 - Editado por:* _Wirk_
-📌 *Perrita no Yūsha Hecho Por:* Wirk
-`, m);
-            break;
-
-
-        // --- Unrecognized RPG Sub-command ---
+        // --- Unrecognized Space Sub-command ---
         default:
-            const helpTextDefault = `Comando RPG '${type}' no reconocido. Usa ${usedPrefix}rpg para ver los comandos disponibles.`;
-            await conn.reply(m.chat, helpTextDefault, m);
+            const defaultText = `Comando espacial '${subCommand}' no reconocido. Usa ${usedPrefix}space help para ver los comandos disponibles.`;
+            await conn.reply(m.chat, defaultText, m);
     }
 
     // --- Save Database after processing a command ---
@@ -1667,53 +733,7 @@ ${user.questProgress >= quest.target ? '✅ *¡COMPLETADA! Reclama tu recompensa
 export default handler;
 
 // --- Add handler properties (adjust based on your framework) ---
-handler.help = ['rpg', 'rpg <comando>'];
-handler.tags = ['fun']; // Or your relevant tag
-handler.command = ['rpg']; // The main command to trigger this handler
-
-// --- Optional: Add acepte/accept logic if your framework supports listening for specific messages ---
-// This is a simplified example and needs to be integrated with your bot's message listener
-/*
-const handleAcceptMessage = async (m, { conn }) => {
-    const db = loadDatabase();
-    const user = db.users[m.sender];
-
-    // Check if the user is currently involved in a pending duel or marriage proposal in this chat
-    // This requires storing the pending proposals/challenges somewhere accessible (e.g., in db.groups or a temporary in-memory object)
-    // For simplicity, this example doesn't store pending challenges globally.
-    // You would need to add that logic in the 'duel' and 'marry' cases.
-
-    // Example logic (requires pending challenges to be stored):
-    // if (conn.duelChallenges && conn.duelChallenges[m.chat] && conn.duelChallenges[m.chat].challenged === m.sender) {
-    //     // User accepted the duel
-    //     const challengerJid = conn.duelChallenges[m.chat].challenger;
-    //     // Implement duel logic here
-    //     await conn.reply(m.chat, `@${m.sender.split('@')[0]} ha aceptado el duelo de @${challengerJid.split('@')[0]}! ¡Que comience la batalla!`, m, { mentions: [m.sender, challengerJid] });
-    //     clearTimeout(conn.duelChallenges[m.chat].timeout);
-    //     delete conn.duelChallenges[m.chat];
-    //     // Save DB after duel logic
-    //     saveDatabase(db);
-    // } else if (conn.marriageProposals && conn.marriageProposals[m.chat] && conn.marriageProposals[m.chat].proposed === m.sender) {
-    //      // User accepted the marriage proposal
-    //      const proposerJid = conn.marriageProposals[m.chat].proposer;
-    //      // Update marriage status for both users
-    //      db.users[m.sender].marriage = proposerJid;
-    //      db.users[proposerJid].marriage = m.sender;
-    //      await conn.reply(m.chat, `💖 ¡Felicidades! @${m.sender.split('@')[0]} y @${proposerJid.split('@')[0]} se han casado!`, m, { mentions: [m.sender, proposerJid] });
-    //      clearTimeout(conn.marriageProposals[m.chat].timeout);
-    //      delete conn.marriageProposals[m.chat];
-    //      // Save DB after marriage
-    //      saveDatabase(db);
-    // }
-};
-
-// You would need to register this handleAcceptMessage function with your bot's message listener
-// to trigger when a user sends a message containing "acepto" or "acepte".
-// Example (conceptual, depends on framework):
-// conn.on('message', async m => {
-//     if (m.text && m.text.toLowerCase().includes('acepto')) {
-//         handleAcceptMessage(m, { conn });
-//     }
-// });
-*/
+handler.help = ['space', 'space <comando>'];
+handler.tags = ['rpg', 'game']; // Or your relevant tags
+handler.command = ['space']; // The main command to trigger this handler
 
