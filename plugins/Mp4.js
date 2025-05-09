@@ -15,7 +15,7 @@ const handler = async (m, { conn, text, command }) => {
     const current = Math.floor(Math.random() * (total - 30 + 1)) + 30;
     let buff = await create(video.thumbnail, video.title, video.author.name, current, total);
     const cap = `
-\`\`\`⊜─⌈ 📻 ◜YouTube Play◞ 📻 ⌋─⊜\`\`\`
+\`\`\`⊜─⌈ 📻 ◜YouTu Play◞ 📻 ⌋─⊜\`\`\`
 
 ≡ 🌿 \`Título\` : » ${video.title}
 ≡ 🌾 \`Author\` : » ${video.author.name}
