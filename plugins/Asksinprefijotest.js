@@ -30,7 +30,7 @@ const handler = async (msg, { conn, text }) => {
       text: result
     }, { quoted: msg });
 
-    await conn.sendMessage(chatId, { react: { text: '🪴, key: msg.key } });
+    await conn.sendMessage(chatId, { react: { text: '🪴', key: msg.key } }); // Aquí estaba el error: comilla faltante
 
   } catch (error) {
     console.error(error);
@@ -80,9 +80,9 @@ async function perplexityQuery(q, prompt) {
   return data.response;
 }
 
-// Ahora sí:
-handler.customPrefix = /^ai\s/i; // si mensaje inicia con "Ai "
-handler.command = new RegExp; // aceptar cualquier comando, lo maneja customPrefix
+// Configuración del handler
+handler.customPrefix = /^ai\s/i;
+handler.command = () => true; // acepta cualquier texto con el prefijo custom
 handler.help = ['ai <pregunta>'];
 handler.tags = ['ai'];
 handler.register = true;
