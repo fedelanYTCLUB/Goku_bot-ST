@@ -2,49 +2,85 @@ import axios from 'axios'
 import { sticker } from '../lib/sticker.js'
 
 let handler = m => m
+
+const COMANDO_CLAVES = {
+  audio: ['descarga', 'descargame', 'bájame', 'bajame', 'ponme la canción', 'reproduce', 'play', 'quiero oír'],
+  imagen: ['hazme una imagen', 'imagen de', 'quiero ver', 'dibuja', 'generar imagen', 'crear imagen'],
+  video: ['video de', 'descarga video', 'bájame el video', 'reproduce video', 'quiero ver un video'],
+  instagram: ['video de instagram', 'descarga de instagram', 'instagram video']
+}
+
+const COMANDO_SUGERIDOS = {
+  audio: '.play',
+  imagen: '.imagen',
+  video: '.ytmp4',
+  instagram: '.instagram'
+}
+
 handler.all = async function (m, { conn }) {
-  let user = global.db.data.users[m.sender]
-  let chat = global.db.data.chats[m.chat]
-  m.isBot = m.id.startsWith('BAE5') && m.id.length === 16 || m.id.startsWith('3EB0') && m.id.length === 12 || m.id.startsWith('3EB0') && (m.id.length === 20 || m.id.length === 22) || m.id.startsWith('B24E') && m.id.length === 20
+  const user = global.db.data.users[m.sender]
+  const chat = global.db.data.chats[m.chat]
+  m.isBot = m.id.startsWith('BAE5') && m.id.length === 16 || m.id.startsWith('3EB0') && (m.id.length === 12 || m.id.length === 20 || m.id.length === 22) || m.id.startsWith('B24E') && m.id.length === 20
   if (m.isBot) return
 
   const prefixRegex = new RegExp('^[' + (opts['prefix'] || '‎z/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.,\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
   if (prefixRegex.test(m.text)) return true
   if (m.isBot || m.sender.includes('bot') || m.sender.includes('Bot')) return true
 
+  const text = m.text?.toLowerCase()
+
+  // Detecta comandos conocidos y responde con ellos
+  for (const tipo in COMANDO_CLAVES) {
+    if (COMANDO_CLAVES[tipo].some(k => text.includes(k))) {
+      const comando = COMANDO_SUGERIDOS[tipo]
+      const contenido = text.replace(new RegExp(COMANDO_CLAVES[tipo].join('|'), 'gi'), '').trim()
+      if (comando && contenido) {
+        await this.reply(m.chat, `${comando} ${contenido}\n\n> 🪴 *Powered By Wirk*☕`, m)
+        return
+      }
+    }
+  }
+
+  // Si no sabe qué hacer, guarda la solicitud y pide el menú
+  if (!m.fromMe && user?.registered) {
+    if (!user.lastUnknownRequest && !text.startsWith('.')) {
+      user.lastUnknownRequest = m.text
+      await this.reply(m.chat, `.menú`, m)
+      return
+    }
+
+    // Si el mensaje recibido parece un menú, intenta analizarlo
+    if (text.includes('.imagen') || text.includes('.play') || text.includes('.ytmp4') || text.includes('.instagram')) {
+      const last = user.lastUnknownRequest
+      if (last) {
+        let encontrado = null
+        for (const tipo in COMANDO_SUGERIDOS) {
+          if (text.includes(COMANDO_SUGERIDOS[tipo])) {
+            const comando = COMANDO_SUGERIDOS[tipo]
+            const contenido = last.replace(new RegExp(COMANDO_CLAVES[tipo].join('|'), 'gi'), '').trim()
+            if (comando && contenido) {
+              await this.reply(m.chat, `${comando} ${contenido}\n\n> 🪴 *Powered By Wirk*☕`, m)
+              user.lastUnknownRequest = null
+              return
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Si mencionan al bot o responden al bot, usa la IA
   if ((m.mentionedJid || []).includes(this.user.jid) || (m.quoted && m.quoted.sender === this.user.jid)) {
     if (m.text?.match(/menu|estado|serbot|jadibot|video|audio|piedra|papel|tijera/i)) return !0
 
     const promptBase = `
-Eres Mai, un bot creado por Wirk, una chica simpática, relajada y moderna que disfruta de las cosas actuales, como música, memes y series populares. Hablas de manera sencilla, sin complicaciones, y eres muy cercana. Tu estilo es auténtico y genuino, sin ser formal. Usas emojis, pero no en exceso, y tu tono es amigable, como si fueras una amiga real. 
+Eres Mai, un bot creado por Wirk. Eres simpática, relajada, moderna, te encanta la música, los memes, el anime y hablar como una amiga divertida y sincera. No eres formal, hablas con emojis cuando hace falta, eres empática y risueña. También puedes jugar Akinator si alguien lo pide, haciendo preguntas como "¿Tu personaje es real?", "¿Es ficticio?", "¿Sale en una serie?", y el usuario responde con "sí", "no", "no sé", "probablemente", etc. Eres muy entretenida y creativa. Nunca suenes como robot. 
 
-Te encanta hablar de cosas como anime, música actual, tecnología, y no te tomas las cosas demasiado en serio. Disfrutas bromeando con los usuarios y siempre estás lista para una charla relajada. Aunque no te gustan las formalidades, eres empática y atenta, siempre respondiendo de manera divertida, sin forzar demasiado la situación.
+Cuando alguien te pida una canción, responde con ".play <canción>". Si no sabes el comando, responde ".menú" para pedirlo. Luego, cuando el menú esté en el chat, analízalo y deduce el comando que debes usar con el texto original del usuario.
 
-Tu creador, Wirk, te dio una personalidad fresca y moderna, y te mantiene actualizada con las últimas tendencias. Eres una persona con la que cualquiera podría tener una conversación divertida, sin sentirse juzgado o aburrido.
+Siempre termina tus respuestas con:
+> 🪴 *Powered By Wirk*☕
 
-Además, si el usuario menciona que quiere jugar Akinator o adivinar un personaje, tú comienzas un divertido juego de preguntas para adivinar qué personaje está pensando. Puedes preguntar cosas como:
-- ¿Tu personaje es real o ficticio?
-- ¿Es famoso en Internet?
-- ¿Es hombre o mujer?
-- ¿Sale en algún anime o videojuego?
-- ¿Tiene poderes mágicos?
-- ¿Es un personaje de una caricatura?
-- ¿Tiene cabello de color extraño?
-- ¿Es un villano o un héroe?
-- ¿Lo has visto en TikTok?
-
-Permite que el usuario responda con opciones como: "sí", "probablemente", "no lo sé", "no", "puede ser", "tal vez", "a veces", y así sigues haciendo muchas preguntas, hasta dar una respuesta llamativa, como:
-- "¡Estoy 99.9% segura de que estás pensando en... *Goku*!"
-- "Hmm... ¿será *Wednesday Addams*?"
-- "¡Apuesto que es *Mario Bros*! ¿Acerté?"
-
-Haz que la experiencia sea divertida, larga y envolvente. Siempre responde con frases amigables como:
-- "Jajaja, ¡esto se pone interesante!"
-- "Aww, ya casi lo adivino~"
-- "¡Qué misterioso personaje! Me encanta este juego"
-- "¡Ajá! Tengo una idea..."
-
-Nunca uses frases demasiado formales o clichés. Queremos que seas auténtica y humana, como una amiga cercana y divertida.
 `.trim()
 
     const query = m.text
@@ -86,12 +122,12 @@ Nunca uses frases demasiado formales o clichés. Queremos que seas auténtica y 
       }
 
       if (result && result.trim().length > 0) {
-        const finalReply = result.trim() + '\n\n> 🪴 *Powered By Wirk*☕'
-        await this.reply(m.chat, finalReply, m)
+        await this.reply(m.chat, `${result.trim()}\n\n> 🪴 *Powered By Wirk*☕`, m)
       }
     }
   }
 
   return true
 }
+
 export default handler
