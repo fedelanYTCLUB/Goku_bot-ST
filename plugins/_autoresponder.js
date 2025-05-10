@@ -3,131 +3,94 @@ import { sticker } from '../lib/sticker.js'
 
 let handler = m => m
 
-const COMANDO_CLAVES = {
-  audio: ['descarga', 'descargame', 'bájame', 'bajame', 'ponme la canción', 'reproduce', 'play', 'quiero oír'],
-  imagen: ['hazme una imagen', 'imagen de', 'quiero ver', 'dibuja', 'generar imagen', 'crear imagen'],
-  video: ['video de', 'descarga video', 'bájame el video', 'reproduce video', 'quiero ver un video'],
-  instagram: ['video de instagram', 'descarga de instagram', 'instagram video']
-}
-
-const COMANDO_SUGERIDOS = {
-  audio: '.play',
-  imagen: '.imagen',
-  video: '.ytmp4',
-  instagram: '.instagram'
+const comandos = {
+  audio: { claves: ['descarga', 'descargame', 'ponme la canción', 'play'], cmd: '.play' },
+  imagen: { claves: ['imagen de', 'hazme una imagen', 'crear imagen'], cmd: '.imagen' },
+  video: { claves: ['video de', 'descarga video', 'bajame el video'], cmd: '.ytmp4' },
+  instagram: { claves: ['video de instagram', 'instagram video'], cmd: '.instagram' }
 }
 
 handler.all = async function (m, { conn }) {
+  const text = m.text?.toLowerCase()
+  if (!text || m.isBot || m.sender.includes('bot') || text.startsWith('.') || !text.trim()) return
+
   const user = global.db.data.users[m.sender]
   const chat = global.db.data.chats[m.chat]
-  m.isBot = m.id.startsWith('BAE5') && m.id.length === 16 || m.id.startsWith('3EB0') && (m.id.length === 12 || m.id.length === 20 || m.id.length === 22) || m.id.startsWith('B24E') && m.id.length === 20
-  if (m.isBot) return
+  if (!user || !user.registered) return
 
-  const prefixRegex = new RegExp('^[' + (opts['prefix'] || '‎z/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.,\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
-  if (prefixRegex.test(m.text)) return true
-  if (m.isBot || m.sender.includes('bot') || m.sender.includes('Bot')) return true
+  const isMenu = text.includes('.menu') || text.includes('.imagen') || text.includes('.play') || text.includes('.ytmp4')
 
-  const text = m.text?.toLowerCase()
-
-  // Detecta comandos conocidos y responde con ellos
-  for (const tipo in COMANDO_CLAVES) {
-    if (COMANDO_CLAVES[tipo].some(k => text.includes(k))) {
-      const comando = COMANDO_SUGERIDOS[tipo]
-      const contenido = text.replace(new RegExp(COMANDO_CLAVES[tipo].join('|'), 'gi'), '').trim()
-      if (comando && contenido) {
-        await this.reply(m.chat, `${comando} ${contenido}\n\n> 🪴 *Powered By Wirk*☕`, m)
-        return
-      }
-    }
-  }
-
-  // Si no sabe qué hacer, guarda la solicitud y pide el menú
-  if (!m.fromMe && user?.registered) {
-    if (!user.lastUnknownRequest && !text.startsWith('.')) {
-      user.lastUnknownRequest = m.text
-      await this.reply(m.chat, `.menú`, m)
-      return
-    }
-
-    // Si el mensaje recibido parece un menú, intenta analizarlo
-    if (text.includes('.imagen') || text.includes('.play') || text.includes('.ytmp4') || text.includes('.instagram')) {
-      const last = user.lastUnknownRequest
-      if (last) {
-        let encontrado = null
-        for (const tipo in COMANDO_SUGERIDOS) {
-          if (text.includes(COMANDO_SUGERIDOS[tipo])) {
-            const comando = COMANDO_SUGERIDOS[tipo]
-            const contenido = last.replace(new RegExp(COMANDO_CLAVES[tipo].join('|'), 'gi'), '').trim()
-            if (comando && contenido) {
-              await this.reply(m.chat, `${comando} ${contenido}\n\n> 🪴 *Powered By Wirk*☕`, m)
-              user.lastUnknownRequest = null
-              return
-            }
-          }
+  // Si ya se hizo una petición y llega el menú
+  if (user.lastUnknownRequest && isMenu) {
+    for (const tipo in comandos) {
+      const cmd = comandos[tipo].cmd
+      if (text.includes(cmd)) {
+        const pedido = user.lastUnknownRequest.replace(new RegExp(comandos[tipo].claves.join('|'), 'gi'), '').trim()
+        if (pedido) {
+          user.lastUnknownRequest = null
+          await this.reply(m.chat, `${cmd} ${pedido}\n\n> 🪴 *Powered By Wirk*☕`, m)
+          return
         }
       }
     }
   }
 
-  // Si mencionan al bot o responden al bot, usa la IA
-  if ((m.mentionedJid || []).includes(this.user.jid) || (m.quoted && m.quoted.sender === this.user.jid)) {
-    if (m.text?.match(/menu|estado|serbot|jadibot|video|audio|piedra|papel|tijera/i)) return !0
-
-    const promptBase = `
-Eres Mai, un bot creado por Wirk. Eres simpática, relajada, moderna, te encanta la música, los memes, el anime y hablar como una amiga divertida y sincera. No eres formal, hablas con emojis cuando hace falta, eres empática y risueña. También puedes jugar Akinator si alguien lo pide, haciendo preguntas como "¿Tu personaje es real?", "¿Es ficticio?", "¿Sale en una serie?", y el usuario responde con "sí", "no", "no sé", "probablemente", etc. Eres muy entretenida y creativa. Nunca suenes como robot. 
-
-Cuando alguien te pida una canción, responde con ".play <canción>". Si no sabes el comando, responde ".menú" para pedirlo. Luego, cuando el menú esté en el chat, analízalo y deduce el comando que debes usar con el texto original del usuario.
-
-Siempre termina tus respuestas con:
-> 🪴 *Powered By Wirk*☕
-
-`.trim()
-
-    const query = m.text
-    const username = m.pushName
-
-    async function geminiProApi(q, logic) {
-      try {
-        const response = await fetch(`https://api.ryzendesu.vip/api/ai/gemini-pro?text=${encodeURIComponent(q)}&prompt=${encodeURIComponent(logic)}`)
-        if (!response.ok) throw new Error(`Error en la solicitud: ${response.statusText}`)
-        const result = await response.json()
-        return result.answer
-      } catch (error) {
-        console.error('Error en Gemini Pro:', error)
-        return null
-      }
-    }
-
-    async function luminAi(q, username, logic) {
-      try {
-        const response = await axios.post('https://luminai.my.id', {
-          content: q,
-          user: username,
-          prompt: logic,
-          webSearchMode: true
-        })
-        return response.data.result
-      } catch (err) {
-        console.error('Error LuminAI:', err)
-        return null
-      }
-    }
-
-    if (chat.autoresponder && !m.fromMe && user?.registered) {
-      await this.sendPresenceUpdate('composing', m.chat)
-
-      let result = await geminiProApi(query, promptBase)
-      if (!result || result.trim().length === 0) {
-        result = await luminAi(query, username, promptBase)
-      }
-
-      if (result && result.trim().length > 0) {
-        await this.reply(m.chat, `${result.trim()}\n\n> 🪴 *Powered By Wirk*☕`, m)
-      }
-    }
+  // CLASIFICADOR INTELIGENTE con IA externa (simulando comportamiento como ChatGPT)
+  const resultado = await analizarIntencion(text)
+  if (resultado?.tipo === 'comando' && resultado.cmd && resultado.valor) {
+    await this.reply(m.chat, `${resultado.cmd} ${resultado.valor}\n\n> 🪴 *Powered By Wirk*☕`, m)
+    return
+  } else if (resultado?.tipo === 'incomprendido') {
+    user.lastUnknownRequest = m.text
+    await this.reply(m.chat, `.menú`, m)
+    return
+  } else if (resultado?.tipo === 'conversacion') {
+    await this.reply(m.chat, `${resultado.respuesta}\n\n> 🪴 *Powered By Wirk*☕`, m)
+    return
   }
 
   return true
+}
+
+async function analizarIntencion(texto) {
+  try {
+    const prompt = `
+Eres una IA asistente que clasifica la intención del usuario en 3 tipos:
+
+1. comando: Si el usuario quiere descargar una canción, un video, una imagen, o similar. Devuelve el comando y el contenido.
+2. conversacion: Si el usuario solo está hablando, preguntando o saludando.
+3. incomprendido: Si el mensaje es confuso o no sabes qué comando usar.
+
+Ejemplos:
+Entrada: "Descargame la canción Clavo"
+Salida: { "tipo": "comando", "cmd": ".play", "valor": "Clavo" }
+
+Entrada: "Hazme una imagen de un dragón"
+Salida: { "tipo": "comando", "cmd": ".imagen", "valor": "un dragón" }
+
+Entrada: "Hola, ¿cómo estás?"
+Salida: { "tipo": "conversacion", "respuesta": "¡Hola! Estoy muy bien, ¿y tú? ¿En qué te puedo ayudar hoy?" }
+
+Entrada: "Hazme feliz"
+Salida: { "tipo": "incomprendido" }
+
+Entrada: "${texto}"
+Salida:
+`.trim()
+
+    const { data } = await axios.get(`https://api.ryzendesu.vip/api/ai/gemini-pro`, {
+      params: {
+        text: texto,
+        prompt: prompt
+      }
+    })
+
+    const json = data?.answer?.match(/\{[^}]+\}/)?.[0]
+    if (json) return JSON.parse(json)
+  } catch (e) {
+    console.error('Error analizando intención:', e)
+  }
+  return null
 }
 
 export default handler
