@@ -40,20 +40,30 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
 
     let { dl: downloadUrl, size: sizeHumanReadable } = data;
 
-    let txt = `*「✦」 » ${title}*\n`;
-    txt += `> ✦ Canal » *${author.name}*\n`;
-    txt += `> ⴵ *Duración* » ${timestamp}\n`;
-    txt += `> ✰ *Vistas* » ${views}\n`;
-    txt += `> ✐ *Publicación* » ${ago}\n`;
-    txt += `> ❒ *Tamaño:* » ${sizeHumanReadable} MB\n`;
-    txt += `> 🜸 *Link* » ${url}\n> ❤️ Si quieres el video normal solo pon #playvideo y ${title}`;
+    let txt = `➪ Descargando › *${title}*\n\n`;
+    txt += `> ✩ Canal › *${author.name}*\n`;
+    txt += `> ⴵ Duración › *${timestamp}*\n`;
+    txt += `> ☄︎ Vistas › *${views}*\n`;
+    txt += `> ☁︎ Publicado › *${ago}*\n`;
+    txt += `> ❑ Enlace › *${url}*\n`;
 
     await star.sendFile(m.chat, thumbnail, 'thumbnail.jpg', txt, m);
+
+    // Convertimos duración a minutos
+    let durationMinutes = 0;
+    if (timestamp.includes(':')) {
+      let parts = timestamp.split(':').map(Number).reverse();
+      durationMinutes = parts[0] / 60 + (parts[1] || 0) + (parts[2] || 0) * 60;
+    }
+
+    // Lógica para tipo de mensaje
+    let isShort = durationMinutes <= 10;
+    let type = isShort ? 'video' : 'document';
 
     await star.sendMessage(
       m.chat,
       {
-        document: { url: downloadUrl },
+        [type]: { url: downloadUrl },
         mimetype: 'video/mp4',
         fileName: `${title}.mp4`
       },
