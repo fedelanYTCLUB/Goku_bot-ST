@@ -57,7 +57,7 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
     }
 
     // Lógica para tipo de mensaje
-    let isShort = durationMinutes <= 10;
+    let isShort = durationMinutes <= 11;
     let type = isShort ? 'video' : 'document';
 
     await star.sendMessage(
@@ -78,5 +78,5 @@ let handler = async (m, { conn: star, args, usedPrefix, command }) => {
   }
 };
 
-handler.command = ['play11', 'playvidoc'];
+handler.command = ['play11', 'play2'];
 export default handler;
