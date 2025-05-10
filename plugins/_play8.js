@@ -7,10 +7,10 @@ const handler = async (m, { conn, text, command }) => {
   try {
     await m.react("🕛");
 
-    const res = await yts(text);
-    const video = res.all[0];
+    const res = await yts(text + ' ' + Date.now()); // Previene caché
+    const video = res?.all?.[0];
+    if (!video) return m.reply("❌ No se encontró el video. Intenta con otro nombre.");
 
-    // Modificación del caption con emojis diferentes y más angosto
     const caption = `
 ┏━ 🎥 *Video Info* 🎥 ━┓
 ┃ 🎵 *Título:* ${video.title}
@@ -22,11 +22,18 @@ const handler = async (m, { conn, text, command }) => {
 
     await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', caption, m);
 
-    // Si es el comando .play9 o .playvid
     if (command === "play2" || command === "playvid") {
-      const api = await (await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`)).json();
-      const isBig = api.data.size_mb >= limit;
-      await conn.sendFile(m.chat, api.data.dl_url, api.data.title, '', m, null, { asDocument: isBig });
+      const api = await (await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480&nocache=${Date.now()}`)).json();
+
+      if (!api?.data?.dl_url) return m.reply("❌ No se pudo obtener el enlace de descarga.");
+      
+      const size = parseFloat(api.data.size_mb) || 0;
+      const isBig = size >= limit;
+
+      await conn.sendFile(m.chat, api.data.dl_url, `${api.data.title}.mp4`, '', m, null, {
+        asDocument: isBig,
+        mimetype: 'video/mp4'
+      });
     }
 
     await m.react("✅");
