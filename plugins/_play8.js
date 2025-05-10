@@ -61,7 +61,7 @@ const handler = async (m, { conn, text }) => {
   await m.react("✅");
 };
 
-handler.command = ["play2"];
+handler.command = ["pla"];
 handler.help = ["play2"];
 handler.tags = ["dl"];
 
