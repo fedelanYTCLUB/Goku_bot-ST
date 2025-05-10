@@ -1,74 +1,64 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-import yts from 'yt-search';
+const limit = 108; // MB límite para mandar como documento
 
-const limit = 108;
+const handler = async (m, { conn, text }) => {
+  if (!text) return m.reply('🌴 Ingresa el nombre o enlace de un video.');
 
-async function getVideoInfo(text) {
-  const search = await yts(text);
-  return search.videos?.[0];
-}
+  await m.react('⏳');
 
-async function trySources(videoUrl) {
   const apis = [
-    `https://ytdl.sylphy.xyz/dl/mp4?url=${videoUrl}&quality=480`,
-    `https://aemt.me/ytdl?url=${videoUrl}`,
-    `https://yt.tiochat.net/mp4?url=${videoUrl}`
+    { name: 'Akuari', url: q => `https://api.akuari.my.id/downloader/youtube?link=${encodeURIComponent(q)}` },
+    { name: 'Botcahx', url: q => `https://api.botcahx.eu.org/api/download/youtube?url=${encodeURIComponent(q)}&apikey=admin` },
+    { name: 'Aemt', url: q => `https://aemt.me/ytdl?url=${encodeURIComponent(q)}` },
+    { name: 'VihangaYT', url: q => `https://vihangayt.me/download/ytmp4?q=${encodeURIComponent(q)}` },
+    { name: 'Tiochat', url: q => `https://yt.tiochat.net/mp4?url=${encodeURIComponent(q)}` },
+    { name: 'Zenkey', url: q => `https://zenkey.cloud/api/button/mp4?url=${encodeURIComponent(q)}` },
+    { name: 'Oceansaver', url: q => `https://oceansaver.xyz/api/ytmp4?q=${encodeURIComponent(q)}` },
+    { name: 'Jiosav', url: q => `https://jiosav.net/api/ytmp4?url=${encodeURIComponent(q)}` },
+    { name: 'Y2mateDL', url: q => `https://y2mate.dl-api.repl.co/api?url=${encodeURIComponent(q)}` },
+    { name: 'Dlfile', url: q => `https://dlfileapi.vercel.app/api/ytdl?url=${encodeURIComponent(q)}` },
   ];
+
+  let data = null, source = null;
 
   for (let api of apis) {
     try {
-      const res = await fetch(api);
+      const res = await fetch(api.url(text));
       const json = await res.json();
-      if (json?.data?.dl_url || json?.url || json?.result?.url) return json;
+      const url = json?.data?.dl_url || json?.result?.url || json?.url;
+      if (url) {
+        data = json;
+        source = api.name;
+        break;
+      }
     } catch (e) {
       continue;
     }
   }
 
-  return null;
-}
+  if (!data) return m.reply("❌ Todas las fuentes fallaron. Intenta con otro video o más corto.");
 
-const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply("🌴 Ingresa el nombre de un video o una URL de YouTube.");
-  try {
-    await m.react("⏳");
+  const videoUrl = data?.data?.dl_url || data?.result?.url || data?.url;
+  const title = data?.title || data?.result?.title || data?.data?.title || "Video";
+  const size = parseFloat(data?.size || data?.result?.size || data?.data?.size_mb || 0);
+  const isBig = size >= limit;
 
-    const video = await getVideoInfo(text);
-    if (!video) return m.reply("❌ No se encontró ningún video.");
-    const url = video.url;
-
-    const json = await trySources(url);
-    if (!json) return m.reply("❌ No se pudo obtener el enlace de descarga.");
-
-    // Detectar URL y tamaño
-    const dl_url = json?.data?.dl_url || json?.url || json?.result?.url;
-    const title = json?.data?.title || video.title;
-    const size = parseFloat(json?.data?.size_mb || json?.size || 0);
-    const isBig = size >= limit;
-
-    const caption = `
+  const caption = `
 🎬 *Título:* ${title}
-🎤 *Autor:* ${video.author.name}
-⏱️ *Duración:* ${video.duration.timestamp}
-👁️‍🗨️ *Vistas:* ${video.views}
-🔗 *URL:* ${url}
-${isBig ? '📁 Enviado como documento por tamaño.' : ''}
+📦 *Tamaño:* ${isBig ? `> ${limit}MB (enviado como documento)` : `${size}MB`}
+🌐 *Fuente:* ${source}
+🔗 *URL:* ${text.includes("http") ? text : videoUrl}
 `.trim();
 
-    await conn.sendMessage(m.chat, {
-      video: { url: dl_url },
-      caption,
-      mimetype: 'video/mp4',
-      fileName: `${title}.mp4`,
-      ...(isBig ? { document: true } : {})
-    }, { quoted: m });
+  await conn.sendMessage(m.chat, {
+    video: { url: videoUrl },
+    caption,
+    mimetype: 'video/mp4',
+    fileName: title + ".mp4",
+    ...(isBig ? { document: true } : {})
+  }, { quoted: m });
 
-    await m.react("✅");
-
-  } catch (e) {
-    console.error(e);
-    m.reply("❌ Error inesperado al procesar el video.");
-  }
+  await m.react("✅");
 };
 
 handler.command = ["play2"];
