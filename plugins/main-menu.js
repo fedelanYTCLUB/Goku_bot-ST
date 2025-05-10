@@ -41,12 +41,8 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Ver la lista de Sub-Bots activos. ♦️
 ✦ *#creador*
 > ⸙ Contacto del creador de la Bot. ★
-✦ *#set*
-> ⸙ Comandos de personalización de Sub-Bots. ⚙️
 ✦ *#status • #estado*
-> ⸙ Ver el estado actual de la Bot. ◎
-✦ *#links • #grupos*
-> ⸙ Ver los enlaces oficiales de la Bot. ✿
+> ⸙ Ver el estado actual de la Bot. 
 ✦ *#sug • #newcommand*
 > ⸙ Sugiere un nuevo comando. ✎
 ✦ *#p • #ping*
