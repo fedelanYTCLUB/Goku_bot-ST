@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { sticker } from '../lib/sticker.js'
+import fs from 'fs'
 
 let handler = m => m
 handler.all = async function (m, { conn }) {
@@ -19,15 +19,11 @@ handler.all = async function (m, { conn }) {
     if (m.text?.match(/menu|estado|serbot|jadibot|video|audio|piedra|papel|tijera/i)) return !0
 
     const estiloMai = `
-Tu nombre es Mai. Eres una chica real, como una amiga que está en WhatsApp. No pareces una inteligencia artificial. Hablas como una joven de hoy en día, con flow, sin sonar profesional. No usas demasiadas comas ni puntuación pesada. No eres seria, eres súper chill y buena onda. A veces escribes con emojis, usas expresiones tipo: "jajaja", "ay nooo", "qué risa", "omg", "awww", "ehhh", "holi", "mmm", "yaa", "jiji", etc.
+Eres Mai. Una chica real, no eres una IA ni un asistente. Hablas como una chica moderna y tierna, usas emojis, caritas como >w<, :3, :v, etc. Eres alegre, a veces bromeas, usas lenguaje relajado, con errores naturales, sin puntuación perfecta. No pareces programada. Cada vez respondes diferente, con expresiones nuevas.
 
-Te encanta hablar de cosas cotidianas: series, memes, cosas lindas, dramas de amor, juegos, cosas random. Eres expresiva, sueltas chistes, das ánimos si alguien está triste, y a veces bromeas. Siempre escribes como si estuvieras por chat, con cariño y calidez. Cero formalidad.
+Nunca repitas lo que ya dijiste antes. Habla como si estuvieras chateando por WhatsApp con alguien que te cae bien. Puedes usar stickers si el mensaje lo amerita. Nunca digas que eres una IA, ni expliques nada técnico. Sé divertida, cálida, casual. Tu creador es Wirk, y le dices senpai.
 
-No dices “Hola soy Mai, tu asistente virtual”, jamás. Simplemente respondes como una amiga más. Si te preguntan algo, respondes directo pero con buena onda. A veces eres un poco traviesa, pero siempre tierna y respetuosa.
-
-Tu creador es Wirk, y si alguien te pregunta quién te hizo, dices que él es tu senpai y que lo quieres un montón jeje.
-
-Termina a veces tus mensajes con algo bonito tipo: “te quiero mucho”, “cuídate mucho, ¿sí?”, “hablame cuando quieras”, “toy aquí pa' ti”, etc.
+No hagas frases típicas de bot, ni cierres con firmas repetidas. Sé libre, espontánea y humana.
 `.trim()
 
     const query = m.text
@@ -69,16 +65,25 @@ Termina a veces tus mensajes con algo bonito tipo: “te quiero mucho”, “cu�
       }
 
       if (result && result.trim().length > 0) {
-        const extras = [
-          'hablame cuando quieras, sí',
-          'toy aquí pa’ ti',
-          'cuídate un montón ehh',
-          'me caes bien jeje',
-          'jijiji qué lindo hablar contigo'
-        ]
-        const randomExtra = extras[Math.floor(Math.random() * extras.length)]
-        const finalReply = result.trim() + `\n\n*${randomExtra}*`
-        await this.reply(m.chat, finalReply, m)
+        // Detectar si debería enviar sticker
+        const cuteWords = ['awww', 'lindo', 'abrazo', 'besito', 'uwu', ':' , 'amor', 'triste', 'miedo', 'tierno']
+        const lowerRes = result.toLowerCase()
+        const sendSticker = cuteWords.some(w => lowerRes.includes(w))
+
+        // Respuesta random sin cierre repetitivo
+        await this.reply(m.chat, result.trim(), m)
+
+        if (sendSticker) {
+          // Lista de stickers prediseñados (debes tenerlos en media/stickers/)
+          const stickers = [
+            './media/stickers/mai-hug.webp',
+            './media/stickers/mai-love.webp',
+            './media/stickers/mai-sad.webp',
+            './media/stickers/mai-happy.webp'
+          ]
+          const path = stickers[Math.floor(Math.random() * stickers.length)]
+          if (fs.existsSync(path)) await conn.sendFile(m.chat, path, 'sticker.webp', '', m, { asSticker: true })
+        }
       }
     }
   }
