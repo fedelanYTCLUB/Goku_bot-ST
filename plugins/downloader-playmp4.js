@@ -1,33 +1,45 @@
+import fetch from 'node-fetch'
+import fs from 'fs'
+import path from 'path'
+import { tmpdir } from 'os'
+import { promisify } from 'util'
+import { pipeline } from 'stream'
+const streamPipeline = promisify(pipeline)
 
-import fetch from "node-fetch";
+var handler = async (m, { args, conn }) => {
+  if (!args[0]) return conn.reply(m.chat, '⚠️ Proporcione un enlace de YouTube. Ej: playmp4 https://youtu.be/xxxx', m)
 
-let handler = async (m, { conn, text }) => {
-  if (!text) {
-    return m.reply("❌ Ingresa un título o nombre de la canción para buscar y descargar.\nEjemplo: .playmp4 DJ malam pagi slowed");
-  }
+  const url = args[0]
+  const apiUrl = `https://nightapioficial.onrender.com/api/ytvideo?url=${encodeURIComponent(url)}&format=mp4&quality=720p`
 
   try {
-    const apiUrl = `https://api.vreden.my.id/api/ytplaymp4?query=${encodeURIComponent(text)}`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    const res = await fetch(apiUrl)
+    if (!res.ok) throw 'No se pudo obtener respuesta de la API'
 
-    if (!data?.result?.download?.url) {
-      return m.reply("❌ No se pudo obtener el video. Verifica el nombre o intenta con otro.");
-    }
+    const json = await res.json()
+    if (!json.video) return conn.reply(m.chat, '⚠️ No se encontró el video en la respuesta de la API.', m)
 
-    await conn.sendMessage(m.chat, {
-      video: { url: data.result.download.url }
-    }, { quoted: m });
+    const videoUrl = json.video
+    const fileName = path.join(tmpdir(), `video_${Date.now()}.mp4`)
+    const videoRes = await fetch(videoUrl)
 
-    await m.react("✅");
-  } catch (error) {
-    console.error(error);
-    await m.reply(`❌ Error al procesar la solicitud:\n${error.message}`);
+    if (!videoRes.ok) throw 'No se pudo descargar el video'
+
+    await streamPipeline(videoRes.body, fs.createWriteStream(fileName))
+
+    await conn.sendMessage(m.chat, { video: { url: fileName }, caption: `✅ Video descargado de: ${url}` }, { quoted: m })
+
+    fs.unlinkSync(fileName) // eliminar para ahorrar espacio
+
+  } catch (err) {
+    console.error(err)
+    conn.reply(m.chat, '❌ Error al procesar el video.', m)
   }
-};
+}
 
-handler.command = ["video"];
-handler.help = ["playmp4 <nombre o título>"];
-handler.tags = ["download"];
+handler.command = ['playmp4']
+handler.help = ['playmp4 <enlace>']
+handler.tags = ['downloader']
+handler.register = true
 
-export default handler;
+export default handler
