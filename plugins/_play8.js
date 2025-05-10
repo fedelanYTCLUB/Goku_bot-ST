@@ -62,7 +62,7 @@ const handler = async (m, { conn, text }) => {
 };
 
 handler.command = ["pla"];
-handler.help = ["play2"];
+handler.help = ["pla2"];
 handler.tags = ["dl"];
 
 export default handler;
