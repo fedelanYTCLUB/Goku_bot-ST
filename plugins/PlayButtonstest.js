@@ -127,7 +127,7 @@ Espero que te guste muchooo! 🥰
 
 handler.help = ['play', 'ytplay'].map(v => v + ' <texto>');
 handler.tags = ['descargas'];
-handler.command = ['play', 'ytplay', 'playaudio'];
+handler.command = ['ytplay', 'playaudio'];
 handler.register = true;
 handler.limit = true;
 handler.coin = 2;
