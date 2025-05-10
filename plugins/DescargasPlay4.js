@@ -47,7 +47,7 @@ let handler = async (m, { conn, text, args }) => {
   }
 }
 
-handler.command = /^(play2)$/i
+handler.command = ['play2v']
 export default handler
 
 async function search(query, options = {}) {
