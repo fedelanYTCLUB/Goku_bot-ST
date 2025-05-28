@@ -83,8 +83,8 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: "Mai 🍀",
-          body: "🌸 Tu Botsita especial 🙈",
+          title: "Goku 🍀",
+          body: "🌸 Tu Bot especial 🐉",
           mediaType: 1,
           previewType: 0,
           mediaUrl: url,
