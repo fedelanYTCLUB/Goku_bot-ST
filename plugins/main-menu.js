@@ -13,7 +13,7 @@ let handler = async (m, { conn, args }) => {
 ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮   ̮
 
 ︶•︶°︶•︶°︶•︶°︶•︶°︶•︶°︶
-> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *Mai*, Aquí tienes la lista de comandos.\n*(˶ᵔ ᵕ ᵔ˶)*
+> ᰔᩚ Hola! @${userId.split('@')[0]}, Soy *Goku 🐉*, Aquí tienes la lista de comandos.\n*(˶ᵔ ᵕ ᵔ˶)*
 
 *╭┈ࠢ͜┅ࠦ͜͜╾݊͜─ؕ͜─ׄ͜─֬͜─֟͜─֫͜─ׄ͜─ؕ͜─݊͜┈ࠦ͜┅ࠡ͜͜┈࠭͜͜۰۰͜۰*
 │✧ *Modo* » ${conn.user.jid == global.conn.user.jid ? 'Bot Principal' : 'Sub-Bot'}
@@ -571,7 +571,7 @@ let handler = async (m, { conn, args }) => {
 > ⸙ Crea una sala de juego. ✗○Game
 ╰ׅ͜─֟͜─͜─ٞ͜─͜─๊͜─͜─๋͜─⃔═̶፝֟═̶⃔─๋͜─͜─͜─๊͜─ٞ͜─͜─֟͜┈ࠢ͜╯ׅ
 
-> *© ⍴᥆ᥕᥱrᥱძ ᑲᥡ wirksito*
+> *© ⍴᥆ᥕᥱrᥱძ ᑲᥡ fedelanYT*
 `.trim()
 
   await conn.sendMessage(m.chat, {
@@ -589,7 +589,7 @@ let handler = async (m, { conn, args }) => {
       title: "♦ Mai ♦ World Of Cute", // Título del reply con símbolos
       body: "➤ Powered By Wirk ★", // Cuerpo del reply con símbolos
       thumbnailUrl: banner, // Asegúrate de que banner esté definido (URL o ruta a la imagen)
-      sourceUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY", // Asegúrate de que la URL sea correcta
+      sourceUrl: "https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7", // Asegúrate de que la URL sea correcta
       mediaType: 1, // Tipo de media (1 para imagen)
       showAdAttribution: true,
       renderLargerThumbnail: true
