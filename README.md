@@ -13,7 +13,7 @@
 </details>
 
 <details>
-  <summary><b> ✨ Funciones de Mai</b></summary>
+  <summary><b> ✨ Funciones de Goku</b></summary>
   
   *Mai* está en constante evolución. Si encuentras errores, avisa al creador para mejorarlo.
 
@@ -133,7 +133,7 @@ npm start
 ❒ Abre Termux y navega al directorio del bot:
    
    ```bash
-    cd MaiBot
+    cd Goku_bot-ST
    ```
 
 ❒ Inicia el bot nuevamente:
@@ -147,29 +147,33 @@ npm start
 > Si después de instalar el bot en Termux y iniciar la session del bot (deseas poner tu número es la lista de owner pon este comando:
 
    ```bash
-    cd MaiBot && nano settings.js
+    cd Goku_bot-ST && nano settings.js
    ```
 
 </details>
+
 
 ### **`➮ Enlaces útiles 💚`**
 
 <details>
  <summary><b> 🜸 Enlaces Oficiales </b></summary>
 
- * Canal Oficial  [`Clickea 🤘`](https://whatsapp.com/channel/0029Vb5UfTC4CrfeKSamhp1f)
-* Grupo Oficial [`Click Aqui 👻`](https://chat.whatsapp.com/GBcSWbfm3JO1HhmbdbnrsH)
-* Comunidad Oficial [`Click aca 🐻‍❄️`](https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY)
+ * Canal Oficial  [`Clickea 🤘`](https://whatsapp.com/channel/0029VbApe6jG8l5Nv43dsC2N)
+* Grupo Oficial [`Click Aqui 👻`](https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7)
+* Comunidad Oficial [`Click aca 🐻‍❄️`](https://chat.whatsapp.com/FWOKPERw74KJGIyycrIX63)
+* 
 </details>
 
 <details>
 <summary><b> ✰ Contácto</b></summary>
 
-* WhatsApp: [`Aquí`](https:/Wa.me/50493732693)
+* WhatsApp: [`Aquí`](https:/Wa.me/5491156178758)
 
 </details>
 
 ---
+
+</details>
 
 ✧ **SKY-ULTRA-PLUS HOST 🌺** ✧
 
@@ -179,9 +183,9 @@ npm start
 
 ---
 
-ᥫ💚 **Propietario**
+ᥫ🐉 **CREADOR**
 
-<a href="https://github.com/Ado926">
-<img src="https://github.com/Ado926.png" width="130" height="130" alt="Ado926"/>
+<a href="https://github.com/fedelanYTCLUB">
+<img src="https://github.com/fedelanYTCLUB.png" width="130" height="130" alt="fedelanYT"/>
 </a>
   
