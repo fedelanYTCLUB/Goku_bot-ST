@@ -81,7 +81,7 @@
 
 ---
 
-<h3 align="center">✨ Instala Termux Solo Toca La Imagen✨</h3>
+<h3 align="center">✨ *Instala manualmente en termux* ✨</h3>
 
 <a href="https://www.mediafire.com/file/llugt4zgj7g3n3u/com.termux_1020.apk/file">
   <p align="center"><img src="https://qu.ax/finc.jpg" height="125px"></p>
