@@ -13,18 +13,18 @@ global.botNumber = ''
 
 global.owner = [
   ['5491156178758', '♡ fedelanYT ♡', true],
-  ['51921826291', 'Maycol', true]
+  ['13124976342', 'Josue bb', true]
 ]
 
 global.mods = []
-global.suittag = ['5491156178758']
+global.suittag = ['5491156178758', '13124976342']
 global.prems = []
 
 global.libreria = 'Baileys'
 global.baileys = 'V 6.7.16'
 global.languaje = 'Español'
 global.vs = '2.2.0'
-global.nameqr = 'MaiBot-MD'
+global.nameqr = 'GokuBot-MD'
 global.namebot = '✿◟ɢᴏᴋᴜ_ʙᴏᴛ◞✿'
 global.sessions = 'Sessions'
 global.jadi = 'JadiBots'
