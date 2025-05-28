@@ -586,8 +586,8 @@ let handler = async (m, { conn, args }) => {
     },
     forwardingScore: 16,
     externalAdReply: {
-      title: "♦ Mai ♦ World Of Cute", // Título del reply con símbolos
-      body: "➤ Powered By Wirk ★", // Cuerpo del reply con símbolos
+      title: "✨ Goku-Bot ✨ World Of Cute", // Título del reply con símbolos
+      body: "➤ Powered By fedelanY ★", // Cuerpo del reply con símbolos
       thumbnailUrl: banner, // Asegúrate de que banner esté definido (URL o ruta a la imagen)
       sourceUrl: "https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7", // Asegúrate de que la URL sea correcta
       mediaType: 1, // Tipo de media (1 para imagen)
