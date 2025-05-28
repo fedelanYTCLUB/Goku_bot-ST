@@ -30,11 +30,11 @@ global.sessions = 'Sessions'
 global.jadi = 'JadiBots'
 global.yukiJadibts = true
 
-global.packname = '🌸 Mᴀɪ • Bᴏᴛ 🌸'
-global.botname = '🌷 Mᴀɪ 🌷'
+global.packname = '🌸 ɢᴏᴋᴜ • ʙᴏᴛ 🌸'
+global.botname = '🌷 ɢᴏᴋᴜ_ʙᴏᴛ 🌷'
 global.wm = '💫 ᴘʀᴏᴄᴇssᴇᴅ ʙʏ ᴍᴀɪ-ʙᴏᴛ ʙʏ ᴡɪʀᴋ 💫'
 global.author = '🍡 By fede 🍡'
-global.dev = '🌼 Wirk Dev 🌼'
+global.dev = '🌼 fedelanYT 🌼'
 global.textbot = '💖 Mᴀɪ-Bᴏᴛ • 𝖯𝗈𝖽𝖾𝗋𝖾𝗌 𝖡𝗒 𝖶𝗂𝗋𝗄 💖'
 global.etiqueta = '🌸 @Fede 🌸'
 
