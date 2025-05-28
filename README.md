@@ -149,9 +149,7 @@ npm start
    ```bash
     cd Goku_bot-ST && nano settings.js
    ```
-
 </details>
-
 
 ### **`➮ Enlaces útiles 💚`**
 
@@ -160,9 +158,7 @@ npm start
 
  * Canal Oficial  [`Clickea 🤘`](https://whatsapp.com/channel/0029VbApe6jG8l5Nv43dsC2N)
 * Grupo Oficial [`Click Aqui 👻`](https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7)
-* Comunidad Oficial [`Click aca 🐻‍❄️`](https://chat.whatsapp.com/FWOKPERw74KJGIyycrIX63)
-* 
-</details>
+* Comunidad Oficial [`Click aca 🐻‍❄️`](https://chat.whatsapp.com/FWOKPERw74KJGIyycrIX63)* </details>
 
 <details>
 <summary><b> ✰ Contácto</b></summary>
