@@ -17,7 +17,7 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
         vcard: `BEGIN:VCARD\nVERSION:3.0\nFN: fede - Bot Developer\nitem1.TEL;waid=5491156178758:5491156178758\nitem1.X-ABLabel:Número\nitem2.ADR:;;Argentina;;;;\nitem2.X-ABLabel:País\nEND:VCARD`,
     }];
 
-    const imageUrl = 'https://qu.ax/VnCGk.jpg';
+    const imageUrl = 'https://files.catbox.moe/jl731y.jpg';
     const texto = `╭───────❀\n│ *Contacto del creador*\n╰───────❀\n\n• *Nombre:* fede\n• *Desde:* Argentina\n• *Creador de:* Goku\n\n_“El código es temporal, pero la creatividad... esa es eterna.”_\n\nPuedes contactarlo si tienes ideas, bugs o quieres apoyar el proyecto..`;
 
     await conn.sendMessage(m.chat, {
