@@ -71,9 +71,9 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
     contextInfo: {
       externalAdReply: {
         title: '✧ Registro Completado ✧',
-        body: 'https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd',
+        body: 'https://chat.whatsapp.com/FoVnxJ64gYV6EZcfNVQUfJ',
         thumbnailUrl: pp,
-        sourceUrl: 'https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd',
+        sourceUrl: 'https://chat.whatsapp.com/FoVnxJ64gYV6EZcfNVQUfJ',
         mediaType: 1,
         showAdAttribution: true,
         renderLargerThumbnail: true
