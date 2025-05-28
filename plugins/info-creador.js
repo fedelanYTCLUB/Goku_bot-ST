@@ -28,10 +28,10 @@ let handler = async (m, { conn, usedPrefix, text, args, command }) => {
         contextInfo: {
             externalAdReply: {
                 showAdAttribution: true,
-                title: 'Mai - Bot Kawaii',
-                body: 'Creador: Wirk',
+                title: 'Goku - Bot Fede',
+                body: 'Creador: fedelanYT',
                 thumbnailUrl: imageUrl,
-                sourceUrl: 'https://github.com/WillZek',
+                sourceUrl: 'https://github.com/fedelanYTCLUB',
                 mediaType: 1,
                 renderLargerThumbnail: true
             }
