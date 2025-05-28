@@ -58,7 +58,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
 │ ❖ *Tokens:* +25
 │
 ├─ 📢 *Verifica Tu Registro Aqui:*
-│ https://chat.whatsapp.com/GHhOeix2sTY32wIO85pNgd
+│ https://chat.whatsapp.com/FoVnxJ64gYV6EZcfNVQUfJ
 │
 ╰────────•••────────╯
 > @Wirk
@@ -82,7 +82,7 @@ let handler = async function (m, { conn, text, usedPrefix, command }) {
   }, { quoted: m })
 
   // Enviar notificación al grupo desde el bot principal
-  const grupoNotificacion = '120363399440277900@g.us'
+  const grupoNotificacion = '120363401705046190@g.us'
   const mensajeNotificacion = `
 ╭───❍ *Nuevo Registro* ❍───╮
 │ ᰔᩚ *Nombre:* ${name}
