@@ -36,10 +36,10 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         forwardingScore: 999,
         isForwarded: true,
         externalAdReply: {
-          title: "☕︎︎ 𝘔𝘢𝘪 • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍁",
-          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖶𝗂𝗋𝗄 🌵",
+          title: "☕︎︎ ɢᴏᴋᴜ • 𝑊𝑜𝑟𝑙𝑑 𝑂𝑓 𝐶𝑢𝑡𝑒 🍀",
+          body: "✐ 𝖯𝗈𝗐𝖾𝗋𝖾𝖽 𝖡𝗒 𝖿ᥱძᥱ 🌳",
           thumbnailUrl: video.image,
-          mediaUrl: "https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY",
+          mediaUrl: "https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs",
           mediaType: 2,
           showAdAttribution: true,
           renderLargerThumbnail: true
