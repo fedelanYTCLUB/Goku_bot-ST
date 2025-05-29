@@ -95,8 +95,8 @@ El número principal no se hace responsable del mal uso.
 
 ${replyMessage}
 
-╰❍🌺 *Comunidad Ofc* 🌺❍╯
-🔗 https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY
+╰❍🍀 *COMUNIDAD OFC* 🍀❍╯
+🔗 https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs
 `.trim();
 
 await _envio.sendMessage(m.chat, {
