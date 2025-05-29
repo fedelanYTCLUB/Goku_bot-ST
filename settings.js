@@ -42,7 +42,7 @@ global.moneda = 'MimiCoins🫦'
 global.welcom1 = '⌗ Usa *setwelcome* para editar este mensaje'
 global.welcom2 = '⌗ Usa *setbye* para editar este mensaje'
 global.banner = 'https://files.catbox.moe/jblj0p.jpg'
-global.avatar = 'https://qu.ax/oBByS.jpg'
+global.avatar = 'https://files.catbox.moe/hlr9vl.jpg'
 
 global.gp1 = 'https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs'
 global.comunidad1 = 'https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7'
