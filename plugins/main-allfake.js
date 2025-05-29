@@ -38,7 +38,7 @@ global.listo = '❀ *Aquí tienes ฅ^•ﻌ•^ฅ*'
 global.fotoperfil = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://files.catbox.moe/xr2m6u.jpg')
 
 global.canalIdM = ["120363402097425674@newsletter", "120363402097425674@newsletter"]
-global.canalNombreM = ["⏤͟͟͞͞Goku_Bot 🌻❀", "🌳 Goku_Bot 🍄"]
+global.canalNombreM = ["⏤͟͟͞͞Goku_Bot 🌻❀", "⏤͟͟͞͞☆ ɢᴀʟᴀxʏ ᴇᴠᴇɴᴛꜱ 'ꜱ ɢᴏᴋᴜ_ʙᴏᴛ🪐᭄"]
 global.channelRD = await getRandomChannel()
 
 global.d = new Date(new Date + 3600000)
@@ -61,13 +61,13 @@ global.emoji4 = '୨୧'
 global.emoji5 = '♡'
 global.emojis = [emoji, emoji2, emoji3, emoji4].getRandom()
 
-global.wait = '❍ Espera un momento, soy lenta...';
-global.waitt = '❍ Espera un momento, soy lenta...';
-global.waittt = '❍ Espera un momento, soy lenta...';
-global.waitttt = '❍ Espera un momento, soy lenta...';
+global.wait = '❍ Espera un momento, soy lento...';
+global.waitt = '❍ Espera un momento, soy lento...';
+global.waittt = '❍ Espera un momento, soy lento...';
+global.waitttt = '❍ Espera un momento, soy lento...';
 
 var canal = 'https://whatsapp.com/channel/0029VbApe6jG8l5Nv43dsC2N'  
-var comunidad = 'https://chat.whatsapp.com/I0dMp2fEle7L6RaWBmwlAa'
+var comunidad = 'https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs'
 var git = 'https://github.com/The-King-Destroy'
 var github = 'https://github.com/The-King-Destroy/Yuki_Suou-Bot' 
 let correo = 'thekingdestroy507@gmail.com'
