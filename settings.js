@@ -44,8 +44,8 @@ global.welcom2 = '⌗ Usa *setbye* para editar este mensaje'
 global.banner = 'https://files.catbox.moe/jblj0p.jpg'
 global.avatar = 'https://qu.ax/oBByS.jpg'
 
-global.gp1 = 'https://chat.whatsapp.com/GBcSWbfm3JO1HhmbdbnrsH'
-global.comunidad1 = 'https://chat.whatsapp.com/KqkJwla1aq1LgaPiuFFtEY'
+global.gp1 = 'https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs'
+global.comunidad1 = 'https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7'
 global.channel = 'https://whatsapp.com/channel/0029VbApe6jG8l5Nv43dsC2N'
 global.channel2 = global.channel
 global.md = 'https://github.com/The-King-Destroy/Yuki_Suou-Bot'
