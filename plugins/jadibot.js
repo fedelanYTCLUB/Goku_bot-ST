@@ -96,7 +96,7 @@ El número principal no se hace responsable del mal uso.
 ${replyMessage}
 
 ╰❍🍀 *COMUNIDAD OFC* 🍀❍╯
-🔗 https://chat.whatsapp.com/GYTJqKhf6z1HBsyyidsBUs
+🔗 https://chat.whatsapp.com/FX6eYrqXtt9L76NDpOm2K7
 `.trim();
 
 await _envio.sendMessage(m.chat, {
